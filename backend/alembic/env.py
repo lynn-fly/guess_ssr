@@ -7,8 +7,8 @@ from alembic import context
 
 import sys
 sys.path = ['', '..'] + sys.path[1:]
-from backend.db.base import Base
-from backend import models
+from app.db.base import Base
+from app import models
 
 
 # this is the Alembic Config object, which provides

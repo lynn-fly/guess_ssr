@@ -7,8 +7,8 @@ from fastapi.exception_handlers import request_validation_exception_handler
 from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import FileResponse
 
-from backend.core.config import settings
-from backend.api.api_v1.api import api_router
+from app.core.config import settings
+from app.api.api_v1.api import api_router
 
 app = FastAPI(
     title=settings.PROJECT_NAME,

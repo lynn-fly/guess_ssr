@@ -2,9 +2,9 @@
 # fix to ModuleNotFound
 import sys; sys.path = ['', '..'] + sys.path[1:]
 import logging
-from backend.db.init_db import init_db
-from backend.db.session import engine, SessionLocal
-from backend.db.base import Base
+from app.db.init_db import init_db
+from app.db.session import engine, SessionLocal
+from app.db.base import Base
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
