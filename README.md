@@ -1,16 +1,16 @@
-# fastapi-vue-blog
+# Guess And SSR
 
 ## 项目在开发阶段
 
 #### 介绍
-fastapi-vue-blog
-前后端分离开源博客
+Guess And SSR
+前后端分离抽奖系统
 * 后端框架：
 >1. Python Web 框架：FastAPI
 >2. ORM：SQLAlchemy
 
 * 前端框架：Vue
->1. 游客界面：BootstrapVue
+>1. 手机界面：BootstrapVue
 >2. 管理界面：ElementUI
 
 #### 启动 
@@ -18,8 +18,9 @@ fastapi-vue-blog
 *后端*
 
 * python版本 3.7.x
-
->1. 在fastapi-vue-blog/backend目录下
+pip install -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com -r requirements.txt
+pip install -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com -r .\requirements.txt
+>1. 在GUESS_SSR目录下backend
 >2. pip install -r requirements.txt
 >3. python main.py
 >4. 数据库迁移https://www.cnblogs.com/turingbrain/p/6372086.html
@@ -37,7 +38,7 @@ fastapi-vue-blog
 
 #### 功能
 
-*游客*
+*手机*
 
 >1. 可以看到所有文章
 >2. 可以看到所有分类
@@ -110,3 +111,35 @@ fastapi-vue-blog
 ![avatar](./introduce/frontend_post_create.png)
 ![avatar](./introduce/frontend_manage_categories.jpg)
 ![avatar](./introduce/backend_api_photo.png)
+
+#### 使用alembic
+
+自动创建版本
+使用alembic revision -m “注释” 创建数据库版本，上面我们修改了配置文件alembic/env.py，指定了target_metadata，这里可以使用–autogenerate参数自动生成迁移脚本。
+
+$ alembic revision --autogenerate -m “initdb”
+
+其他常用参数
+更新数据库
+$ alembic upgrade 版本号
+
+更新到最新版
+alembic upgrade head
+
+降级数据库
+$ alembic downgrade 版本号
+
+更新到最初版
+alembic downgrade head
+
+离线更新（生成sql）
+alembic upgrade 版本号 --sql > migration.sql
+
+从特定起始版本生成sql
+alembic upgrade 版本一:版本二 --sql > migration.sql
+
+查询当前数据库版本号
+
+查看alembic_version表。
+清除所有版本
+将versions删掉，并删除alembic_version表

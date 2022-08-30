@@ -7,19 +7,15 @@ import os
 
 
 class Settings(BaseSettings):
-    PROJECT_NAME: str = 'fastapi vue blog'
+    PROJECT_NAME: str = 'Guess and SSR'
     BASEDIR = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
     LOG_PATH = os.path.join(BASEDIR, 'logs')
 
     API_V1_STR: str = "/api/v1"
-    BACKEND_CORS_ORIGINS: List = ['*', 
-    "http://localhost.tiangolo.com",
-    "https://localhost.tiangolo.com",
-    "http://localhost",
-    "http://127.0.0.1:8080",
-    ]
+    BACKEND_CORS_ORIGINS: List = ['*']
 
-    SQLALCHEMY_DATABASE_URI: str = f'sqlite:///{BASEDIR}/fastapi-vue-blog.db'
+    # SQLALCHEMY_DATABASE_URI: str = f'sqlite:///{BASEDIR}/fastapi-vue-blog.db'
+    SQLALCHEMY_DATABASE_URI:str = f'mysql+pymysql://root:123456Aa@127.0.0.1:3308/guessr'
 
     SECRET_KEY: str = secrets.token_urlsafe(32)
 
