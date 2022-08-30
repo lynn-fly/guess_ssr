@@ -25,4 +25,4 @@ cd ..
 python3 init_data.py
 
 
-nohup uvicorn main:app --reload > log.txt 2>&1 &
+nohup uvicorn --app-dir backend main:app --reload > log.txt 2>&1 &
