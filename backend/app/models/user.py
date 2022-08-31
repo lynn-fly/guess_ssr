@@ -1,6 +1,5 @@
 from datetime import datetime
-from email.policy import default
-from sqlalchemy import Boolean, Integer, Column, String, ForeignKey
+from sqlalchemy import Boolean, Integer, Column, String, ForeignKey,Text
 from sqlalchemy.orm import relationship
 from app.db.base import Base
 
@@ -29,6 +28,6 @@ class User(Base):
     answerids  = Column(String(128),default='-1') #答对题目的id（1，2，3，4）
     upload_file_url = Column(String(128),default='')
     upload_comment  = Column(String(128),default='')
-    thumbed  = Column(String(128),default='-1') # 保存点赞人的id，如“1，2，3”
+    thumbed  = Column(Text,default='-1') # 保存点赞人的id，如“1，2，3”
     # gift_id = Column(Integer, ForeignKey('gift.id'))
     # gift = relationship('Gift', back_populates='gifts')
