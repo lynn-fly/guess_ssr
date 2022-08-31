@@ -18,12 +18,37 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
             username=obj_in.username,
             hashed_password=get_password_hash(obj_in.password),
             is_admin=obj_in.is_admin,
-            email=obj_in.email
+            email=obj_in.email,
+            nick_name = obj_in.nick_name,
+            dept_name = obj_in.dept,
         )
         db.add(db_obj)
         db.commit()
         db.refresh(db_obj)
         return db_obj
+    
+    def bulk_save(self,db:Session,*, objs:[UserCreate]) :
+        userlist = [User(
+            username=obj.username,
+            hashed_password=get_password_hash(obj.password),
+            email=obj.email,
+            nick_name = obj.nick_name,
+            dept_name = obj.dept,
+            ) for obj in objs]
+        db.bulk_save_objects(userlist)
+        db.commit()
+
+    # 高效的方式
+    # fourth_time = datetime.utcnow()
+    # db.session.execute(
+    #     User.__table__.insert(),
+    #     [{"username": 'Execute NAME ' + str(i), "password": password} for i in range(10000)]
+    # )
+    # db.session.commit()
+    # five_time = datetime.utcnow()
+    # print((five_time - fourth_time).total_seconds())
+
+
 
     def update(
             self, db: Session, *, db_obj: User, obj_in: UserUpdate

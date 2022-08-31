@@ -38,6 +38,26 @@ def login_access_token(
         "token_type": "bearer"
     }
 
+@router.post('/login/user', response_model=Any, status_code=status.HTTP_201_CREATED)
+def login_user(db: Session = Depends(deps.get_db), *, ulogin: schemas.UserLogin) -> Any:
+     user = crud.user.get_by_username(db=db,username=ulogin.username)
+     if not user:
+        raise HTTPException(
+            status_code=400, detail="Incorrect email or password"
+        )
+     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+     return {
+        'access_token': security.create_access_token(
+            user.id, expires_delta=access_token_expires
+        ),
+        'userId':user.id,
+        'userName':user.nick_name,
+        'heartValue':user.heart_value,
+        'isAnswerLottery':False,
+        'isUploadLottery':False,
+        'isLocal':True
+    }
+
 
 @router.get('/login/info')
 def login_info(
