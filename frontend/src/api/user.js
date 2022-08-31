@@ -1,5 +1,6 @@
 import request from '@/utils/request'
 
+// 用户登陆
 export function login(data) {
   const form = new FormData()
   const keys = Object.keys(data)
@@ -19,4 +20,7 @@ export function getInfo() {
     method: 'get'
   })
 }
+
+// 管理员登陆
+
 

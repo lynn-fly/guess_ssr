@@ -1,8 +1,8 @@
 {
   "name": "frontend",
   "version": "1.0.0",
-  "description": "A Vue.js project",
-  "author": "徐工Worker <1104440778@qq.com>",
+  "description": "在线中秋抽奖",
+  "author": "Daniel",
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
@@ -12,10 +12,6 @@
   },
   "dependencies": {
     "axios": "^0.19.2",
-    "bootstrap": "^4.5.1",
-    "bootstrap-vue": "^2.16.0",
-    "element-ui": "^2.13.2",
-    "mavon-editor": "^2.9.0",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
     "vuex": "^3.5.1"
