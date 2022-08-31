@@ -28,7 +28,7 @@ def login_access_token(
     )
     if not user:
         raise HTTPException(
-            status_code=400, detail="Incorrect email or password"
+            status_code=400, detail="Incorrect admin username or password"
         )
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     return {
@@ -43,7 +43,7 @@ def login_user(db: Session = Depends(deps.get_db), *, ulogin: schemas.UserLogin)
      user = crud.user.get_by_username(db=db,username=ulogin.username)
      if not user:
         raise HTTPException(
-            status_code=400, detail="Incorrect email or password"
+            status_code=400, detail="Incorrect username or password"
         )
      access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
      return {
@@ -53,8 +53,9 @@ def login_user(db: Session = Depends(deps.get_db), *, ulogin: schemas.UserLogin)
         'userId':user.id,
         'userName':user.nick_name,
         'heartValue':user.heart_value,
-        'isAnswerLottery':False,
-        'isUploadLottery':False,
+        'isAnswerMax': user.answer_heart_value == 50,
+        'isUpload': user.upload_heart_value == 50,
+        'lotteryCount': user.lottery_count,
         'isLocal':True
     }
 
