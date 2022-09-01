@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import Boolean, Integer, Column, String, ForeignKey,Text
+from sqlalchemy import Boolean, Integer, Column, String, ForeignKey,Text,LargeBinary
 from sqlalchemy.orm import relationship
 from app.db.base import Base
 
@@ -27,7 +27,9 @@ class User(Base):
     second_prize_time   =  Column(Integer,default=0)
     answerids  = Column(String(128),default='-1') #答对题目的id（1，2，3，4）
     upload_file_url = Column(String(128),default='')
+    upload_file = Column(LargeBinary) #二进制保存上传的图片
     upload_comment  = Column(String(128),default='')
+    upload_time = Column(Integer,default=0) # Javascript 获取时间 new Date(1661991352 * 1000) 这个是UTC时间根据时区自己转换
     thumbed  = Column(Text,default='-1') # 保存点赞人的id，如“1，2，3”
     # gift_id = Column(Integer, ForeignKey('gift.id'))
     # gift = relationship('Gift', back_populates='gifts')

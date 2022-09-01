@@ -32,7 +32,8 @@ class UserUpdate(UserBase):
     upload_file_url : Optional[str]
     upload_comment  : Optional[str]
     thumbed  : Optional[str]
-
+    upload_file: Optional[bytes]
+    upload_time:Optional[int]
 class UserLogin(UserBase):
     username: str
 

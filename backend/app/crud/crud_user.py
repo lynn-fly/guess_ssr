@@ -1,7 +1,7 @@
 from typing import Optional
 from sqlalchemy.orm import Session
 from fastapi.encoders import jsonable_encoder
-
+from sqlalchemy import Column,and_
 from app.models import User
 from app.crud.base import CRUDBase
 from app.schemas.user import UserCreate, UserUpdate
@@ -81,6 +81,22 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         if not verify_password(password, user.hashed_password):
             return None
         return user
+
+    def get_uploads(self, db: Session, *, filters=None,
+            order_by: Column = None,
+            page: int = 1,
+            limit: int = 10):
+        query = db.query(
+            self.model.id, self.model.nick_name, self.model.upload_file_url,self.model.upload_comment,self.model.thumbed
+        )
+        offset = limit * (page - 1)
+        if filters is not None:
+            query = query.filter(*filters)
+            #query = query.filter(and_(User.upload_heart_value==50))
+        if order_by is not None:
+            query = query.order_by(order_by)
+        query = query.offset(offset).limit(limit)
+        return [r._asdict() for r in query.all()]
 
 
 

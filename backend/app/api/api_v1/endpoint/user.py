@@ -1,8 +1,13 @@
 import random
+import base64
+import shutil
+import uuid
+
 from datetime import datetime
 from typing import Any
 from sqlalchemy.orm import Session
-from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy import desc,and_,or_
+from fastapi import APIRouter, Depends, HTTPException, status,UploadFile, File, Form
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 
@@ -121,3 +126,56 @@ def get_prize(db: Session = Depends(deps.get_db),user: User = Depends(deps.get_c
         'userId':new_user.id,
         'lotteryNumber':giftlevel,
     }
+
+@router.post('/save_upload',
+             dependencies=[Depends(deps.get_current_user)], 
+             response_model=Any, status_code=status.HTTP_201_CREATED)
+def save_upload(
+        db: Session = Depends(deps.get_db), 
+        user: User = Depends(deps.get_current_user),
+        upload_file: UploadFile = File(...), comment: str = Form(...)) -> Any:
+    if not user:
+        raise HTTPException(
+            status_code=400, detail="user not found"
+        )
+    upload_heart_value = user.upload_heart_value
+    lottery_count = user.lottery_count
+    heart_value = user.heart_value
+    if (upload_heart_value > 0):
+        raise HTTPException(
+            status_code=500, detail="uploaded yet"
+        )
+    upload_heart_value = 50
+    lottery_count += 1
+    heart_value += 50
+    ext = upload_file.filename.split('.')[-1]
+    u_name = uuid.uuid4()
+    file_location = f"uploads/{u_name}.{ext}"
+    
+    with open(file_location, "wb+") as file_object:
+        shutil.copyfileobj(upload_file.file, file_object)
+    user_up = schemas.UserUpdate(
+        upload_heart_value=upload_heart_value,heart_value=heart_value,lottery_count=lottery_count,
+        upload_comment=comment,upload_file_url=f"/upload/{u_name}.{ext}",upload_time=int(datetime.timestamp(datetime.utcnow()))
+    )
+    new_user = crud.user.update(db,db_obj=user,obj_in=user_up)
+    return {
+        'userId':new_user.id,
+        'userName':new_user.nick_name,
+        'heartValue':new_user.heart_value,
+        'lotteryCount ':new_user.lottery_count,
+        'fileUrl':new_user.upload_file_url,
+        'comment':new_user.upload_comment,
+        'uploadTime':new_user.upload_time
+    }
+
+@router.get('/upload_list',
+             dependencies=[Depends(deps.get_current_user)], 
+             response_model=Any, status_code=status.HTTP_200_OK)
+def upload_list(
+        db: Session = Depends(deps.get_db), 
+        user: User = Depends(deps.get_current_user),*,page: int = 1, limit: int = 10) -> Any:
+    filters = (and_(User.upload_heart_value==50),) # 逗号不能少，如果只有一个条件的时候
+    order_by =desc(User.upload_time)
+    data = crud.user.get_uploads(db,order_by=order_by,filters=filters,page=page,limit=limit)
+    return JSONResponse(content=data, status_code=status.HTTP_200_OK)

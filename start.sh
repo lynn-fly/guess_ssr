@@ -21,4 +21,4 @@ test -d $RUNDIR || mkdir -p $RUNDIR
 
 # Start your Django Unicorn
 # Programs meant to be run under supervisor should not daemonize themselves (do not use --daemon)
-exec /home/$USER/xcode/guess_ssr/.venv/bin/unicorn --app-dir backend main:app --reload 
+exec /home/$USER/xcode/guess_ssr/.venv/bin/uvicorn --app-dir backend main:app --reload  

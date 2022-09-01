@@ -27,6 +27,7 @@ if settings.BACKEND_CORS_ORIGINS:
 
 # mount frontend static files
 app.mount("/static", StaticFiles(directory="frontend/dist/static"), name="static")
+app.mount("/upload", StaticFiles(directory="uploads"), name="upload")
 app.include_router(api_router, prefix=settings.API_V1_STR)
 
 

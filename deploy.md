@@ -55,3 +55,7 @@ nginx -s reload
 
 git reset HEAD .
 git checkout .
+
+sudo supervisorctl start guessr
+sudo supervisorctl stop guessr
+sudo supervisorctl restart guessr
