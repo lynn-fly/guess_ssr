@@ -26,3 +26,32 @@ python3 init_data.py
 
 主目录运行
 nohup uvicorn --app-dir backend main:app --reload > log.txt 2>&1 &
+
+
+4.nginx反代
+
+ 
+
+nginx反代有很多文章介绍了 这里就不赘述了. 直接proxy到刚才在supervisord里面暴露的sock即可.
+
+ 
+
+复制代码
+server {
+    listen 80;
+    server_name wx.domain.com;
+
+    location / {
+        proxy_pass http://unix:/root/Envs/wx/gzh/wx.sock;
+    }
+}
+复制代码
+ 
+
+然后重新nginx就可以了
+
+nginx -s reload
+
+
+git reset HEAD .
+git checkout .
