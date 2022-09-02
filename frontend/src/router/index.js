@@ -7,7 +7,7 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
-    //redirect: '/home',
+    redirect: '/home',
     children: [{
       path: 'home',
       name: 'home',
