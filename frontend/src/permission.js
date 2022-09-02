@@ -2,12 +2,14 @@ import router from './router'
 import store from './store'
 import { getToken } from './utils/auth'
 
-const noTokenWhiteList = ['/login', '/home', '/manage','/',]
-const tokenAdminWhiteList =  ['/manage']
-const tokenCustomWhiteList =  ['/home', '/answer', '/upload', '/prize']
+const noTokenWhiteList = ['/login', '/home', '/', '/guess',
+  '/auspiciousness',
+  '/luckDraw']
+const tokenAdminWhiteList = ['/manage']
+const tokenCustomWhiteList = ['/home', '/answer', '/upload', '/prize']
 
 
-router.beforeEach(async(to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const hasToken = getToken()
   if (hasToken) {
     const hasRoles = store.getters.roles && store.getters.roles.length > 0
@@ -35,7 +37,7 @@ router.beforeEach(async(to, from, next) => {
         router.addRoutes(accessRoutes)
         next({ ...to, replace: true })
       } catch (e) {
-        await store.dispatch('user/resetToken') 
+        await store.dispatch('user/resetToken')
         next(`/home`)
       }
     }
