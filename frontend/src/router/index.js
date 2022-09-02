@@ -7,7 +7,7 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
-    redirect: '/home',
+    //redirect: '/home',
     children: [{
       path: 'home',
       name: 'home',
@@ -28,6 +28,11 @@ export const constantRoutes = [
       path: 'login',
       name: 'login',
       component: () => import('@/views/login/index')
+    },{
+      path: 'manage',
+      name: 'manage',
+      component: () => import('@/views/manage/index'),
+      //meta: { roles: ['admin'] }
     }]
   }
 ]

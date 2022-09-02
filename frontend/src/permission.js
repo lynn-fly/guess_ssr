@@ -2,7 +2,7 @@ import router from './router'
 import store from './store'
 import { getToken } from './utils/auth'
 
-const noTokenWhiteList = ['/login', '/home', '/']
+const noTokenWhiteList = ['/login', '/home', '/manage','/',]
 const tokenAdminWhiteList =  ['/manage']
 const tokenCustomWhiteList =  ['/home', '/answer', '/upload', '/prize']
 
