@@ -179,3 +179,13 @@ def upload_list(
     order_by =desc(User.upload_time)
     data = crud.user.get_uploads(db,order_by=order_by,filters=filters,page=page,limit=limit)
     return JSONResponse(content=data, status_code=status.HTTP_200_OK)
+
+@router.post('/result',
+             dependencies=[Depends(deps.get_current_active_admin)], 
+             response_model=Any, status_code=status.HTTP_200_OK)
+def get_results(
+        db: Session = Depends(deps.get_db), *,page: int = 1, limit: int = 10) -> Any:
+    filters = (or_(User.first_prize_level > 0,User.second_prize_level > 0),) # 逗号不能少，如果只有一个条件的时候
+    order_by = User.username
+    data = crud.user.get_results(db,order_by=order_by,filters=filters,page=page,limit=limit)
+    return JSONResponse(content=data, status_code=status.HTTP_200_OK)

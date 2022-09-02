@@ -97,6 +97,23 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
             query = query.order_by(order_by)
         query = query.offset(offset).limit(limit)
         return [r._asdict() for r in query.all()]
+    
+    # 获取中奖人员列表
+    def get_results(self, db: Session, *, filters=None,
+            order_by: Column = None,
+            page: int = 1,
+            limit: int = 10):
+        query = db.query(
+            self.model.id, self.model.nick_name, self.model.dept_name,self.model.first_prize_level,self.model.second_prize_level
+        )
+        offset = limit * (page - 1)
+        if filters is not None:
+            query = query.filter(*filters)
+            #query = query.filter(and_(User.upload_heart_value==50))
+        if order_by is not None:
+            query = query.order_by(order_by)
+        query = query.offset(offset).limit(limit)
+        return [r._asdict() for r in query.all()]
 
 
 
