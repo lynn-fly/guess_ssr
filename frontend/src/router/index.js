@@ -20,14 +20,26 @@ export const constantRoutes = [
       path: 'upload',
       name: 'upload',
       component: () => import('@/views/upload/index')
-    },{
+    }, {
       path: 'prize',
       name: 'prize',
       component: () => import('@/views/prize/index')
-    },{
+    }, {
       path: 'login',
       name: 'login',
       component: () => import('@/views/login/index')
+    }, {
+      path: 'guess',
+      name: 'guess',
+      component: () => import('@/views/guess/guess')
+    }, {
+      path: 'auspiciousness',
+      name: 'auspiciousness',
+      component: () => import('@/views/auspiciousness/auspiciousness')
+    }, {
+      path: 'luckDraw',
+      name: 'luckDraw',
+      component: () => import('@/views/luckDraw/luckDraw')
     }]
   }
 ]

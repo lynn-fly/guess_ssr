@@ -4,7 +4,7 @@ import { getToken, setToken, removeToken } from '@/utils/auth'
 const getDefaultState = () => {
   return {
     token: getToken(),
-    name: '',
+    name: '员工姓名',
     roles: []
   }
 }
