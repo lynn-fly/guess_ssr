@@ -2,14 +2,15 @@ import random
 import base64
 import shutil
 import uuid
-
+import xlwt
+from io import BytesIO
 from datetime import datetime
 from typing import Any
 from sqlalchemy.orm import Session
 from sqlalchemy import desc,and_,or_
 from fastapi import APIRouter, Depends, HTTPException, status,UploadFile, File, Form
 from fastapi.encoders import jsonable_encoder
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse,StreamingResponse
 
 from app import crud, schemas
 from app.utils import utils
@@ -184,8 +185,122 @@ def upload_list(
              dependencies=[Depends(deps.get_current_active_admin)], 
              response_model=Any, status_code=status.HTTP_200_OK)
 def get_results(
-        db: Session = Depends(deps.get_db), *,page: int = 1, limit: int = 10) -> Any:
-    filters = (or_(User.first_prize_level > 0,User.second_prize_level > 0),) # 逗号不能少，如果只有一个条件的时候
+        db: Session = Depends(deps.get_db), *,searchKey: str = Form(''), gift:int =Form(...), page: int = 1, limit: int = 10) -> Any:
+    filters = [] #  如果是 tuple逗号不能少，如果只有一个条件的时候
+    if (searchKey) :
+        filters.append(or_(User.username.like(f'%{searchKey}%'),User.nick_name.like(f'%{searchKey}%')))
+    if(gift > 0) :
+        filters.append(or_(User.first_prize_level == gift, User.second_prize_level == gift)) # 逗号不能少，如果只有一个条件的时候
+    else:
+        filters.append(or_(User.first_prize_level > 0, User.second_prize_level > 0)) # 逗号不能少，如果只有一个条件的时候
+    filters = tuple(filters)
     order_by = User.username
     data = crud.user.get_results(db,order_by=order_by,filters=filters,page=page,limit=limit)
     return JSONResponse(content=data, status_code=status.HTTP_200_OK)
+
+@router.post('/export')
+def fl_query(db: Session = Depends(deps.get_db), *,searchKey: str = Form(''), gift:int =Form(...), page: int = 1, limit: int = 10):
+     header = ['工号', '姓名', '部门', "奖品一", "奖品二"]
+     """
+     以流的形式导出到excel     """
+ 
+     def set_style():
+         """
+         设置样式
+         :return:
+         """
+         # 居中设置
+         alignment = xlwt.Alignment()
+         alignment.horz = xlwt.Alignment.HORZ_CENTER
+         alignment.vert = xlwt.Alignment.VERT_CENTER
+ 
+         # 设置表头字体样式
+         head_style = xlwt.XFStyle()
+         font = xlwt.Font()
+         font.name = 'Times New Roman'  # 字体
+         font.bold = True  # 字体加粗
+         head_style.font = font  # 设置字体
+         head_style.alignment = alignment  # Add Alignment to Style
+ 
+         # 设置表中内容样式
+         cont_style = xlwt.XFStyle()
+         font = xlwt.Font()
+         font.name = 'Times New Roman'  # 字体
+         font.bold = False  # 字体加粗
+         cont_style.font = font  # 设置字体
+         cont_style.alignment = alignment  # Add Alignment to Style
+ 
+         # 设置单元格边界
+         borders = xlwt.Borders()
+         borders.left = xlwt.Borders.THIN
+         borders.right = xlwt.Borders.THIN
+         borders.top = xlwt.Borders.THIN
+         borders.bottom = xlwt.Borders.THIN
+         head_style.borders = borders
+         cont_style.borders = borders
+         return head_style, cont_style
+ 
+     def get_sheet(_book, _index):
+         """
+         创建sheet页
+         :param _book:
+         :param _index:
+         :return:
+         """
+         _name = "sheet_{}".format(str(_index))
+         _sheet = _book.add_sheet(_name)
+         return _sheet
+ 
+     def write_head(_head, _sheet, _head_style):
+         """
+         写入表头
+         :param _head:
+         :param _sheet:
+         :param _head_style:
+         :return:
+         """
+         for head in range(len(header)):
+             context = str(header[head])
+             need_width = (1 + len(context)) * 556 * 2
+             table_sheet.col(head).width = need_width
+             # table_sheet.write(0, head, context, style=_head_style)
+             table_sheet.write(0, head, context, style=_head_style)
+ 
+     sheet_index = 1
+     book = xlwt.Workbook(encoding='utf-8')  # 创建 Excel 文件
+     table_sheet = get_sheet(book, sheet_index)  # 添加sheet表
+     h_style, c_style = set_style()
+     write_head(header, table_sheet, h_style)
+ 
+     # 获取数据
+     filters = [] #  如果是 tuple逗号不能少，如果只有一个条件的时候
+     if (searchKey) :
+        filters.append(or_(User.username.like(f'%{searchKey}%'),User.nick_name.like(f'%{searchKey}%')))
+     if(gift > 0) :
+        filters.append(or_(User.first_prize_level == gift, User.second_prize_level == gift)) # 逗号不能少，如果只有一个条件的时候
+     else:
+        filters.append(or_(User.first_prize_level > 0, User.second_prize_level > 0)) # 逗号不能少，如果只有一个条件的时候
+     filters = tuple(filters)
+     order_by = User.username
+     fls = crud.user.get_results(db,order_by=order_by,filters=filters,page=page,limit=limit)
+     # 插入数据
+     row = 1
+     for f_log in fls:
+         table_sheet.write(row, 0, str(f_log['username']), style=c_style)
+         table_sheet.write(row, 1, str(f_log['nick_name']), style=c_style)
+         table_sheet.write(row, 2, str(f_log['dept_name']), style=c_style)
+         table_sheet.write(row, 3, str(f_log['first_prize_level']), style=c_style) 
+         table_sheet.write(row, 4, str(f_log['second_prize_level']), style=c_style)          
+         row += 1
+         if row > 50000:  # 单表数量超过 65535 条 添加新的表
+             row = 1
+             sheet_index += 1
+             table_sheet = get_sheet(book, sheet_index)  # 添加sheet表
+             write_head(header, table_sheet, h_style)
+     sio = BytesIO()  # 返回文件流到浏览端下载，浏览端必须以form提交方式方能下载成功！
+     book.save(sio)  # 这点很重要，传给save函数的不是保存文件名，而是一个StringIO流
+     sio.seek(0)  # 保存流
+     # 组装header
+     headers = {"content-type": "application/vnd.ms-excel", "content-disposition": 'attachment;filename=download.xls'}
+     # 以流的形式返回浏览器
+     return StreamingResponse(sio, media_type="xls/xlsx", headers=headers)

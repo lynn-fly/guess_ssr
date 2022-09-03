@@ -104,7 +104,7 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
             page: int = 1,
             limit: int = 10):
         query = db.query(
-            self.model.id, self.model.nick_name, self.model.dept_name,self.model.first_prize_level,self.model.second_prize_level
+            self.model.username, self.model.nick_name, self.model.dept_name,self.model.first_prize_level,self.model.second_prize_level
         )
         offset = limit * (page - 1)
         if filters is not None:

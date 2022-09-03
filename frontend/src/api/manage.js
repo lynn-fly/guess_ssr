@@ -12,3 +12,17 @@ export function getNameList(data) {
       data: form
     })
   }
+
+export function getExcel(data) {
+    const form = new FormData()
+    const keys = Object.keys(data)
+    keys.forEach(key => {
+      form.append(key, data[key])
+    })
+    return request({
+      url: '/user/export',
+      method: 'post',
+      data: form,
+      responseType: 'blob' 
+    })
+  }

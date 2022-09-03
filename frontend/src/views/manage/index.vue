@@ -1,17 +1,16 @@
 <template>
   <div :style="{textAlign:'center'}">
-    <h1  >天涯"云团聚"，塔米共此时——答题活动获奖名单</h1>
+    <h1>天涯"云团聚"，塔米共此时——答题活动获奖名单</h1>
     <div>
-      <input type="text" placeholder="员工编号/部门" />
-      <select placeholder="礼品等级" >
-        <option value="">--请选择礼品--</option>
-        <option>一等奖</option>
-        <option>二等奖</option>
-        <option>三等奖</option>
+      <input type="text" placeholder="员工编号/部门" v-model="searchKey" />
+      <select  v-model="selected_gift">
+        <option :value="-1">--请选择奖品--</option>
+        <option v-for="(gift,index) in gifts" :key="index" :value="gift.level">{{gift.name}}</option>
+    
       </select>
       <button  @click="search">查询</button>
-      <button>导出</button>
-      <button v-show="showLogout" @click="logout">[退出]</button>
+      <button @click="exportExcel">导出</button>
+      <button class="logout" v-show="showLogout" @click="logout">[退出]</button>
     </div>
     <hr/>
     <div>
@@ -23,7 +22,7 @@
         </thead>
         <tbody>
           <tr v-for="item,index in members" :key="index">
-            <td>{{item.id}}</td>
+            <td>{{item.username}}</td>
             <td>{{item.nick_name}}</td>
             <td>{{item.dept_name}}</td>
             <td>{{item.first_prize_level}}等奖</td>
@@ -36,7 +35,7 @@
 </template>
 
 <script>
-import { getNameList } from '@/api/manage'
+import { getNameList,getExcel } from '@/api/manage'
 import { mapGetters } from "vuex";
 import { gotopPage } from "@/utils/index";
 export default {
@@ -44,7 +43,10 @@ export default {
   data() {
     return {
       members: [],
-      showLogout:false
+      showLogout:false,
+      selected_gift: -1,
+      searchKey:"",
+      gifts:[{level:1,name:'一等奖'},{level:2,name:'二等奖'},{level:3,name:'三等奖'},{level:4,name:'四等奖'},{level:5,name:'五等奖'}]
     };
   },
   created() {
@@ -55,10 +57,38 @@ export default {
   },
   methods: { 
     search(){
-      getNameList({})
+      getNameList({searchKey: this.searchKey, gift: this.selected_gift})
       .then(data=>{
-        console.log('111111111111111',data)
+        //console.log('lucky boys:',data)
         this.members=data.data;
+      })
+      .catch(err=>{
+        console.log(err)
+      })
+    },
+    exportExcel(){
+      getExcel({searchKey: this.searchKey, gift: this.selected_gift})
+      .then(res=>{
+          //console.log('lucky boys:',res)
+          //const content = res.data;
+          //const blob = new Blob([content]);
+          let blob = new Blob([res.data], {
+          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8',
+        });
+          const fileName = "塔迷2022年度中秋抽奖数据.xls";
+          if ("download" in document.createElement("a")) { // 非IE下载
+            const elink = document.createElement("a");
+            elink.download = fileName;
+            elink.style.display = "none";
+            //console.log('xxxxxx',blob);
+            elink.href = URL.createObjectURL(blob);
+            document.body.appendChild(elink);
+            elink.click();
+            URL.revokeObjectURL(elink.href); // 释放URL 对象
+            document.body.removeChild(elink);
+          } else { // IE10+下载
+            navigator.msSaveBlob(blob, fileName);
+          }
       })
       .catch(err=>{
         console.log(err)
@@ -145,6 +175,28 @@ export default {
 </script>
 
 <style scoped>
+
+input, textarea, button, select, a {
+  border: solid 1px;
+  height:29px;
+  width: auto;
+  line-height:2;
+  margin-right: 10px;
+}
+
+button {
+  width: 80px;
+  cursor:pointer;
+}
+.logout {
+    float: right;
+    margin-right: 15px;
+  }
+h1 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
 table {
 
 width: 700px;
