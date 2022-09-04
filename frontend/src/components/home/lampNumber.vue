@@ -1,11 +1,11 @@
 <template>
   <div class="buttons">
-    <div class="wrap">
-      <img src="@/assets/home/heard.png" alt="" />
-      <!-- <div class="wrap1">
+    <!-- <div class="wrap"> -->
+    <img class="wrap" src="@/assets/home/heard.png" alt="" />
+    <!-- <div class="wrap1">
         <img src="@/assets/home/heard.png" alt="" />
       </div> -->
-    </div>
+    <!-- </div> -->
     <div class="num">
       {{ num }}
       <!-- <div class="num1">
@@ -43,13 +43,13 @@ export default {
 
 .wrap {
   position: relative;
-  widows: 0.6rem;
-  height: 0.6rem;
+  width: 0.6rem;
+  /* height: 0.6rem; */
   filter: drop-shadow(0 0 0.08rem #14c9c9) drop-shadow(0 0 0.08rem #14c9c9);
 }
 
 img {
-  width: 100%;
-  height: 100%;
+  /* width: 100%; */
+  /* height: 100%; */
 }
 </style>

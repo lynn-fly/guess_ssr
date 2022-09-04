@@ -14,20 +14,6 @@ export function login(data) {
   })
 }
 
-// 管理员登陆
-export function loginAdmin(data) {
-  const form = new FormData()
-  const keys = Object.keys(data)
-  keys.forEach(key => {
-    form.append(key, data[key])
-  })
-  return request({
-    url: '/login/access-token',
-    method: 'post',
-    data: form
-  })
-}
-
 export function getInfo() {
   return request({
     url: '/login/info',

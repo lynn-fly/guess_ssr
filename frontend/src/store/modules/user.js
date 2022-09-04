@@ -1,10 +1,10 @@
-import { login, getInfo, loginAdmin } from '@/api/user'
+import { login, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 
 const getDefaultState = () => {
   return {
     token: getToken(),
-    name: '员工姓名',
+    name: '',
     roles: []
   }
 }
@@ -40,22 +40,6 @@ const actions = {
       })
     })
   },
-
-  loginAdmin({ commit }, userInfo) {
-    const { username, password } = userInfo
-    return new Promise((resolve, reject) => {
-      loginAdmin({ username: username.trim(), password: password }).then(response => {
-        const { data } = response
-        commit('SET_TOKEN', data['access_token'])
-        setToken(data['access_token'])
-        resolve()
-      }).catch(error => {
-        reject(error)
-      })
-    })
-  },
-
-
   // get user info
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
@@ -83,9 +67,8 @@ const actions = {
       try {
         removeToken()
         commit('RESET_STATE')
-        resolve();
       } catch (error) {
-        reject(error);
+        reject(error)
       }
     })
   },

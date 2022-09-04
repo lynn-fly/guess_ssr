@@ -1,41 +1,33 @@
 <template>
   <div class="home">
     <!-- <LampNumber :num="startNum" /> -->
-    <img
-      class="background"
-      v-show="true"
-      src="../../assets/home/background.png"
-      alt=""
-      srcset=""
-    />
-    <div class="main" v-show="true">
-      <div class="top">
-        <Buttons :msg="name" @backLogin="backLogin" />
-        <LampNumber :num="startNum" />
-      </div>
-      <div class="cententTop">
-        <img class="up" src="@/assets/home/otherTitle.png" alt="" />
-        <img class="down" src="@/assets/home/theme.png" alt="" />
-        <img class="time" src="@/assets/home/time.png" alt="" />
-      </div>
-      <div class="rabbit">
-        <img class="rabbitImg" src="@/assets/home/rabbit.png" alt="" />
-        <img class="wearetoImg" src="@/assets/home/weareto.png" alt="" />
-      </div>
-      <div class="buttonsOur">
-        <div class="buttonsCenter">
-          <img class="guess" @click="guess" src="@/assets/home/guess.png" alt="" />
-          <img
-            class="auspiciousness"
-            @click="auspiciousness"
-            src="@/assets/home/auspiciousness.png"
-            alt=""
-          />
+    <img class="background" id="background" v-show="false" src="../../assets/home/background.png" alt="" srcset="" />
+    <div class="mainOut">
+      <div class="main" v-show="true" :style="{ height: mainHeight + 'px' }">
+        <div class="top">
+          <Buttons :msg="name" @back="back" />
+          <LampNumber :num="startNum" />
         </div>
-        <img class="luckDraw" @click="luckDraw" src="@/assets/home/luckDraw.png" alt="" />
-      </div>
-      <div class="bottomImg">
-        <img class="bottomImgs" src="@/assets/home/introduce.png" alt="" />
+        <div class="cententTop">
+          <!-- <img class="up" src="@/assets/home/otherTitle.png" alt="" />
+          <img class="down" src="@/assets/home/theme.png" alt="" />
+          <img class="time" src="@/assets/home/time.png" alt="" /> -->
+          <img class="up" src="@/assets/home/123.png" alt="" />
+        </div>
+        <div class="rabbit">
+          <img class="rabbitImg" src="@/assets/home/rabbit.png" alt="" />
+          <img class="wearetoImg" src="@/assets/home/weareto.png" alt="" />
+        </div>
+        <div class="buttonsOur">
+          <div class="buttonsCenter">
+            <img class="guess" @click="guess" src="@/assets/home/guess.png" alt="" />
+            <img class="auspiciousness" @click="auspiciousness" src="@/assets/home/auspiciousness.png" alt="" />
+          </div>
+          <img class="luckDraw" @click="luckDraw" src="@/assets/home/luckDraw.png" alt="" />
+        </div>
+        <div class="bottomImg">
+          <img class="bottomImgs" src="@/assets/home/introduce.png" alt="" />
+        </div>
       </div>
     </div>
   </div>
@@ -55,12 +47,27 @@ export default {
   data() {
     return {
       startNum: 50,
+      mainHeight: 600
     };
+  },
+  mounted() {
+    this.changeSIze()
   },
   computed: {
     ...mapGetters(["name"]),
   },
   methods: {
+    changeSIze() {
+      let backDom = document.getElementById('background')
+      let that = this;
+      backDom.onload = function () {
+        let ph = window.screen.height, pw = window.screen.width, scale = this.height / this.width;
+        // console.log(this.width, pw, this.height, ph, scale)
+        let lastHeight = scale * pw
+        console.log(lastHeight)
+        that.mainHeight = ph > lastHeight ? ph : lastHeight;
+      }
+    },
     guess() {
       console.log("guess");
       gotopPage("/guess");
@@ -73,8 +80,10 @@ export default {
       gotopPage("/luckDraw");
       console.log("luckDraw");
     },
-    backLogin() {
-      gotopPage("/login");
+    back(val) {
+      if (val == 'login') {
+        gotopPage("/login");
+      }
     },
   },
   created() {
@@ -96,22 +105,31 @@ export default {
   position: fixed;
   left: 0;
   top: 0;
-  width: 100vw;
-  height: 100vh;
+  /* width: 100vw; */
+  /* height: 100vh; */
   z-index: 1;
 }
 
 .main {
   width: 100vw;
-  height: 100vh;
-  position: fixed;
-  left: 0;
-  top: 0;
-  z-index: 10;
   display: flex;
   align-items: center;
   flex-direction: column;
   justify-content: space-between;
+  background-image: url(../../assets/home/background.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+.mainOut {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  width: 100vw;
+  z-index: 10;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .main .top {
@@ -136,11 +154,12 @@ export default {
 }
 
 .cententTop .up {
+  margin: 1rem;
   width: 6.5rem;
   height: 6.5rem;
 }
 
-.cententTop .down {
+/* .cententTop .down {
   position: absolute;
   width: 5rem;
   top: 2.1rem;
@@ -152,7 +171,7 @@ export default {
   width: 2.1rem;
   height: 0.7rem;
   bottom: 0;
-}
+} */
 
 .rabbit {
   position: relative;
