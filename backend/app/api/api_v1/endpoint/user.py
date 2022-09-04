@@ -1,3 +1,5 @@
+from functools import reduce
+from math import fabs
 import random
 import base64
 import shutil
@@ -84,8 +86,14 @@ def save_answer(db: Session = Depends(deps.get_db),user: User = Depends(deps.get
         'thumbeUsers': new_user.thumbed.split(',')
     }
 
-@router.post('/get_prize',dependencies=[Depends(deps.get_current_user)], response_model=Any, status_code=status.HTTP_201_CREATED)
-def get_prize(db: Session = Depends(deps.get_db),user: User = Depends(deps.get_current_user)) -> Any:
+# @router.post('/get_prize',dependencies=[Depends(deps.get_current_user)], response_model=Any, status_code=status.HTTP_200_OK)
+# def get_prize(db: Session = Depends(deps.get_db),user: User = Depends(deps.get_current_user)) -> Any:
+@router.post('/get_prize', response_model=Any, status_code=status.HTTP_200_OK)
+def get_prize(db: Session = Depends(deps.get_db)) -> Any:
+    # for test  start
+    randomUserId =random.sample(range(2,1912),1)
+    user = crud.user.get(db,id=randomUserId)
+    # fot test end
     if not user:
         raise HTTPException(
             status_code=400, detail="user not found"
@@ -104,9 +112,34 @@ def get_prize(db: Session = Depends(deps.get_db),user: User = Depends(deps.get_c
         raise HTTPException(
             status_code=500, detail="you had prize towice"
         )
-    gifts = [1,2,2,3,3,3,4,4,4,4,5,5,5,5,5,6,6,6,6,6,6,7,7,7,7,7,7,7,8,8,8,8,8,8,8,8,9,9,9,9,9,9,9,9,9,9]
-    index=random.sample(range(0,len(gifts)-1),1)
-    giftlevel = gifts[index[0]]
+    gifts = [1,2,2,3,3,3,4,4,4,5,5,5,6,6,6,6,6,6,7,7,7,7,7,7,8,8,8,8,8,8,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9]
+    # 如果第一次已经抽取了，就在三等奖和四等奖中抽取，且中间总额不能大于总数量 -  总人数
+    has_gifts = True
+    if first_prize_level > 0:
+        second_count = crud.user.get_second(db)
+        if second_count <= 150:
+            gifts = [6,7,8,9,10,10,10,10,10,10,10,10,10,10,10,10,10]
+        else:
+            has_gifts = False
+    random.shuffle(gifts)
+    giftlevel = -1
+    retry = 30
+    while giftlevel == -1 and retry > 0 and has_gifts:
+        index=random.sample(range(0,len(gifts)-1),1)
+        giftlevel = gifts[index[0]]
+        
+        gift = crud.gift.get(db,id=giftlevel)
+        if (gift and gift.allowance > 0 ):
+            gift =  crud.gift.reduceOneAllowance(db,db_obj=gift)
+            if (gift.allowance < 0):
+                giftlevel = -1
+        else:
+            giftlevel = -1
+        retry -= 1
+    
+    if retry < 1 or giftlevel == 10:
+        giftlevel = -1
+
     if first_prize_time == 0:
         first_prize_time = int(datetime.timestamp(datetime.utcnow()))
         first_prize_level = giftlevel

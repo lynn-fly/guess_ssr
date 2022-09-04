@@ -10,7 +10,7 @@ class Gift(Base):
     name = Column(String(50), unique=True)
     pic_name = Column(String(50), unique=True)
     note = Column(String(128), default='')
-    allowance = Column(Integer,default=0,index=True) #剩余数量
-    level = Column(Integer,default=0,index=True) # 奖品等级
+    allowance = Column(Integer,default=0) #剩余数量
+    level = Column(Integer,default=0) # 奖品等级
 
 

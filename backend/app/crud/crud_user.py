@@ -114,6 +114,11 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
             query = query.order_by(order_by)
         query = query.offset(offset).limit(limit)
         return [r._asdict() for r in query.all()]
+    
+    # 获取二次抽中的人数    
+    def get_second(self, db: Session) -> int:
+        count = db.query(self.model.username).filter(User.second_prize_level.in_((6,7,8,9,))).count()
+        return count
 
 
 

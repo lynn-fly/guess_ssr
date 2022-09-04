@@ -140,6 +140,17 @@ alembic upgrade 版本一:版本二 --sql > migration.sql
 
 查询当前数据库版本号
 
+init：创建一个 alembic 仓库。
+revision：创建一个新的版本文件。
+--autogenerate：自动将当前模型的修改，生成迁移脚本。
+-m：本次迁移做了哪些修改，用户可以指定这个参数，方便回顾。
+upgrade：将指定版本的迁移文件映射到数据库中，会执行版本文件中的 upgrade 函数。如果有多个迁移脚本没有被映射到数据库中，那么会执行多个迁移脚本。
+[head]：代表最新的迁移脚本的版本号。
+downgrade：会执行指定版本的迁移文件中的 downgrade 函数。
+heads：展示head指向的脚本文件版本号。
+history：列出所有的迁移版本及其信息。
+current：展示当前数据库中的版本号。另外，在你第一次执行 upgrade 的时候，就会在数据库中创建一个名叫 alembic_version 表，这个表只会有一条数据，记录当前数据库映射的是哪个版本的迁移文件。
+
 查看alembic_version表。
 清除所有版本
 将versions删掉，并删除alembic_version表
