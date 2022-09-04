@@ -1,9 +1,9 @@
 <template>
   <div class="buttons">
-    <div class="name" v-if="msg">
+    <div class="name" v-if="msg" @click="$emit('back', msg)">
       {{ msg }}
     </div>
-    <div class="login" v-else @click="$emit('backLogin')">
+    <div class="login" v-else @click="$emit('back', 'login')">
       <img src="@/assets/home/login.png" alt="" />
     </div>
   </div>
@@ -25,11 +25,13 @@ export default {
   border-radius: 0.3rem;
   text-align: center;
   line-height: 0.4rem;
-  /* width: 1.2rem; */
+  min-width: 1.2rem;
 }
+
 .login {
   width: 2rem;
 }
+
 .login img {
   width: 100%;
   height: 100%;

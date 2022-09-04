@@ -1,22 +1,39 @@
 <template>
-  <div class="login">
-    <!--<h1>登录</h1>-->
-    <div class="row" style="margin-top: 100px;">
+  <div class="login ">
+    <!--<h1>登录</h1> flex-c-c-->
+    <!-- <div class="row" style="margin-top: 100px;">
       <div class="offset-3 col-md-6">
         <button @click="handleLogin">登陆</button>
       </div>
+    </div> -->
+    <img class="theme" src="@/assets/login/title.png" alt="" srcset="">
+    <div class="inputs flex-c-c">
+      <div class="once flex-c-c">
+        <div class="title">
+          <img class="titleImg" src="@/assets/login/number2.png" alt="" srcset="">
+        </div>
+        <input type="text" v-model="form.username" placeholder="请输入姓名">
+      </div>
+      <div class="once flex-c-c">
+        <div class="title ">
+          <img class="titleImg" src="@/assets/login/number1.png" alt="" srcset="">
+        </div>
+        <input type="text" v-model="form.password" placeholder="请输入工号">
+      </div>
     </div>
+    <img class="luckDraw" @click="loging" src="@/assets/login/login.png" alt="" srcset="">
   </div>
 </template>
 
 <script>
+import { gotopPage } from "@/utils/index";
 export default {
   name: 'Login',
   data() {
     return {
       form: {
-        username: undefined,
-        password: undefined
+        username: 1,
+        password: 1
       },
       rules: {
         username: [{ required: true, trigger: 'blur', message: '用户名不能为空' }],
@@ -35,16 +52,93 @@ export default {
       //     })
       //   }
       // })
-          this.$store.dispatch('user/login', {username: 'admin', password: 'admin'}).then(() => {
-            this.$router.push({ name: 'manage' })
-          }).catch(() => {
+      this.$store.dispatch('user/login', { username: 'admin', password: 'admin' }).then(() => {
+        this.$router.push({ name: 'manage' })
+      }).catch(() => {
 
-          })
+      })
+    },
+    isOk(name, pass) {
+      let names = ['1', '2', '3'], passs = ['1', '2', '3'], ki = -1;
+      for (let k in names) {
+        if (names[k] == name) {
+          ki = k
+        }
+      }
+      if (ki == -1 || pass != passs[ki]) {
+        return false
+      }
+      return true
+    },
+    loging() {
+      if (this.isOk(this.form.username, this.form.password)) {
+        console.log(this.$store, '登入成功')
+        this.$store.commit('user/SET_NAME', this.form.username)
+        setTimeout(() => {
+          gotopPage("/");
+        }, 100);
+      } else {
+        console.log('账号密码错误')
+      }
     }
   }
 }
 </script>
 
 <style scoped>
+.login {
+  /* background-color: #000; */
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-image: url(../../assets/login/bj.png);
+  padding: 2rem;
+  box-sizing: border-box;
+  justify-content: center !important;
+  flex-direction: column;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
 
+.theme {
+  width: 100%;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+
+}
+
+.luckDraw {
+  width: 100%;
+}
+
+.inputs {
+  width: 100%;
+  flex-direction: column;
+  margin-bottom: 1rem;
+
+}
+
+.inputs .once {
+  width: 100%;
+  margin: 0.5rem 0;
+}
+
+.inputs .once .title {
+  color: #fff;
+  font-size: 0.4rem;
+  margin-right: 0.2rem;
+  width: 1rem;
+}
+
+.inputs .once .title img {
+  width: 1.2rem;
+}
+
+.inputs .once input {
+  border-radius: 0.15rem;
+  padding: 0.1rem;
+  width: 100%;
+}
 </style>

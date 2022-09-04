@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
@@ -11,5 +11,12 @@ export default {
 </script>
 
 <style>
-
+* {
+  font-family: "ph Dinpro" !important;
+}
+.flex-c-c{
+  display: flex;
+  justify-content: center;
+  justify-content: center;
+}
 </style>
