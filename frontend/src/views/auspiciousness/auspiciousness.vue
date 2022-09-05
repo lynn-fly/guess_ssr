@@ -16,7 +16,7 @@
       />
       <img class="themes" src="@/assets/auspiciousness/msg.png" alt="" srcset="" />
       <img class="themes1" src="@/assets/auspiciousness/back.png" alt="" srcset="" />
-      <div class="upImg">
+      <div class="upImg" >
         <img
           class="upImgs"
           @click="upImg"
@@ -25,7 +25,7 @@
           srcset=""
         />
       </div>
-      <div class="upImg">
+      <div class="upImg" >
         <input
           class="upInput"
           v-model="textUp"
@@ -37,7 +37,7 @@
         <img class="upImgs2" src="@/assets/auspiciousness/ty.png" alt="" srcset="" />
       </div>
       <div class="centent" :style="{ height: contentHeight + 'px' }">
-        <div class="cententOnce" v-for="(item, index) in imgData">
+        <div class="cententOnce" v-for="(item, index) in imgData" :key="index">
           <img
             class="imgs"
             :style="{ height: imgHeight + 'px' }"
@@ -62,6 +62,7 @@
 
 <script>
 import { gotopPage } from "@/utils/index";
+import { getUser} from "@/utils/auth";
 import LampNumber from "@/components/home/lampNumber.vue";
 import Buttons from "@/components/home/buttons.vue";
 import { upFile, getupload_list, setsave_thumbed } from "@/api/auspiciousness";
@@ -142,6 +143,7 @@ export default {
       mainHeight: 800,
       contentHeight: "auto",
       textUp: "",
+      isUploaded:false
     };
   },
   mounted() {
@@ -163,6 +165,9 @@ export default {
     //     cententDom.clientHeight > lastHeight ? lastHeight : cententDom.clientHeight;
     // });
     this.getList();
+    const userInfo = getUser();
+    console.log('userinfo:',userInfo);
+    this.isUploaded = userInfo.isUpload;
   },
   computed: {
     ...mapGetters(["userInfor"]),
@@ -171,11 +176,14 @@ export default {
     getList() {
       this.imgData = [];
       getupload_list().then((res) => {
-        console.log(res);
-        let data = res.data;
+        //console.log(res);
+        const {config,data} =res 
+        const { baseURL } = config
+        console.log(baseURL.substring(0,baseURL.length - 7));
         for (let k in data) {
           this.imgData.push({
-            icon: "http://129.226.227.171" + data[k].upload_file_url,
+            //icon: "http://129.226.227.171" + data[k].upload_file_url,
+            icon:  baseURL.substring(0,baseURL.length - 7) + data[k].upload_file_url,
             name: data[k].upload_comment,
             ...data[k],
           });
@@ -212,10 +220,15 @@ export default {
       }
     },
     upImg() {
+      if(this.isUploaded) {
+        alert("你已经祈福过啦，请看看其他人的祝福吧！");
+        return;
+      }
       if (!this.textUp) {
         alert("需要先填写祝福语");
         return;
       }
+      
       let that = this;
       function inputUpload() {
         that.upLoad(this.files);

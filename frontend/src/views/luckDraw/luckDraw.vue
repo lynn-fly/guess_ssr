@@ -19,6 +19,7 @@
           class="cententOnce"
           :class="[chouseIndex == index ? 'avtive' : '']"
           v-for="(item, index) in imgData"
+          :key="index"
         >
           <img
             class="imgs"
@@ -43,6 +44,8 @@
 import { gotopPage } from "@/utils/index";
 import Popup from "@/components/popup.vue";
 import Buttons from "@/components/home/buttons.vue";
+import {goodLucky} from "@/api/user";
+
 export default {
   components: {
     Buttons,
@@ -155,37 +158,46 @@ export default {
     beginChouse() {
       if (this.state) return;
       this.state = true;
-      let nums = parseInt(Math.random() * 101 + 1),
-        num = 8;
+      // let nums = parseInt(Math.random() * 101 + 1),
+      //   num = 8;
+      goodLucky()
+      .then(res => {
+      //   for (let k in this.probability) {
+      //   if (nums >= this.probability[k][0] && nums < this.probability[k][1]) {
+      //     num = this.probability[k][2];
+      //   }
+      // }
 
-      for (let k in this.probability) {
-        if (nums >= this.probability[k][0] && nums < this.probability[k][1]) {
-          num = this.probability[k][2];
-        }
-      }
-
-      console.log(nums, num);
-      let nowNum = 0;
-      let doit = () => {
-        setTimeout(() => {
-          nowNum++;
-          this.addIndex();
-          if (nowNum > 10 && this.chouseIndex == num) {
-            this.state = false;
-            this.chouseIndex = num;
-            console.log(num);
-            this.getResult(num);
-            return;
-          } else if (nowNum > 10 && num == 9) {
-            this.state = false;
-            this.getResult(num);
-            return;
-          } else {
-            doit();
-          }
-        }, nowNum * 10);
-      };
-      doit();
+        const {lotteryNumber,lottery_count} = res.data;
+        let num = lotteryNumber < 1? 9: lotteryNumber - 1;
+      
+        let nowNum = 0;
+        let doit = () => {
+          setTimeout(() => {
+            nowNum++;
+            this.addIndex();
+            if (nowNum > 30 && this.chouseIndex == num) {
+              this.state = lottery_count < 1;
+              this.chouseIndex = num;
+              console.log(num);
+              this.getResult(num);
+              return;
+            } else if (nowNum > 30 && num == 9) {
+              this.state = lottery_count < 1;
+              this.getResult(num);
+              return;
+            } else {
+              doit();
+            }
+          }, nowNum * 10);
+        };
+        doit();
+      })
+      .catch(err=>{
+        alert("抽奖次数不足，请努力答题或参与祈福！每人仅有两次抽奖机会！");
+        gotopPage("/home");
+      })
+      
     },
     addIndex() {
       if (this.chouseIndex == 8) {

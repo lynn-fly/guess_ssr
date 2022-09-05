@@ -223,9 +223,11 @@ def save_upload(
         w,h=sImg.size
         dImg=sImg.resize((int(w/img_file_size),int(h/img_file_size)),Image.ANTIALIAS)  
         dImg.save(file_location_c) 
-        print (file_location_c +" successful.")
-    except Exception:
-        print(file_location_c + " fail.")
+        #print (file_location_c +" successful.")
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, detail=f"图片处理异常，{e.__str__()}"
+        )
 
     user_up = schemas.UserUpdate(
         upload_heart_value=upload_heart_value,heart_value=heart_value,lottery_count=lottery_count,

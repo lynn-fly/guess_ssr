@@ -35,4 +35,11 @@ export function getInfo() {
   })
 }
 
+export function goodLucky() {
+  return request({
+    url: '/user/get_prize',
+    method: 'post'
+  })
+}
+
 // 管理员登陆
