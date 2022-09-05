@@ -1,6 +1,7 @@
 <template>
-  <div :style="{textAlign:'center'}">
-    <h1>天涯"云团聚"，塔米共此时——答题活动获奖名单</h1>
+  <div :style="{textAlign:'center',minWidth:'700px'}">
+    <h1>天涯"云团聚"，塔迷共此时</h1>
+    <h2>中秋线上灯谜会获奖名单</h2>
     <div>
       <input type="text" placeholder="员工编号/姓名" v-model="searchKey" />
       <select  v-model="selected_gift">
@@ -208,6 +209,11 @@ button {
   }
 h1 {
   font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+h2 {
+  font-size: 18px;
   font-weight: 600;
   margin-bottom: 20px;
 }
