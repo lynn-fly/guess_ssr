@@ -1,7 +1,7 @@
 from typing import Optional
 from sqlalchemy.orm import Session
 from fastapi.encoders import jsonable_encoder
-from sqlalchemy import Column,and_
+from sqlalchemy import Column,and_,or_
 from app.models import User
 from app.crud.base import CRUDBase
 from app.schemas.user import UserCreate, UserUpdate
@@ -74,6 +74,36 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         db.refresh(db_obj)
         return db_obj
 
+    def update_giftlevel(self, db: Session, *, db_obj: User, now_time: int, gift_level:int) -> bool:
+        
+        sql = f'''
+        update user set second_prize_level = case when first_prize_time > 0 and second_prize_time = 0 then {gift_level} else second_prize_level end, 
+        second_prize_time = case when first_prize_time > 0 and second_prize_time = 0 then {now_time} else second_prize_time end,
+        first_prize_level = case when first_prize_time = 0 and second_prize_time = 0 then {gift_level} else first_prize_level end,
+        first_prize_time = case when first_prize_time = 0 and second_prize_time = 0 then {now_time} else first_prize_time end,
+        lottery_count = lottery_count - 1,
+        is_prize  = 1
+        where id = {db_obj.id} and (first_prize_time = 0 or second_prize_time = 0)'''
+        result = db.execute(sql)
+
+        #old_user = db.query(User).with_for_update(read=False, nowait=False).filter(User.id == db_obj.id).one()
+        # db_obj.lottery_count -=   1
+        # db_obj.is_prize = True
+        # update = 0
+        # if db_obj.first_prize_time == 0:
+        #     update = db.query(User).filter(User.id == db_obj.id, User.first_prize_time == 0)\
+        #         .update({"first_prize_level": gift_level,"first_prize_time":now_time,"lottery_count":db_obj.lottery_count,"is_prize":db_obj.is_prize})
+            
+        # else:
+        #     update = db.query(User).filter(User.id == db_obj.id, User.first_prize_time > 0, User.second_prize_time ==0)\
+        #         .update({"second_prize_level": gift_level,"second_prize_time":now_time,"lottery_count":db_obj.lottery_count,"is_prize":db_obj.is_prize})
+        if result.rowcount < 1:
+            print(f"用户:{db_obj.username} - {db_obj.nick_name}已经全部抽取！")
+        db.flush()
+        #db.commit()
+        #db.refresh(db_obj)
+        return result.rowcount > 0
+
     def authenticate(self, db: Session, *, username: str, password: str) -> Optional[User]:
         user = self.get_by_username(db, username=username)
         if not user:
@@ -120,6 +150,13 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         count = db.query(self.model.username).filter(User.second_prize_level.in_((6,7,8,9,))).count()
         return count
 
+    def get_nodraw(self, db: Session) -> User:
+        user = db.query(User).filter(or_(User.first_prize_time == 0,User.second_prize_time == 0)).first()
+        return user
+    
+    def locke_user(self, db: Session,*,db_obj:User) -> User:
+        old_user = db.query(User).with_for_update(read=False, nowait=True).filter(User.id == db_obj.id).one()
+        return old_user
 
 
 

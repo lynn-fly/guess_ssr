@@ -36,6 +36,7 @@ class UserUpdate(UserBase):
     upload_time:Optional[int]
 class UserLogin(UserBase):
     username: str
+    nick_name:str
 
 
 

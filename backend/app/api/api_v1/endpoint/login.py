@@ -41,9 +41,9 @@ def login_access_token(
 @router.post('/login/user', response_model=Any, status_code=status.HTTP_201_CREATED)
 def login_user(db: Session = Depends(deps.get_db), *, ulogin: schemas.UserLogin) -> Any:
      user = crud.user.get_by_username(db=db,username=ulogin.username)
-     if not user:
+     if not user or user.nick_name != ulogin.nick_name:
         raise HTTPException(
-            status_code=400, detail="Incorrect username or password"
+            status_code=400, detail="姓名和工号匹配错误！"
         )
      access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
      return {
@@ -56,17 +56,23 @@ def login_user(db: Session = Depends(deps.get_db), *, ulogin: schemas.UserLogin)
         'isAnswerMax': user.answer_heart_value == 50,
         'isUpload': user.upload_heart_value == 50,
         'lotteryCount': user.lottery_count,
-        'isLocal':True
+        'isLocal':user.is_local
     }
 
 
 @router.get('/login/info')
 def login_info(
-        current_user: models.User = Depends(deps.get_current_active_admin),
+        current_user: models.User = Depends(deps.get_current_user),
 ):
     data = {
-        "name": current_user.username,
-        "roles": ['admin'] if current_user.is_admin else []
+        "roles": ['admin'] if current_user.is_admin else [],
+        'userId':current_user.id,
+        'userName':current_user.nick_name,
+        'heartValue':current_user.heart_value,
+        'isAnswerMax': current_user.answer_heart_value == 50,
+        'isUpload': current_user.upload_heart_value == 50,
+        'lotteryCount': current_user.lottery_count,
+        'isLocal':current_user.is_local
     }
     return JSONResponse(content=jsonable_encoder(data), status_code=status.HTTP_200_OK)
 
