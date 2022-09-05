@@ -2,9 +2,10 @@ import router from './router'
 import store from './store'
 import { getToken } from './utils/auth'
 
-const noTokenWhiteList = ['/login', '/home', '/', '/guess',
-  '/auspiciousness',
-  '/luckDraw']
+const noTokenWhiteList = ['/login']
+// , '/home', '/', '/guess',
+//   '/auspiciousness',
+//   '/luckDraw']
 const tokenAdminWhiteList = ['/manage']
 const tokenCustomWhiteList = ['/home', '/answer', '/upload', '/prize']
 
@@ -45,7 +46,7 @@ router.beforeEach(async (to, from, next) => {
     if (noTokenWhiteList.indexOf(to.path) !== -1) {
       next()
     } else {
-      next(`/home`)
+      next(`/login`)
     }
   }
 })

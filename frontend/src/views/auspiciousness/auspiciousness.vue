@@ -1,21 +1,60 @@
 <template>
   <div class="mainOut">
-    <div class="luckDraw" :style="{ height: mainHeight + 'px' }">
+    <!-- :style="{ height: mainHeight + 'px' }" -->
+    <div class="luckDraw">
       <div class="top">
         <Buttons :msg="name" @back="back" />
         <LampNumber :num="startNum" />
       </div>
-      <img class="background" id="background" v-show="false" src="../../assets/home/background.png" alt="" srcset="" />
-      <img class="themes" src="@/assets/luckDraw/msg.png" alt="" srcset="">
-      <div class="centent">
-        <div class="cententOnce" :class="[chouseIndex == index ? 'avtive' : '']" v-for="(item, index) in imgData">
-          <img class="imgs" :style="{ height: imgHeight + 'px' }" :src="item.icon" alt="" srcset="">
-          <div class="label">{{ item.name }}</div>
-        </div>
+      <img
+        class="background"
+        id="background"
+        v-show="false"
+        src="../../assets/auspiciousness/bj.jpg"
+        alt=""
+        srcset=""
+      />
+      <img class="themes" src="@/assets/auspiciousness/msg.png" alt="" srcset="" />
+      <img class="themes1" src="@/assets/auspiciousness/back.png" alt="" srcset="" />
+      <div class="upImg">
+        <img
+          class="upImgs"
+          @click="upImg"
+          src="@/assets/auspiciousness/upDown.png"
+          alt=""
+          srcset=""
+        />
       </div>
-      <div class="butBom">
-        <img src="@/assets/luckDraw/begin.png" @click="beginChouse" alt="" srcset="">
-        <img src="@/assets/luckDraw/yue.png" alt="" srcset="">
+      <div class="upImg">
+        <input
+          class="upInput"
+          v-model="textUp"
+          type="text"
+          placeholder="在这里写下你的祝福，100字以内"
+        />
+      </div>
+      <div class="upImg">
+        <img class="upImgs2" src="@/assets/auspiciousness/ty.png" alt="" srcset="" />
+      </div>
+      <div class="centent" :style="{ height: contentHeight + 'px' }">
+        <div class="cententOnce" v-for="(item, index) in imgData">
+          <img
+            class="imgs"
+            :style="{ height: imgHeight + 'px' }"
+            :src="item.icon"
+            alt=""
+            srcset=""
+          />
+          <div class="label">{{ item.name }}</div>
+          <div classs="uppppp" style="width: 100% !important; color: #fff">
+            <img
+              src="@/assets/auspiciousness/up.png"
+              alt=""
+              @click="upClick(item, index)"
+            />
+            {{ item.numUp }}
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -27,125 +66,147 @@ import LampNumber from "@/components/home/lampNumber.vue";
 import Buttons from "@/components/home/buttons.vue";
 export default {
   components: {
-    Buttons, LampNumber
+    Buttons,
+    LampNumber,
   },
   data() {
     return {
-      name: '返回首页',
-      chouseIndex: 0,
+      name: "返回首页",
       state: false,
       startNum: 50,
       imgData: [
         {
-          icon: require('@/assets/luckDraw/1.png'),
-          name: '户外桌椅-灰'
+          icon: require("@/assets/luckDraw/1.png"),
+          name: "户外桌椅-灰",
+          numUp: 200,
         },
         {
-          icon: require('@/assets/luckDraw/2.png'),
-          name: '阿峰塔定制保温杯'
-        }, {
-          icon: require('@/assets/luckDraw/3.png'),
-          name: '城市画展系列T恤衫-XL '
-        }, {
-          icon: require('@/assets/luckDraw/4.png'),
-          name: '户外超声波防潮野餐地垫-灰'
-        }, {
-          icon: require('@/assets/luckDraw/5.png'),
-          name: '户外折叠整理箱-灰'
-        }, {
-          icon: require('@/assets/luckDraw/6.png'),
-          name: 'AVATR环保東口包'
-        }, {
-          icon: require('@/assets/luckDraw/7.png'),
-          name: 'AVATR精品帆布包(含定制徽章)'
-        }, {
-          icon: require('@/assets/luckDraw/8.png'),
-          name: '杜邦电脑包'
-        }, {
-          icon: require('@/assets/luckDraw/E66.png'),
-          name: 'E值-66'
-        }
+          icon: require("@/assets/luckDraw/2.png"),
+          name: "阿峰塔定制保温杯",
+          numUp: 200,
+        },
+        {
+          icon: require("@/assets/luckDraw/3.png"),
+          name: "城市画展系列T恤衫-XL ",
+          numUp: 200,
+        },
+        {
+          icon: require("@/assets/luckDraw/4.png"),
+          name: "户外超声波防潮野餐地垫-灰",
+          numUp: 200,
+        },
+        {
+          icon: require("@/assets/luckDraw/5.png"),
+          name: "户外折叠整理箱-灰",
+          numUp: 200,
+        },
+        {
+          icon: require("@/assets/luckDraw/6.png"),
+          name: "AVATR环保東口包",
+          numUp: 200,
+        },
+        {
+          icon: require("@/assets/luckDraw/7.png"),
+          name: "AVATR精品帆布包(含定制徽章)",
+          numUp: 200,
+        },
+        {
+          icon: require("@/assets/luckDraw/8.png"),
+          name: "杜邦电脑包",
+          numUp: 200,
+        },
+        {
+          icon: require("@/assets/luckDraw/E66.png"),
+          name: "E值-66",
+          numUp: 200,
+        },
+        {
+          icon: require("@/assets/luckDraw/7.png"),
+          name: "AVATR精品帆布包(含定制徽章)",
+          numUp: 200,
+        },
+        {
+          icon: require("@/assets/luckDraw/8.png"),
+          name: "杜邦电脑包",
+          numUp: 200,
+        },
+        {
+          icon: require("@/assets/luckDraw/E66.png"),
+          name: "E值-66",
+          numUp: 200,
+        },
       ],
-      imgHeight: 'auto',
-      mainHeight: 600,
-      probability: [
-        [1, 50],
-        [50, 60],
-        [60, 70],
-        [70, 80],
-        [80, 90],
-        [90, 95],
-        [95, 98],
-        [98, 99],
-        [99, 101]
-      ]
-    }
+      imgHeight: "auto",
+      mainHeight: 800,
+      contentHeight: "auto",
+      textUp: "",
+    };
   },
   mounted() {
-    let imgs = document.getElementsByClassName('imgs');
+    let imgs = document.getElementsByClassName("imgs");
     let imgw = imgs[0];
     imgw.onload = () => {
-      this.imgHeight = imgw.clientWidth
-    }
-    this.changeSIze()
-    // setTimeout(() => {
-    //   this.beginChouse()
-    // }, 2000);
+      this.imgHeight = imgw.clientWidth / 1.8;
+    };
+    // let main = document.getElementsByClassName("mainOut")[0];
+    // this.mainHeight = main.clientHeight;
+    // this.changeSIze((res) => {
+    //   let cententDom = document.getElementsByClassName("centent")[0];
+    //   let contentTop = this.addTopHeight(["upImgs2"]);
+    //   console.log(res, contentTop, cententDom.clientHeight, res - contentTop - 60);
+    //   let lastHeight = res - contentTop - 60;
+    //   this.contentHeight =
+    //     cententDom.clientHeight > lastHeight ? lastHeight : cententDom.clientHeight;
+    // });
   },
   methods: {
-    changeSIze() {
-      let backDom = document.getElementById('background')
+    addTopHeight(arr) {
+      let top = 0;
+      for (let a in arr) {
+        let dom = document.getElementsByClassName(arr[a])[0];
+        top += dom.offsetTop;
+        console.log(dom.offsetTop, arr[a]);
+      }
+      return top;
+    },
+    changeSIze(fn) {
+      let backDom = document.getElementById("background");
       let that = this;
       backDom.onload = function () {
-        let ph = window.screen.height, pw = window.screen.width, scale = this.height / this.width;
+        let ph = window.screen.height,
+          pw = window.screen.width,
+          scale = this.height / this.width;
         // console.log(this.width, pw, this.height, ph, scale)
-        let lastHeight = scale * pw
-        console.log(lastHeight)
+        let lastHeight = scale * pw;
         that.mainHeight = ph > lastHeight ? ph : lastHeight;
-      }
+        if (fn) {
+          fn(that.mainHeight);
+        }
+      };
     },
     back(val) {
-      if (val == '返回首页') {
+      if (val == "返回首页") {
         gotopPage("/");
       }
     },
-    beginChouse() {
-      // if (this.state) return
-      this.state = true;
-      let nums = parseInt(Math.random() * 100 + 1), num = 8;
-
-      for (let k in this.probability) {
-        if (nums >= this.probability[k][0] && nums < this.probability[k][1]) {
-          num = k
-        }
+    upImg() {
+      let that = this;
+      function inputUpload() {
+        that.upLoad(this.files);
       }
-      console.log(nums, num)
-      let nowNum = 0;
-      let doit = () => {
-        setTimeout(() => {
-          nowNum++
-          this.addIndex()
-          if (nowNum > 30 && this.chouseIndex == num) {
-            this.state = false;
-            this.chouseIndex = num
-            console.log(num + 1)
-
-            return
-          } else {
-            doit()
-          }
-        }, nowNum * 10);
-      }
-      doit()
+      let input = document.createElement("input");
+      input.type = "file";
+      input.accept = "image/*";
+      input.onchange = inputUpload;
+      input.click();
     },
-    addIndex() {
-      if (this.chouseIndex == 8) {
-        this.chouseIndex = 0
-      } else {
-        this.chouseIndex++
-      }
-    }
-  }
+    upLoad(files) {
+      console.log(this.files);
+    },
+    upClick(tiem, index) {
+      console.log(tiem, index);
+    },
+  },
 };
 </script>
 
@@ -177,7 +238,7 @@ export default {
   /* top: 0; */
   /* left: 0; */
   width: calc(100vw - 1rem);
-  background-image: url(../../assets/luckDraw/bj.jpg);
+  background-image: url(../../assets/auspiciousness/bj.jpg);
   background-size: 100% 100%;
   background-repeat: no-repeat;
 }
@@ -194,8 +255,39 @@ export default {
 }
 
 .themes {
-  width: 6rem;
+  width: 7.8rem;
   margin-bottom: 0.5rem;
+}
+
+.themes1 {
+  position: absolute;
+  right: 0.5rem;
+  top: 1.5rem;
+  width: 2.6rem;
+}
+
+.upImg {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.upImg .upImgs {
+  width: 80%;
+  margin: 0.3rem auto 0.5rem;
+}
+
+.upImg .upImgs2 {
+  width: 60%;
+  margin: 0.3rem auto 0.5rem;
+}
+
+.upImg .upInput {
+  padding: 0.15rem;
+  width: calc(80% - 0.3rem);
+  box-shadow: 0 0 6px 3px #f323ca;
+  border-radius: 0.15rem;
 }
 
 .centent {
@@ -203,13 +295,17 @@ export default {
   width: 95%;
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: flex-start;
   margin-bottom: 0.7rem;
   flex-wrap: wrap;
+  position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .centent .cententOnce {
-  width: 33%;
+  width: 48%;
+  margin-left: 1.5%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -229,21 +325,7 @@ export default {
   font-size: 0.2rem;
   margin-top: 0.2rem;
 }
-
-.centent .cententOnce.avtive .imgs {
-  box-shadow: 0 0 6px 6px #f323ca
-}
-
-.butBom {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
-}
-
-.butBom img {
-  margin-bottom: 0.7rem;
-  width: 60%;
+.uppppp {
+  width: 100% !important;
 }
 </style>

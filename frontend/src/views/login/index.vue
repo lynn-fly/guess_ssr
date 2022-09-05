@@ -1,45 +1,51 @@
 <template>
-  <div class="login ">
+  <div class="login">
     <!--<h1>登录</h1> flex-c-c-->
     <!-- <div class="row" style="margin-top: 100px;">
       <div class="offset-3 col-md-6">
         <button @click="handleLogin">登陆</button>
       </div>
     </div> -->
-    <img class="theme" src="@/assets/login/title.png" alt="" srcset="">
+    <img class="theme" src="@/assets/login/title.png" alt="" srcset="" />
     <div class="inputs flex-c-c">
       <div class="once flex-c-c">
         <div class="title">
-          <img class="titleImg" src="@/assets/login/number2.png" alt="" srcset="">
+          <img class="titleImg" src="@/assets/login/number2.png" alt="" srcset="" />
         </div>
-        <input type="text" v-model="form.username" placeholder="请输入姓名">
+        <input type="text" v-model="form.username" placeholder="请输入姓名" />
       </div>
       <div class="once flex-c-c">
-        <div class="title ">
-          <img class="titleImg" src="@/assets/login/number1.png" alt="" srcset="">
+        <div class="title">
+          <img class="titleImg" src="@/assets/login/number1.png" alt="" srcset="" />
         </div>
-        <input type="text" v-model="form.password" placeholder="请输入工号">
+        <input type="text" v-model="form.password" placeholder="请输入工号" />
       </div>
     </div>
-    <img class="luckDraw" @click="loging" src="@/assets/login/login.png" alt="" srcset="">
+    <img
+      class="luckDraw"
+      @click="loging"
+      src="@/assets/login/login.png"
+      alt=""
+      srcset=""
+    />
   </div>
 </template>
 
 <script>
 import { gotopPage } from "@/utils/index";
 export default {
-  name: 'Login',
+  name: "Login",
   data() {
     return {
       form: {
-        username: 1,
-        password: 1
+        username: "谭本宏",
+        password: "AVA0000319",
       },
       rules: {
-        username: [{ required: true, trigger: 'blur', message: '用户名不能为空' }],
-        password: [{ required: true, trigger: 'blur', message: '密码不能为空' }]
-      }
-    }
+        username: [{ required: true, trigger: "blur", message: "用户名不能为空" }],
+        password: [{ required: true, trigger: "blur", message: "密码不能为空" }],
+      },
+    };
   },
   methods: {
     handleLogin() {
@@ -52,37 +58,44 @@ export default {
       //     })
       //   }
       // })
-      this.$store.dispatch('user/login', { username: 'admin', password: 'admin' }).then(() => {
-        this.$router.push({ name: 'manage' })
-      }).catch(() => {
-
-      })
+      this.$store
+        .dispatch("user/login", { username: "admin", password: "admin" })
+        .then(() => {
+          this.$router.push({ name: "manage" });
+        })
+        .catch(() => {});
     },
     isOk(name, pass) {
-      let names = ['1', '2', '3'], passs = ['1', '2', '3'], ki = -1;
+      let names = ["1", "2", "3"],
+        passs = ["1", "2", "3"],
+        ki = -1;
       for (let k in names) {
         if (names[k] == name) {
-          ki = k
+          ki = k;
         }
       }
       if (ki == -1 || pass != passs[ki]) {
-        return false
+        return false;
       }
-      return true
+      return true;
     },
     loging() {
-      if (this.isOk(this.form.username, this.form.password)) {
-        console.log(this.$store, '登入成功')
-        this.$store.commit('user/SET_NAME', this.form.username)
-        setTimeout(() => {
-          gotopPage("/");
-        }, 100);
-      } else {
-        console.log('账号密码错误')
-      }
-    }
-  }
-}
+      this.$store.dispatch("user/login", {
+        username: this.form.username + "",
+        password: this.form.password,
+      });
+      // if (this.isOk(this.form.username, this.form.password)) {
+      //   console.log(this.$store, '登入成功')
+      //   this.$store.commit('user/SET_NAME', this.form.username)
+      //   setTimeout(() => {
+      //     gotopPage("/");
+      //   }, 100);
+      // } else {
+      //   console.log('账号密码错误')
+      // }
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -106,7 +119,6 @@ export default {
   width: 100%;
   margin-bottom: 1rem;
   margin-top: 1rem;
-
 }
 
 .luckDraw {
@@ -117,7 +129,6 @@ export default {
   width: 100%;
   flex-direction: column;
   margin-bottom: 1rem;
-
 }
 
 .inputs .once {

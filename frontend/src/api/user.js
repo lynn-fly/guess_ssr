@@ -8,7 +8,7 @@ export function login(data) {
     form.append(key, data[key])
   })
   return request({
-    url: '/login/access-token',
+    url: '/login/user',
     method: 'post',
     data: form
   })
@@ -22,5 +22,3 @@ export function getInfo() {
 }
 
 // 管理员登陆
-
-

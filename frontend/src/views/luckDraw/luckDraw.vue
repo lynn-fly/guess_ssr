@@ -1,149 +1,223 @@
 <template>
   <div class="mainOut">
     <div class="luckDraw" :style="{ height: mainHeight + 'px' }">
-      <img class="background" id="background" v-show="false" src="../../assets/home/background.png" alt="" srcset="" />
+      <img
+        class="background"
+        id="background"
+        v-show="false"
+        src="../../assets/home/background.png"
+        alt=""
+        srcset=""
+      />
       <div class="top">
         <Buttons :msg="name" @back="back" />
-        <img class="theme" src="@/assets/luckDraw/title.png" alt="" srcset="">
+        <img class="theme" src="@/assets/luckDraw/title.png" alt="" srcset="" />
       </div>
-      <img class="themes" src="@/assets/luckDraw/msg.png" alt="" srcset="">
+      <img class="themes" src="@/assets/luckDraw/msg.png" alt="" srcset="" />
       <div class="centent">
-        <div class="cententOnce" :class="[chouseIndex == index ? 'avtive' : '']" v-for="(item, index) in imgData">
-          <img class="imgs" :style="{ height: imgHeight + 'px' }" :src="item.icon" alt="" srcset="">
+        <div
+          class="cententOnce"
+          :class="[chouseIndex == index ? 'avtive' : '']"
+          v-for="(item, index) in imgData"
+        >
+          <img
+            class="imgs"
+            :style="{ height: imgHeight + 'px' }"
+            :src="item.icon"
+            alt=""
+            srcset=""
+          />
           <div class="label">{{ item.name }}</div>
         </div>
       </div>
       <div class="butBom">
-        <img src="@/assets/luckDraw/begin.png" @click="beginChouse" alt="" srcset="">
-        <img src="@/assets/luckDraw/yue.png" alt="" srcset="">
+        <img src="@/assets/luckDraw/begin.png" @click="beginChouse" alt="" srcset="" />
+        <img src="@/assets/luckDraw/yue.png" alt="" srcset="" />
       </div>
     </div>
+    <Popup :popupData="result" :visible="popupVisible" @close="close" />
   </div>
 </template>
 
 <script>
 import { gotopPage } from "@/utils/index";
+import Popup from "@/components/popup.vue";
 import Buttons from "@/components/home/buttons.vue";
 export default {
   components: {
     Buttons,
+    Popup,
   },
   data() {
     return {
-      name: '返回首页',
+      name: "返回首页",
       chouseIndex: 0,
       state: false,
       imgData: [
         {
-          icon: require('@/assets/luckDraw/1.png'),
-          name: '户外桌椅-灰'
+          icon: require("@/assets/luckDraw/1.png"),
+          name: "户外桌椅-灰",
         },
         {
-          icon: require('@/assets/luckDraw/2.png'),
-          name: '阿峰塔定制保温杯'
-        }, {
-          icon: require('@/assets/luckDraw/3.png'),
-          name: '城市画展系列T恤衫-XL '
-        }, {
-          icon: require('@/assets/luckDraw/4.png'),
-          name: '户外超声波防潮野餐地垫-灰'
-        }, {
-          icon: require('@/assets/luckDraw/5.png'),
-          name: '户外折叠整理箱-灰'
-        }, {
-          icon: require('@/assets/luckDraw/6.png'),
-          name: 'AVATR环保東口包'
-        }, {
-          icon: require('@/assets/luckDraw/7.png'),
-          name: 'AVATR精品帆布包(含定制徽章)'
-        }, {
-          icon: require('@/assets/luckDraw/8.png'),
-          name: '杜邦电脑包'
-        }, {
-          icon: require('@/assets/luckDraw/E66.png'),
-          name: 'E值-66'
-        }
+          icon: require("@/assets/luckDraw/2.png"),
+          name: "阿峰塔定制保温杯",
+        },
+        {
+          icon: require("@/assets/luckDraw/3.png"),
+          name: "城市画展系列T恤衫-XL ",
+        },
+        {
+          icon: require("@/assets/luckDraw/4.png"),
+          name: "户外超声波防潮野餐地垫-灰",
+        },
+        {
+          icon: require("@/assets/luckDraw/5.png"),
+          name: "户外折叠整理箱-灰",
+        },
+        {
+          icon: require("@/assets/luckDraw/6.png"),
+          name: "AVATR环保東口包",
+        },
+        {
+          icon: require("@/assets/luckDraw/7.png"),
+          name: "AVATR精品帆布包(含定制徽章)",
+        },
+        {
+          icon: require("@/assets/luckDraw/8.png"),
+          name: "杜邦电脑包",
+        },
+        {
+          icon: require("@/assets/luckDraw/E66.png"),
+          name: "E值-66",
+        },
       ],
-      imgHeight: 'auto',
+      imgHeight: "auto",
       mainHeight: 600,
       probability: [
-        [1, 50],
-        [50, 60],
-        [60, 70],
-        [70, 80],
-        [80, 90],
-        [90, 95],
-        [95, 98],
-        [98, 99],
-        [99, 101]
-      ]
-    }
+        [1, 50, 9],
+        [50, 60, 8],
+        [60, 70, 7],
+        [70, 80, 6],
+        [80, 90, 5],
+        [90, 95, 4],
+        [95, 98, 3],
+        [98, 99, 2],
+        [99, 100, 1],
+        [100, 101, 0],
+      ],
+      popupVisible: false,
+      wz: require("@/assets/luckDraw/result/wz1.png"),
+      zj: require("@/assets/luckDraw/result/zj1.png"),
+      wzMain: require("@/assets/luckDraw/result/wz2.png"),
+      result: {
+        type: "luckDraw",
+        icon: "",
+        name: "",
+        button: [
+          {
+            icon: "",
+            value: "首页",
+          },
+        ],
+      },
+    };
   },
   mounted() {
-    let imgs = document.getElementsByClassName('imgs');
+    let imgs = document.getElementsByClassName("imgs");
     let imgw = imgs[0];
     imgw.onload = () => {
-      this.imgHeight = imgw.clientWidth
-    }
-    this.changeSIze()
+      this.imgHeight = imgw.clientWidth;
+    };
+    this.changeSIze();
     // setTimeout(() => {
-    //   this.beginChouse()
+    // this.beginChouse();
     // }, 2000);
   },
   methods: {
     changeSIze() {
-      let backDom = document.getElementById('background')
+      let backDom = document.getElementById("background");
       let that = this;
       backDom.onload = function () {
-        let ph = window.screen.height, pw = window.screen.width, scale = this.height / this.width;
+        let ph = window.screen.height,
+          pw = window.screen.width,
+          scale = this.height / this.width;
         // console.log(this.width, pw, this.height, ph, scale)
-        let lastHeight = scale * pw
-        console.log(lastHeight)
+        let lastHeight = scale * pw;
+        console.log(lastHeight);
         that.mainHeight = ph > lastHeight ? ph : lastHeight;
-      }
+      };
     },
     back(val) {
-      if (val == '返回首页') {
+      if (val == "返回首页") {
         gotopPage("/");
       }
     },
     beginChouse() {
-      // if (this.state) return
+      if (this.state) return;
       this.state = true;
-      let nums = parseInt(Math.random() * 100 + 1), num = 8;
+      let nums = parseInt(Math.random() * 101 + 1),
+        num = 8;
 
       for (let k in this.probability) {
         if (nums >= this.probability[k][0] && nums < this.probability[k][1]) {
-          num = k
+          num = this.probability[k][2];
         }
       }
-      console.log(nums, num)
+
+      console.log(nums, num);
       let nowNum = 0;
       let doit = () => {
         setTimeout(() => {
-          nowNum++
-          this.addIndex()
-          if (nowNum > 30 && this.chouseIndex == num) {
+          nowNum++;
+          this.addIndex();
+          if (nowNum > 10 && this.chouseIndex == num) {
             this.state = false;
-            this.chouseIndex = num
-            console.log(num + 1)
-
-            return
+            this.chouseIndex = num;
+            console.log(num);
+            this.getResult(num);
+            return;
+          } else if (nowNum > 10 && num == 9) {
+            this.state = false;
+            this.getResult(num);
+            return;
           } else {
-            doit()
+            doit();
           }
         }, nowNum * 10);
-      }
-      doit()
+      };
+      doit();
     },
     addIndex() {
       if (this.chouseIndex == 8) {
-        this.chouseIndex = 0
+        this.chouseIndex = 0;
       } else {
-        this.chouseIndex++
+        this.chouseIndex++;
       }
-    }
-  }
+    },
+    getResult(num) {
+      let icon = this.zj;
+      let main = this.wzMain;
+      let name = "";
+      if (num == 9) {
+        icon = this.wz;
+      } else {
+        main = this.imgData[num].icon;
+        name = this.imgData[num].name;
+      }
+      this.result.button[0].icon = icon;
+      this.result.icon = main;
+      this.result.name = name;
+      this.popupVisible = true;
+      console.log(this.result);
+    },
+    close(val) {
+      if (val == "关闭") {
+        this.popupVisible = false;
+      } else {
+        gotopPage("/");
+      }
+    },
+  },
 };
 </script>
 
@@ -229,7 +303,7 @@ export default {
 }
 
 .centent .cententOnce.avtive .imgs {
-  box-shadow: 0 0 6px 6px #f323ca
+  box-shadow: 0 0 6px 6px #f323ca;
 }
 
 .butBom {

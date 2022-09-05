@@ -1,5 +1,12 @@
-import { login, getInfo } from '@/api/user'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import {
+  login,
+  getInfo
+} from '@/api/user'
+import {
+  getToken,
+  setToken,
+  removeToken
+} from '@/utils/auth'
 
 const getDefaultState = () => {
   return {
@@ -27,11 +34,21 @@ const mutations = {
 }
 
 const actions = {
-  login({ commit }, userInfo) {
-    const { username, password } = userInfo
+  login({
+    commit
+  }, userInfo) {
+    const {
+      username,
+      password
+    } = userInfo
     return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: password }).then(response => {
-        const { data } = response
+      login({
+        nick_name: username.trim(),
+        username: password
+      }).then(response => {
+        const {
+          data
+        } = response
         commit('SET_TOKEN', data['access_token'])
         setToken(data['access_token'])
         resolve()
@@ -41,14 +58,22 @@ const actions = {
     })
   },
   // get user info
-  getInfo({ commit, state }) {
+  getInfo({
+    commit,
+    state
+  }) {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
-        const { data } = response
+        const {
+          data
+        } = response
         if (!data) {
           reject('验证失败，请重新登录。')
         }
-        const { name, roles } = data
+        const {
+          name,
+          roles
+        } = data
         console.log(name)
         if (!roles || roles.le <= 0) {
           reject('getInfo: roles must be a non-null array!')
@@ -62,7 +87,10 @@ const actions = {
     })
   },
   // logout
-  logout({ commit, state }) {
+  logout({
+    commit,
+    state
+  }) {
     return new Promise((resolve, reject) => {
       try {
         removeToken()
@@ -73,7 +101,9 @@ const actions = {
     })
   },
   // remove token
-  resetToken({ commit }) {
+  resetToken({
+    commit
+  }) {
     return new Promise(resolve => {
       removeToken()
       commit('RESET_STATE')
