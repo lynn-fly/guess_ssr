@@ -8,7 +8,7 @@ console.log(process.env)
 console.log(process.env.API_URL)
 const service = axios.create({
   baseURL: process.env.API_URL,
-  timeout: 5000 // 请求超时时间
+  timeout: 120 * 1000 // 请求超时时间
 })
 
 // 设置请求拦截器

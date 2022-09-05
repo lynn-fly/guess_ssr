@@ -1,12 +1,5 @@
-import {
-  login,
-  getInfo
-} from '@/api/user'
-import {
-  getToken,
-  setToken,
-  removeToken
-} from '@/utils/auth'
+import { login, getInfo,loginAdmin } from '@/api/user'
+import { getToken, setToken, removeToken } from '@/utils/auth'
 
 const getDefaultState = () => {
   return {
@@ -34,21 +27,25 @@ const mutations = {
 }
 
 const actions = {
-  login({
-    commit
-  }, userInfo) {
-    const {
-      username,
-      password
-    } = userInfo
+  login({ commit }, userInfo) {
+    const { username, password } = userInfo
     return new Promise((resolve, reject) => {
-      login({
-        nick_name: username.trim(),
-        username: password
-      }).then(response => {
-        const {
-          data
-        } = response
+      login({ username: username.trim(), password: password }).then(response => {
+        const { data } = response
+        commit('SET_TOKEN', data['access_token'])
+        setToken(data['access_token'])
+        resolve()
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+
+  loginAdmin({ commit }, userInfo) {
+    const { username, password } = userInfo
+    return new Promise((resolve, reject) => {
+      loginAdmin({ username: username.trim(), password: password }).then(response => {
+        const { data } = response
         commit('SET_TOKEN', data['access_token'])
         setToken(data['access_token'])
         resolve()
@@ -95,6 +92,7 @@ const actions = {
       try {
         removeToken()
         commit('RESET_STATE')
+        resolve()
       } catch (error) {
         reject(error)
       }

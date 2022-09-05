@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     BACKEND_CORS_ORIGINS: List = ['*']
 
     # SQLALCHEMY_DATABASE_URI: str = f'sqlite:///{BASEDIR}/fastapi-vue-blog.db'
-    SQLALCHEMY_DATABASE_URI:str = f'mysql+pymysql://root:123456Aa@127.0.0.1:3308/guessr'
+    SQLALCHEMY_DATABASE_URI:str = f'mysql+pymysql://root:123456Aa@127.0.0.1:3308/guessr?charset=utf8mb4'
 
     SECRET_KEY: str = secrets.token_urlsafe(32)
 

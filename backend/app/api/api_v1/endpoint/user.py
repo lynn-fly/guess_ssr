@@ -61,7 +61,7 @@ def save_answer(db: Session = Depends(deps.get_db),user: User = Depends(deps.get
 
 #saveThumbed
 @router.post('/save_thumbed/{user_id}',dependencies=[Depends(deps.get_current_user)], response_model=Any, status_code=status.HTTP_201_CREATED)
-def save_answer(db: Session = Depends(deps.get_db),user: User = Depends(deps.get_current_user),*,user_id:int) -> Any:
+def save_thumbed(db: Session = Depends(deps.get_db),user: User = Depends(deps.get_current_user),*,user_id:int) -> Any:
      if not user:
         raise HTTPException(
             status_code=400, detail="user not found"
@@ -86,80 +86,92 @@ def save_answer(db: Session = Depends(deps.get_db),user: User = Depends(deps.get
         'thumbeUsers': new_user.thumbed.split(',')
     }
 
-# @router.post('/get_prize',dependencies=[Depends(deps.get_current_user)], response_model=Any, status_code=status.HTTP_200_OK)
-# def get_prize(db: Session = Depends(deps.get_db),user: User = Depends(deps.get_current_user)) -> Any:
-@router.post('/get_prize', response_model=Any, status_code=status.HTTP_200_OK)
-def get_prize(db: Session = Depends(deps.get_db)) -> Any:
+@router.post('/get_prize',dependencies=[Depends(deps.get_current_user)], response_model=Any, status_code=status.HTTP_200_OK)
+def get_prize(db: Session = Depends(deps.get_db),user: User = Depends(deps.get_current_user)) -> Any:
+#@router.post('/get_prize', response_model=Any, status_code=status.HTTP_200_OK)
+#def get_prize(db: Session = Depends(deps.get_db)) -> Any:
     # for test  start
-    randomUserId =random.sample(range(2,1912),1)
-    user = crud.user.get(db,id=randomUserId)
+    # randomUserId =random.sample(range(2,1912),1)
+    # user = crud.user.get(db,id=randomUserId)
     # fot test end
-    if not user:
-        raise HTTPException(
-            status_code=400, detail="user not found"
-        )
-    lottery_count = user.lottery_count
-    first_prize_time = user.first_prize_time
-    second_prize_time = user.second_prize_time
-    first_prize_level = user.first_prize_level
-    second_prize_level = user.second_prize_level
-    
-    if lottery_count < 1:
-        raise HTTPException(
-            status_code=500, detail="lottery count is 0"
-        )
-    if second_prize_time > 0 and first_prize_time > 0:
-        raise HTTPException(
-            status_code=500, detail="you had prize towice"
-        )
-    gifts = [1,2,2,3,3,3,4,4,4,5,5,5,6,6,6,6,6,6,7,7,7,7,7,7,8,8,8,8,8,8,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9]
-    # 如果第一次已经抽取了，就在三等奖和四等奖中抽取，且中间总额不能大于总数量 -  总人数
-    has_gifts = True
-    if first_prize_level > 0:
-        second_count = crud.user.get_second(db)
-        if second_count <= 150:
-            gifts = [6,7,8,9,10,10,10,10,10,10,10,10,10,10,10,10,10]
-        else:
-            has_gifts = False
-    random.shuffle(gifts)
-    giftlevel = -1
-    retry = 30
-    while giftlevel == -1 and retry > 0 and has_gifts:
-        index=random.sample(range(0,len(gifts)-1),1)
-        giftlevel = gifts[index[0]]
-        
-        gift = crud.gift.get(db,id=giftlevel)
-        if (gift and gift.allowance > 0 ):
-            gift =  crud.gift.reduceOneAllowance(db,db_obj=gift)
-            if (gift.allowance < 0):
-                giftlevel = -1
-        else:
-            giftlevel = -1
-        retry -= 1
-    
-    if retry < 1 or giftlevel == 10:
+    # if not access_user:
+    #     raise HTTPException(
+    #         status_code=400, detail="user not found"
+    #     )
+    user_updated = False
+    second_count = crud.user.get_second(db)
+    with db.begin(subtransactions=True):
+        # user = None
+        # try:
+        #     user = crud.user.locke_user(db,db_obj=access_user)
+        # except Exception as e:
+        #     print(f"抽奖异常:{e.__str__()}")
+        if not user:
+            raise HTTPException(
+                status_code=400, detail="user not found"
+            )
+        lottery_count = user.lottery_count
+        first_prize_time = user.first_prize_time
+        second_prize_time = user.second_prize_time
+        first_prize_level = user.first_prize_level
+        second_prize_level = user.second_prize_level
+
+        if lottery_count < 1:
+            raise HTTPException(
+                status_code=500, detail="lottery count is 0"
+            )
+        if second_prize_time > 0 and first_prize_time > 0:
+            raise HTTPException(
+                status_code=500, detail="you had prize towice"
+            )
+        gifts = [1,2,2,3,3,3,4,4,4,5,5,5,6,6,6,6,7,7,7,7,8,8,8,8,9,9,9,9,9,9,9,9,9,9,9,9,9
+        ,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9
+        ,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9]
+        # 如果第一次已经抽取了，就在三等奖和四等奖中抽取，且中间总额不能大于总数量 -  总人数
+        has_gifts = True
+        if first_prize_level > 0:      
+            if second_count <= 150:
+                gifts = [6,7,8,9,10,10,10,10,10,10,10,10,10,10,10,10,10]
+            else:
+                has_gifts = False
+        random.shuffle(gifts)
         giftlevel = -1
+        retry = 30
+        while giftlevel == -1 and retry > 0 and has_gifts:
+            index=random.sample(range(0,len(gifts)-1),1)
+            giftlevel = gifts[index[0]]
+            
+            gift = crud.gift.get(db,id=giftlevel)
+            if (gift and gift.allowance > 0 ):
+                upOK =  crud.gift.reduceOneAllowance(db,db_obj=gift)
+                if (not upOK):
+                    giftlevel = -1
+            else:
+                giftlevel = -1
+            retry -= 1
+        
+        if retry < 1 or giftlevel == 10:
+            giftlevel = -1
 
-    if first_prize_time == 0:
-        first_prize_time = int(datetime.timestamp(datetime.utcnow()))
-        first_prize_level = giftlevel
+        now_time = int(datetime.timestamp(datetime.utcnow()))
+        user_updated = crud.user.update_giftlevel(db,db_obj=user,now_time=now_time,gift_level=giftlevel)
+    if user_updated:
+        db.commit()
+        db.refresh(user)
+        return {
+            'userId':user.id,
+            'lottery_count':user.lottery_count,
+            'lotteryNumber':giftlevel,
+        }
     else:
-        second_prize_time = int(datetime.timestamp(datetime.utcnow()))
-        second_prize_level = giftlevel
-
-    obj_u = schemas.UserUpdate(
-        first_prize_time=first_prize_time,
-        first_prize_level=first_prize_level,
-        second_prize_time=second_prize_time,
-        second_prize_level=second_prize_level,
-        lottery_count = lottery_count - 1,
-        is_prize = True
-        )
-    new_user = crud.user.update(db,db_obj=user,obj_in=obj_u)
-    return {
-        'userId':new_user.id,
-        'lotteryNumber':giftlevel,
-    }
+        db.rollback()
+        print("user update false")
+        raise HTTPException(
+                status_code=500, detail="you had prize towice"
+            )
+    
+            
+            
 
 @router.post('/save_upload',
              dependencies=[Depends(deps.get_current_user)], 
@@ -218,7 +230,7 @@ def upload_list(
              dependencies=[Depends(deps.get_current_active_admin)], 
              response_model=Any, status_code=status.HTTP_200_OK)
 def get_results(
-        db: Session = Depends(deps.get_db), *,searchKey: str = Form(''), gift:int =Form(...), page: int = 1, limit: int = 10) -> Any:
+        db: Session = Depends(deps.get_db), *,searchKey: str = Form(''), gift:int =Form(...), page: int = 1, limit: int = 2500) -> Any:
     filters = [] #  如果是 tuple逗号不能少，如果只有一个条件的时候
     if (searchKey) :
         filters.append(or_(User.username.like(f'%{searchKey}%'),User.nick_name.like(f'%{searchKey}%')))
@@ -231,8 +243,8 @@ def get_results(
     data = crud.user.get_results(db,order_by=order_by,filters=filters,page=page,limit=limit)
     return JSONResponse(content=data, status_code=status.HTTP_200_OK)
 
-@router.post('/export')
-def fl_query(db: Session = Depends(deps.get_db), *,searchKey: str = Form(''), gift:int =Form(...), page: int = 1, limit: int = 10):
+@router.post('/export',dependencies=[Depends(deps.get_current_active_admin)], response_model=Any, status_code=status.HTTP_200_OK)
+def fl_query(db: Session = Depends(deps.get_db), *,searchKey: str = Form(''), gift:int =Form(...), page: int = 1, limit: int = 2500):
      header = ['工号', '姓名', '部门', "奖品一", "奖品二"]
      """
      以流的形式导出到excel     """
@@ -318,12 +330,14 @@ def fl_query(db: Session = Depends(deps.get_db), *,searchKey: str = Form(''), gi
      fls = crud.user.get_results(db,order_by=order_by,filters=filters,page=page,limit=limit)
      # 插入数据
      row = 1
+     gifts = ['未中奖','户外座椅-灰','阿维塔定制保温杯','城市画展系列T恤衫-XL',
+     '户外超声波防潮野餐地垫-灰','户外折叠整理箱-灰','AVATR环保束口包','AVATR精品帆布包（含定制徽章）','杜邦电脑包','E值-66']
      for f_log in fls:
          table_sheet.write(row, 0, str(f_log['username']), style=c_style)
          table_sheet.write(row, 1, str(f_log['nick_name']), style=c_style)
          table_sheet.write(row, 2, str(f_log['dept_name']), style=c_style)
-         table_sheet.write(row, 3, str(f_log['first_prize_level']), style=c_style) 
-         table_sheet.write(row, 4, str(f_log['second_prize_level']), style=c_style)          
+         table_sheet.write(row, 3, str(gifts[f_log['first_prize_level']]) if f_log['first_prize_level'] > 0 else '--', style=c_style) 
+         table_sheet.write(row, 4, str(gifts[f_log['second_prize_level']]) if f_log['second_prize_level'] > 0 else '--', style=c_style)          
          row += 1
          if row > 50000:  # 单表数量超过 65535 条 添加新的表
              row = 1
