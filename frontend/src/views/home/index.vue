@@ -8,6 +8,8 @@
           <Buttons :msg="name" @back="back" />
           <LampNumber :num="startNum" />
         </div>
+        <img src="../../assets/home//music.png" style="width:50px; height:50px" class="img" :class="[muteBgMusic ? 'pause' : 'start']" @click="playMusic"/>
+        <audio style="display:none; height: 0" id="bg-music"  autoplay="autoplay" src="http://129.226.227.171/upload/7scmx-u2mhm-4.mp3 " loop="loop"></audio>
         <div class="cententTop">
           <!-- <img class="up" src="@/assets/home/otherTitle.png" alt="" />
           <img class="down" src="@/assets/home/theme.png" alt="" />
@@ -47,16 +49,47 @@ export default {
   data() {
     return {
       startNum: 50,
-      mainHeight: 600
+      mainHeight: 600,
+      muteBgMusic: false,
     };
   },
+  watch: {
+		muteBgMusic(newValue, oldValue) {
+			if (newValue) {
+				// 开启静音
+        var audio = document.getElementById('bg-music');
+        audio.pause()
+
+			} else {
+				// 关闭 静音
+        var audio = document.getElementById('bg-music');
+        audio.play()
+			}
+		}
+	},
   mounted() {
     this.changeSIze()
+
+    const userAgent = window.navigator.userAgent;
+    const IS_IN_IOS = !!userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+    const IS_IN_WX = /MicroMessenger/i.test(userAgent);
+    if (IS_IN_WX) { // 是否微信环境
+      if (IS_IN_IOS) {
+        var audio = document.getElementById('bg-music');
+        audio.play()
+      }
+    } else {
+       var audio = document.getElementById('bg-music');
+       audio.play()
+    }
   },
   computed: {
     ...mapGetters(["name"]),
   },
   methods: {
+    playMusic() {
+			this.muteBgMusic = !this.muteBgMusic;
+		},
     changeSIze() {
       let backDom = document.getElementById('background')
       let that = this;
@@ -243,3 +276,62 @@ export default {
   width: 6.5rem;
 }
 </style>
+<style scoped>
+.img {
+  position: fixed !important;
+  right:20px;
+  top:55px;
+  z-index: 1000;
+}
+.start {
+  animation: music 10s infinite linear;  
+}
+.pause {
+  z-index: 1000;
+} 
+@keyframes music {
+  0% {
+		transform: rotate(0deg);
+	}
+ 
+	10% {
+		transform: rotate(36deg);
+	}
+ 
+	20% {
+		transform: rotate(72deg);
+	}
+ 
+	30% {
+		transform: rotate(108deg);
+	}
+ 
+	40% {
+		transform: rotate(144deg);
+	}
+ 
+	50% {
+		transform: rotate(180deg);
+	}
+ 
+	60% {
+		transform: rotate(216deg);
+	}
+ 
+	70% {
+		transform: rotate(252deg);
+	}
+ 
+	80% {
+		transform: rotate(288deg);
+	}
+ 
+	90% {
+		transform: rotate(324deg);
+	}
+ 
+	100% {
+		transform: rotate(360deg);
+	}
+}
+</style> 
