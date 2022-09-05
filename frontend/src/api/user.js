@@ -2,15 +2,15 @@ import request from '@/utils/request'
 
 // 用户登陆
 export function login(data) {
-  const form = new FormData()
-  const keys = Object.keys(data)
-  keys.forEach(key => {
-    form.append(key, data[key])
-  })
+  // const form = new FormData()
+  // const keys = Object.keys(data)
+  // keys.forEach(key => {
+  //   form.append(key, data[key])
+  // })
   return request({
     url: '/login/user',
     method: 'post',
-    data: form
+    data: data
   })
 }
 

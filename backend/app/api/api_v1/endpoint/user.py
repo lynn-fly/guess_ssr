@@ -5,6 +5,8 @@ import base64
 import shutil
 import uuid
 import xlwt
+import os
+from PIL import Image
 from io import BytesIO
 from datetime import datetime
 from typing import Any
@@ -197,12 +199,37 @@ def save_upload(
     ext = upload_file.filename.split('.')[-1]
     u_name = uuid.uuid4()
     file_location = f"uploads/{u_name}.{ext}"
+    context_type = upload_file.content_type
+    allow_types = ['image/jpeg', 'image/jpg', 'image/png']
+    if context_type not in allow_types:
+        raise HTTPException(
+            status_code=500, detail="文件类型不支持，请上传jpeg/jpg/png格式图片"
+        )
     
     with open(file_location, "wb+") as file_object:
         shutil.copyfileobj(upload_file.file, file_object)
+    
+    img_file_size = os.path.getsize(file_location)/1000/1000
+    if img_file_size >= 5:
+        raise HTTPException(
+            status_code=500, detail="上传图片不能大于5M"
+        )
+    if img_file_size < 1:
+        img_file_size = 1
+    file_location_c = f"uploads/{u_name}_c.{ext}"
+    try:
+        
+        sImg=Image.open(file_location)
+        w,h=sImg.size
+        dImg=sImg.resize((int(w/img_file_size),int(h/img_file_size)),Image.ANTIALIAS)  
+        dImg.save(file_location_c) 
+        print (file_location_c +" successful.")
+    except Exception:
+        print(file_location_c + " fail.")
+
     user_up = schemas.UserUpdate(
         upload_heart_value=upload_heart_value,heart_value=heart_value,lottery_count=lottery_count,
-        upload_comment=comment,upload_file_url=f"/upload/{u_name}.{ext}",upload_time=int(datetime.timestamp(datetime.utcnow()))
+        upload_comment=comment,upload_file_url=f"/upload/{u_name}_c.{ext}",upload_time=int(datetime.timestamp(datetime.utcnow()))
     )
     new_user = crud.user.update(db,db_obj=user,obj_in=user_up)
     return {
