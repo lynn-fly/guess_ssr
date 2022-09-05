@@ -1,7 +1,8 @@
 import {
   login,
   getInfo,
-  loginAdmin
+  loginAdmin,
+  goodLucky
 } from '@/api/user'
 import {
   getToken,
@@ -127,6 +128,19 @@ const actions = {
         resolve(data)
       }).catch(error => {
         reject(error)
+      })
+    })
+  },
+  // luckyDraw
+  luckyDraw({commit,state}) {
+    return new Promise((resolve,reject) => {
+      goodLucky().then(res=>{
+        const {lotteryNumber,lottery_count} = res.data;
+        let num = lotteryNumber < 1? 9: lotteryNumber - 1;
+        resolve(num);
+      })
+      .catch(err=>{
+        reject(err);
       })
     })
   },
