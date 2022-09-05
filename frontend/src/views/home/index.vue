@@ -87,6 +87,19 @@ export default {
 	},
   mounted() {
     this.changeSIze();
+    const userAgent = window.navigator.userAgent;
+    const IS_IN_IOS = !!userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+    const IS_IN_WX = /MicroMessenger/i.test(userAgent);
+
+    if (IS_IN_WX) { // 是否微信环境
+      if (IS_IN_IOS) {
+        var audio = document.getElementById('bg-music');
+        audio.play()
+      }
+    } else {
+      var audio = document.getElementById('bg-music');
+      audio.play()
+    }
   },
   computed: {
     ...mapGetters(["name", "userInfor"]),
@@ -97,19 +110,7 @@ export default {
 		},
     changeSIze() {
       let backDom = document.getElementById("background");
-      const userAgent = window.navigator.userAgent;
-      const IS_IN_IOS = !!userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
-      const IS_IN_WX = /MicroMessenger/i.test(userAgent);
-
-      if (IS_IN_WX) { // 是否微信环境
-        if (IS_IN_IOS) {
-          var audio = document.getElementById('bg-music');
-          audio.play()
-        }
-      } else {
-        var audio = document.getElementById('bg-music');
-        audio.play()
-      }
+      
 
       let that = this;
       backDom.onload = function () {
