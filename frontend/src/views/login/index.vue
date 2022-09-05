@@ -38,8 +38,8 @@ export default {
   data() {
     return {
       form: {
-        username: "谭本宏",
-        password: "AVA0000319",
+        username: "",
+        password: "",
       },
       rules: {
         username: [{ required: true, trigger: "blur", message: "用户名不能为空" }],
