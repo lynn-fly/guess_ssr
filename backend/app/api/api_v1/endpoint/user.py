@@ -87,25 +87,25 @@ def save_thumbed(db: Session = Depends(deps.get_db),user: User = Depends(deps.ge
     }
 
 @router.post('/get_prize',dependencies=[Depends(deps.get_current_user)], response_model=Any, status_code=status.HTTP_200_OK)
-def get_prize(db: Session = Depends(deps.get_db),access_user: User = Depends(deps.get_current_user)) -> Any:
+def get_prize(db: Session = Depends(deps.get_db),user: User = Depends(deps.get_current_user)) -> Any:
 #@router.post('/get_prize', response_model=Any, status_code=status.HTTP_200_OK)
 #def get_prize(db: Session = Depends(deps.get_db)) -> Any:
     # for test  start
-    #randomUserId =random.sample(range(2,1912),1)
-    #access_user = crud.user.get(db,id=randomUserId)
+    # randomUserId =random.sample(range(2,1912),1)
+    # user = crud.user.get(db,id=randomUserId)
     # fot test end
-    if not access_user:
-        raise HTTPException(
-            status_code=400, detail="user not found"
-        )
+    # if not access_user:
+    #     raise HTTPException(
+    #         status_code=400, detail="user not found"
+    #     )
     user_updated = False
     second_count = crud.user.get_second(db)
     with db.begin(subtransactions=True):
-        user = None
-        try:
-            user = crud.user.locke_user(db,db_obj=access_user)
-        except Exception as e:
-            print(f"抽奖异常:{e.__str__()}")
+        # user = None
+        # try:
+        #     user = crud.user.locke_user(db,db_obj=access_user)
+        # except Exception as e:
+        #     print(f"抽奖异常:{e.__str__()}")
         if not user:
             raise HTTPException(
                 status_code=400, detail="user not found"
