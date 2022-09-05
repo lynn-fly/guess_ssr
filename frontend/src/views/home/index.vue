@@ -1,11 +1,18 @@
 <template>
   <div class="home">
     <!-- <LampNumber :num="startNum" /> -->
-    <img class="background" id="background" v-show="false" src="../../assets/home/background.png" alt="" srcset="" />
+    <img
+      class="background"
+      id="background"
+      v-show="false"
+      src="../../assets/home/background.png"
+      alt=""
+      srcset=""
+    />
     <div class="mainOut">
       <div class="main" v-show="true" :style="{ height: mainHeight + 'px' }">
         <div class="top">
-          <Buttons :msg="name" @back="back" />
+          <Buttons :msg="name" :key="name" @back="back" />
           <LampNumber :num="startNum" />
         </div>
         <img src="../../assets/home//music.png" style="width:50px; height:50px" class="img" :class="[muteBgMusic ? 'pause' : 'start']" @click="playMusic"/>
@@ -23,9 +30,19 @@
         <div class="buttonsOur">
           <div class="buttonsCenter">
             <img class="guess" @click="guess" src="@/assets/home/guess.png" alt="" />
-            <img class="auspiciousness" @click="auspiciousness" src="@/assets/home/auspiciousness.png" alt="" />
+            <img
+              class="auspiciousness"
+              @click="auspiciousness"
+              src="@/assets/home/auspiciousness.png"
+              alt=""
+            />
           </div>
-          <img class="luckDraw" @click="luckDraw" src="@/assets/home/luckDraw.png" alt="" />
+          <img
+            class="luckDraw"
+            @click="luckDraw"
+            src="@/assets/home/luckDraw.png"
+            alt=""
+          />
         </div>
         <div class="bottomImg">
           <img class="bottomImgs" src="@/assets/home/introduce.png" alt="" />
@@ -53,7 +70,7 @@ export default {
       muteBgMusic: false,
     };
   },
-  watch: {
+   watch: {
 		muteBgMusic(newValue, oldValue) {
 			if (newValue) {
 				// 开启静音
@@ -68,38 +85,41 @@ export default {
 		}
 	},
   mounted() {
-    this.changeSIze()
-
-    const userAgent = window.navigator.userAgent;
-    const IS_IN_IOS = !!userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
-    const IS_IN_WX = /MicroMessenger/i.test(userAgent);
-    if (IS_IN_WX) { // 是否微信环境
-      if (IS_IN_IOS) {
-        var audio = document.getElementById('bg-music');
-        audio.play()
-      }
-    } else {
-       var audio = document.getElementById('bg-music');
-       audio.play()
-    }
+    this.changeSIze();
   },
   computed: {
-    ...mapGetters(["name"]),
+    ...mapGetters(["name", "userInfor"]),
   },
   methods: {
     playMusic() {
 			this.muteBgMusic = !this.muteBgMusic;
 		},
     changeSIze() {
-      let backDom = document.getElementById('background')
+      let backDom = document.getElementById("background");
+      const userAgent = window.navigator.userAgent;
+      const IS_IN_IOS = !!userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+      const IS_IN_WX = /MicroMessenger/i.test(userAgent);
+
+      if (IS_IN_WX) { // 是否微信环境
+        if (IS_IN_IOS) {
+          var audio = document.getElementById('bg-music');
+          audio.play()
+        }
+      } else {
+        var audio = document.getElementById('bg-music');
+        audio.play()
+      }
+
       let that = this;
       backDom.onload = function () {
-        let ph = window.screen.height, pw = window.screen.width, scale = this.height / this.width;
+        let ph = window.screen.height,
+          pw = window.screen.width,
+          scale = this.height / this.width;
         // console.log(this.width, pw, this.height, ph, scale)
-        let lastHeight = scale * pw
-        console.log(lastHeight)
+        let lastHeight = scale * pw;
+        console.log(lastHeight);
         that.mainHeight = ph > lastHeight ? ph : lastHeight;
-      }
+      };
     },
     guess() {
       console.log("guess");
@@ -114,7 +134,7 @@ export default {
       console.log("luckDraw");
     },
     back(val) {
-      if (val == 'login') {
+      if (val == "login") {
         gotopPage("/login");
       }
     },
@@ -276,6 +296,7 @@ export default {
   width: 6.5rem;
 }
 </style>
+
 <style scoped>
 .img {
   position: fixed !important;

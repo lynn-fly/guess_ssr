@@ -52,7 +52,7 @@
               alt=""
               @click="upClick(item, index)"
             />
-            {{ item.numUp }}
+            {{ item.thumbed.length - 1 }}
           </div>
         </div>
       </div>
@@ -64,6 +64,8 @@
 import { gotopPage } from "@/utils/index";
 import LampNumber from "@/components/home/lampNumber.vue";
 import Buttons from "@/components/home/buttons.vue";
+import { upFile, getupload_list, setsave_thumbed } from "@/api/auspiciousness";
+import { mapGetters } from "vuex";
 export default {
   components: {
     Buttons,
@@ -75,66 +77,66 @@ export default {
       state: false,
       startNum: 50,
       imgData: [
-        {
-          icon: require("@/assets/luckDraw/1.png"),
-          name: "户外桌椅-灰",
-          numUp: 200,
-        },
-        {
-          icon: require("@/assets/luckDraw/2.png"),
-          name: "阿峰塔定制保温杯",
-          numUp: 200,
-        },
-        {
-          icon: require("@/assets/luckDraw/3.png"),
-          name: "城市画展系列T恤衫-XL ",
-          numUp: 200,
-        },
-        {
-          icon: require("@/assets/luckDraw/4.png"),
-          name: "户外超声波防潮野餐地垫-灰",
-          numUp: 200,
-        },
-        {
-          icon: require("@/assets/luckDraw/5.png"),
-          name: "户外折叠整理箱-灰",
-          numUp: 200,
-        },
-        {
-          icon: require("@/assets/luckDraw/6.png"),
-          name: "AVATR环保東口包",
-          numUp: 200,
-        },
-        {
-          icon: require("@/assets/luckDraw/7.png"),
-          name: "AVATR精品帆布包(含定制徽章)",
-          numUp: 200,
-        },
-        {
-          icon: require("@/assets/luckDraw/8.png"),
-          name: "杜邦电脑包",
-          numUp: 200,
-        },
-        {
-          icon: require("@/assets/luckDraw/E66.png"),
-          name: "E值-66",
-          numUp: 200,
-        },
-        {
-          icon: require("@/assets/luckDraw/7.png"),
-          name: "AVATR精品帆布包(含定制徽章)",
-          numUp: 200,
-        },
-        {
-          icon: require("@/assets/luckDraw/8.png"),
-          name: "杜邦电脑包",
-          numUp: 200,
-        },
-        {
-          icon: require("@/assets/luckDraw/E66.png"),
-          name: "E值-66",
-          numUp: 200,
-        },
+        // {
+        //   icon: require("@/assets/luckDraw/1.png"),
+        //   name: "户外桌椅-灰",
+        //   numUp: 200,
+        // },
+        // {
+        //   icon: require("@/assets/luckDraw/2.png"),
+        //   name: "阿峰塔定制保温杯",
+        //   numUp: 200,
+        // },
+        // {
+        //   icon: require("@/assets/luckDraw/3.png"),
+        //   name: "城市画展系列T恤衫-XL ",
+        //   numUp: 200,
+        // },
+        // {
+        //   icon: require("@/assets/luckDraw/4.png"),
+        //   name: "户外超声波防潮野餐地垫-灰",
+        //   numUp: 200,
+        // },
+        // {
+        //   icon: require("@/assets/luckDraw/5.png"),
+        //   name: "户外折叠整理箱-灰",
+        //   numUp: 200,
+        // },
+        // {
+        //   icon: require("@/assets/luckDraw/6.png"),
+        //   name: "AVATR环保東口包",
+        //   numUp: 200,
+        // },
+        // {
+        //   icon: require("@/assets/luckDraw/7.png"),
+        //   name: "AVATR精品帆布包(含定制徽章)",
+        //   numUp: 200,
+        // },
+        // {
+        //   icon: require("@/assets/luckDraw/8.png"),
+        //   name: "杜邦电脑包",
+        //   numUp: 200,
+        // },
+        // {
+        //   icon: require("@/assets/luckDraw/E66.png"),
+        //   name: "E值-66",
+        //   numUp: 200,
+        // },
+        // {
+        //   icon: require("@/assets/luckDraw/7.png"),
+        //   name: "AVATR精品帆布包(含定制徽章)",
+        //   numUp: 200,
+        // },
+        // {
+        //   icon: require("@/assets/luckDraw/8.png"),
+        //   name: "杜邦电脑包",
+        //   numUp: 200,
+        // },
+        // {
+        //   icon: require("@/assets/luckDraw/E66.png"),
+        //   name: "E值-66",
+        //   numUp: 200,
+        // },
       ],
       imgHeight: "auto",
       mainHeight: 800,
@@ -145,9 +147,11 @@ export default {
   mounted() {
     let imgs = document.getElementsByClassName("imgs");
     let imgw = imgs[0];
-    imgw.onload = () => {
-      this.imgHeight = imgw.clientWidth / 1.8;
-    };
+    if (imgw) {
+      imgw.onload = () => {
+        this.imgHeight = imgw.clientWidth / 1.8;
+      };
+    }
     // let main = document.getElementsByClassName("mainOut")[0];
     // this.mainHeight = main.clientHeight;
     // this.changeSIze((res) => {
@@ -158,8 +162,26 @@ export default {
     //   this.contentHeight =
     //     cententDom.clientHeight > lastHeight ? lastHeight : cententDom.clientHeight;
     // });
+    this.getList();
+  },
+  computed: {
+    ...mapGetters(["userInfor"]),
   },
   methods: {
+    getList() {
+      this.imgData = [];
+      getupload_list().then((res) => {
+        console.log(res);
+        let data = res.data;
+        for (let k in data) {
+          this.imgData.push({
+            icon: "http://129.226.227.171" + data[k].upload_file_url,
+            name: data[k].upload_comment,
+            ...data[k],
+          });
+        }
+      });
+    },
     addTopHeight(arr) {
       let top = 0;
       for (let a in arr) {
@@ -186,10 +208,14 @@ export default {
     },
     back(val) {
       if (val == "返回首页") {
-        gotopPage("/");
+        gotopPage("/home");
       }
     },
     upImg() {
+      if (!this.textUp) {
+        alert("需要先填写祝福语");
+        return;
+      }
       let that = this;
       function inputUpload() {
         that.upLoad(this.files);
@@ -201,10 +227,80 @@ export default {
       input.click();
     },
     upLoad(files) {
-      console.log(this.files);
+      let size = this.getfilesize(files[0].size);
+      let type = ["jpeg", "jpg", "png", "image/png", "image/jpg", "image/jpeg"];
+      // console.log(files[0]);
+      if (!type.includes(files[0].type)) {
+        alert("图片格式为jpeg,jpg,png");
+        return;
+      }
+      if (size[1] == "MB") {
+        alert("图片需要小于5M");
+        if (+size[0] >= 5) return;
+      }
+      let d = {
+        upload_file: files[0],
+        comment: this.textUp,
+      };
+      upFile(d)
+        .then((res) => {
+          console.log(res);
+          if (res.status == 201) {
+            this.textUp = "";
+            this.getList();
+          }
+        })
+        .catch((error) => {
+          alert("图片上传失败,请联系管理员");
+        });
     },
     upClick(tiem, index) {
-      console.log(tiem, index);
+      // console.log(tiem, index, this.userInfor.userId);
+      for (let k in tiem.thumbed) {
+        if (tiem.thumbed[k] == this.userInfor.userId) {
+          alert("不可重复点赞");
+          return;
+        }
+      }
+      setsave_thumbed(this.userInfor.userId)
+        .then((res) => {
+          console.log(res);
+          this.getList();
+        })
+        .catch((error) => {
+          alert("点赞失败,请联系管理员");
+          this.getList();
+        });
+    },
+    getfilesize(size) {
+      //把字节转换成正常文件大小
+      if (!size) return "";
+      var num = 1024.0; //byte
+      let n = 0,
+        type = "";
+      if (size < num) {
+        n = size;
+        type = "B";
+        return [n, type];
+      }
+      if (size < Math.pow(num, 2)) {
+        n = (size / num).toFixed(2);
+        type = "KB";
+        return [n, type];
+      }
+      // if (size < Math.pow(num, 3)) {
+      n = (size / Math.pow(num, 2)).toFixed(2);
+      type = "MB";
+      return [n, type];
+      // }
+      // if (size < Math.pow(num, 4)) {
+      //   n = (size / Math.pow(num, 3)).toFixed(2);
+      //   type = "GB";
+      //   return [n, type];
+      // }
+      // n = (size / Math.pow(num, 4)).toFixed(2);
+      // type = "TB";
+      return [n, type];
     },
   },
 };

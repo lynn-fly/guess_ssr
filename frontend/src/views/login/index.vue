@@ -80,10 +80,14 @@ export default {
       return true;
     },
     loging() {
-      this.$store.dispatch("user/login", {
-        username: this.form.username + "",
-        password: this.form.password,
-      });
+      this.$store
+        .dispatch("user/login", {
+          username: this.form.username + "",
+          password: this.form.password,
+        })
+        .then(() => {
+          this.$router.replace({ path: "/home" });
+        });
       // if (this.isOk(this.form.username, this.form.password)) {
       //   console.log(this.$store, '登入成功')
       //   this.$store.commit('user/SET_NAME', this.form.username)

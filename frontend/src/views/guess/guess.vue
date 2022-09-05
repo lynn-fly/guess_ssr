@@ -149,14 +149,14 @@ export default {
     },
     back(val) {
       if (val == "返回首页") {
-        gotopPage("/");
+        gotopPage("/home");
       }
     },
     openAnwser(i) {
       //答题
       this.popupVisible = true;
       this.resultData = this.result.answering;
-      console.log(subject[i])
+      console.log(subject[i]);
       this.resultData.subject = subject[i];
     },
   },

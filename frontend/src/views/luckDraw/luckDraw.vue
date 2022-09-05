@@ -149,7 +149,7 @@ export default {
     },
     back(val) {
       if (val == "返回首页") {
-        gotopPage("/");
+        gotopPage("/home");
       }
     },
     beginChouse() {
@@ -214,7 +214,7 @@ export default {
       if (val == "关闭") {
         this.popupVisible = false;
       } else {
-        gotopPage("/");
+        gotopPage("/home");
       }
     },
   },
