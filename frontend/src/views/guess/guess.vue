@@ -3,7 +3,7 @@
     <div class="luckDraw" :style="{ height: mainHeight + 'px' }">
       <div class="top">
         <Buttons :msg="name" @back="back" />
-        <LampNumber :num="startNum" />
+        <LampNumber :num="userInfor.heartValue" />
       </div>
       <img
         class="background"
@@ -30,7 +30,7 @@
       </div>
       <img class="down" src="@/assets/guess/down.png" alt="" srcset="" />
     </div>
-    <Popup :popupData="resultData" :visible="popupVisible" @close="close"> </Popup>
+    <Popup :popupData="resultData" :visible="popupVisible" @close="close" @rightChoose="rightChoose" @wrongChoose="wrongChoose"> </Popup>
   </div>
 </template>
 
@@ -40,6 +40,9 @@ import LampNumber from "@/components/home/lampNumber.vue";
 import Buttons from "@/components/home/buttons.vue";
 import Popup from "@/components/popup.vue";
 import subject from "./subject.js";
+import { mapGetters } from "vuex";
+import { setsave_answer } from "@/api/guess";
+
 export default {
   components: {
     Buttons,
@@ -112,16 +115,72 @@ export default {
       this.imgData.push(this.imgData[0]);
     }
   },
+  computed: {
+    ...mapGetters(["userInfor"]),
+  },
   methods: {
     close(val) {
       console.log(val);
+      var subjectIndex = -1;
+      if (val.indexOf('-') > -1) {
+        subjectIndex = parseInt(val.split('-')[1]);
+        val = val.split('-')[0];
+      }
       let close = ["关闭", "答对", "答错", "继续"];
       if (close.includes(val)) {
+        this.resultData = {};
         this.popupVisible = false;
+        if (val == '答对') {
+          this.openAnwser(subjectIndex + 1)
+        } else if (val == "答错") {
+          this.openAnwser(subjectIndex)
+        } else if (val =="继续") {
+          this.openAnwser(subjectIndex + 1)
+        }
       } else if (val == "立即") {
+        this.resultData = {};
         gotopPage("/luckDraw");
+      } else {
+        this.resultData = {};
       }
+    },
+    rightChoose(val) {
+      setsave_answer(val)
+        .then((res) => { 
+          if (this.userInfor.isAnswerMax) { //直接继续答题
+            this.popupVisible = false;
+            this.resultData = {};
+            this.popupVisible = true;
+            this.resultData = this.result.answer;
+            this.resultData.subject = subject[val-1];
+          } else {
+            if ( res.data.answerId.length == 6) {
+              this.popupVisible = false;
+              this.resultData = {};
+              this.popupVisible = true;
+              this.resultData = this.result.Accept;
+              this.resultData.subject = subject[val-1];
+              this.$store.commit('user/SET_HEART_IS_MAX', true)
+            } else {
+              this.popupVisible = false;
+              this.resultData = {};
+              this.popupVisible = true;
+              this.resultData = this.result.answer;
+              this.resultData.subject = subject[val-1];
+            }
+          }
+          this.$store.commit('user/SET_HEARTVALUE', res.data.heartValue)
+        })
+        .catch((error) => {
+           
+        });
+    },
+    wrongChoose(val) {
+      this.popupVisible = false;
       this.resultData = {};
+      this.popupVisible = true;
+      this.resultData = this.result.incorrectly;
+      this.resultData.subject = subject[val-1];
     },
     addTopHeight(arr) {
       let top = 0;
@@ -153,7 +212,6 @@ export default {
       }
     },
     openAnwser(i) {
-      //答题
       this.popupVisible = true;
       this.resultData = this.result.answering;
       console.log(subject[i]);

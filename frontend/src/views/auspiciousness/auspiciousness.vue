@@ -4,7 +4,7 @@
     <div class="luckDraw">
       <div class="top">
         <Buttons :msg="name" @back="back" />
-        <LampNumber :num="startNum" />
+        <LampNumber :num="userInfor.heartValue" />
       </div>
       <img
         class="background"

@@ -13,7 +13,7 @@
       <div class="main" v-show="true" :style="{ height: mainHeight + 'px' }">
         <div class="top">
           <Buttons :msg="name" :key="name" @back="back" />
-          <LampNumber :num="startNum" />
+          <LampNumber :num="userInfor.heartValue" />
         </div>
         <img src="../../assets/home//music.png" style="width:50px; height:50px" class="img" :class="[muteBgMusic ? 'pause' : 'start']" @click="playMusic"/>
         <audio style="display:none; height: 0" id="bg-music"  autoplay="autoplay" src="http://129.226.227.171/upload/7scmx-u2mhm-4.mp3 " loop="loop"></audio>
@@ -24,12 +24,12 @@
           <img class="up" src="@/assets/home/123.png" alt="" />
         </div>
         <div class="rabbit">
-          <img class="rabbitImg" src="@/assets/home/rabbit.png" alt="" />
+          <img class="rabbitImg" src="@/assets/home/rabbit.png" alt=""/>
           <img class="wearetoImg" src="@/assets/home/weareto.png" alt="" />
         </div>
         <div class="buttonsOur">
-          <div class="buttonsCenter">
-            <img class="guess" @click="guess" src="@/assets/home/guess.png" alt="" />
+          <div class="buttonsCenter" >
+            <img class="guess" @click="guess" src="@/assets/home/guess.png" alt="" v-if="userInfor.isLocal"/>
             <img
               class="auspiciousness"
               @click="auspiciousness"
@@ -42,6 +42,7 @@
             @click="luckDraw"
             src="@/assets/home/luckDraw.png"
             alt=""
+            v-if="userInfor.lotteryCount > 0"
           />
         </div>
         <div class="bottomImg">
@@ -141,6 +142,7 @@ export default {
   },
   created() {
     console.log("Home");
+    console.log(this.userInfor)
   },
 };
 </script>

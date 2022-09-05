@@ -39,7 +39,13 @@ const mutations = {
   },
   SET_ROLES: (state, roles) => {
     state.roles = roles
-  }
+  },
+  SET_HEARTVALUE: (state, value) => {
+    state.userInfor.heartValue = value
+  },
+  SET_HEART_IS_MAX: (state, value) => {
+    state.userInfor.isAnswerMax = value
+  },
 }
 
 const actions = {

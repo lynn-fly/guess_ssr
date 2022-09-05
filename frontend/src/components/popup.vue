@@ -20,14 +20,14 @@
           </div>
         </div>
         <img
-          @click="clicks(item.value)"
+          @click="clicks(item.value, popupData.subject.index)"
           v-for="(item, index) in popupData.button"
           :src="item.icon"
         />
       </div>
       <div class="buttons" v-else-if="popupData.button">
         <img
-          @click="clicks(item.value)"
+          @click="clicks(item.value, popupData.subject.index)"
           v-for="(item, index) in popupData.button"
           :src="item.icon"
         />
@@ -42,7 +42,7 @@
         <div class="answer">
           <div
             class="answerOnce"
-            @click="chouseAnswer(item, index)"
+            @click="chooseAnswer(item, index)"
             v-for="(item, index) in answer"
           >
             <div class="left" :class="[item.style ? 'style' : '']">
@@ -107,11 +107,21 @@ export default {
     },
   },
   methods: {
-    clicks(val) {
-      this.$emit("close", val);
+    clicks(val, subjectIndex) {
+      if (val == '答对' || val == '答错' || val == '继续') {
+        this.$emit("close", val + '-' + subjectIndex);
+      } else {
+        this.$emit("close", val);
+      }
     },
-    chouseAnswer(item, index) {
-      console.log(item);
+    chooseAnswer(item, index) {
+      var selected = this.answer.find(x => x.number == item.number); 
+      if (selected.check) {
+        this.$emit("rightChoose", this.popupData.subject.index + 1);
+      } else {
+        this.$emit("wrongChoose", this.popupData.subject.index + 1);
+      }
+      //debugger
       for (let k in this.answer) {
         if (k == index) {
           this.answer[k].icon = this.chouse;
