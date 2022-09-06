@@ -143,6 +143,7 @@ export default {
         num[k] = this.land[num[k]];
       }
       if (num.length == 2) {
+        num.splice(0, 1, this.land[num[0] - 1]);
         num.splice(1, 0, "十");
       }
       console.log(num, "nnnnnnnnnnnnnnnn");
@@ -189,14 +190,15 @@ export default {
       console.log(item, index);
       var selected = this.answer.find((x) => x.number == item.number);
       console.log(selected);
+      this.chouseIndexAns = index;
       if (selected.check) {
         // this.visible = false;
+        this.chouseIndexAns = "";
         this.$emit("rightChoose", this.popupData.subject.index + 1);
       } else {
         // this.visible = false;
         this.$emit("wrongChoose", this.popupData.subject.index + 1);
       }
-      this.chouseIndexAns = index;
       // for (let k in this.answer) {
       //   if (k == index) {
       //     this.answer[k].icon = this.chouse;
