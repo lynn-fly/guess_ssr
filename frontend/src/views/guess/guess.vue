@@ -201,13 +201,13 @@ export default {
       if (close.includes(val)) {
         this.resultData = {};
         //this.popupVisible = false;
-        console.log(val, subjectIndex, "4444444");
+        console.log(val, subjectIndex, "我的新题索引");
         if (val == "答对") {
-          this.openAnwser(subjectIndex + 1);
+          this.openAnwser(subjectIndex-1);
         } else if (val == "答错") {
-          this.openAnwser(subjectIndex);
+          this.openAnwser(subjectIndex-1);
         } else if (val == "继续") {
-          this.openAnwser(subjectIndex + 1);
+          this.openAnwser(subjectIndex-1);
         }
       } else if (val == "立即") {
         this.resultData = {};
@@ -296,6 +296,7 @@ export default {
         var currentItem = this.subObj.find((x) => x.number == val);
         // 设置为已作答
         currentItem.notDo = true;
+        this.$forceUpdate();
         // 找下一题的索引
         var nextIndex = currentItem.i;
         // 找到下一题
@@ -309,7 +310,7 @@ export default {
                 break;
               }
             }    
-            if (oldNextIndex == nextItem) {//证明没有新题了
+            if (oldNextIndex == nextIndex) {//证明没有新题了
               // todo 直接跳提示框
               alert('回答错误，没有新题了');
             }
@@ -323,6 +324,7 @@ export default {
               this.resultData = this.result.answer;
               this.resultData.subject = this.subObj[nextIndex];
               this.popupVisible = true;
+              console.log(this.resultData.subject);
             } else {
               // 刚好满5题
               if (res.data.answerId.length == 6) {
@@ -332,12 +334,14 @@ export default {
                 this.$store.commit("user/SET_HEART_IS_MAX", true);
                 this.$store.commit("user/SET_LOTTERY_COUNT", res.data.lotteryCount);
                 this.popupVisible = true;
+                console.log(this.resultData.subject);
               } else {
                 //不到5题
                 this.resultData = {};
                 this.resultData = this.result.answer;
                 this.resultData.subject = this.subObj[nextIndex];
                 this.popupVisible = true;
+                console.log(this.resultData.subject);
               }
             }
         } else {
@@ -345,6 +349,7 @@ export default {
           this.popupVisible = true;
           this.resultData = this.result.incorrectly;
           this.resultData.subject = this.subObj[nextIndex];
+          console.log(this.resultData.subject);
         }
       })
     },
