@@ -14,7 +14,7 @@
     play: (state, id) => {
       state.audios.play(id)
     },
-    puse: (state, id) => {
+    pause: (state, id) => {
       state.audios.pause(id)
     },
     getPaused: (state, id) => {
