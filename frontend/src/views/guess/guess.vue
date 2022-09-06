@@ -214,11 +214,11 @@ export default {
         //this.popupVisible = false;
         console.log(val, subjectIndex, "4444444");
         if (val == "答对") {
-          this.openAnwser(subjectIndex + 1);
+          this.openAnwser(subjectIndex);
         } else if (val == "答错") {
-          this.openAnwser(subjectIndex + 1);
+          this.openAnwser(subjectIndex);
         } else if (val == "继续") {
-          this.openAnwser(subjectIndex + 1);
+          this.openAnwser(subjectIndex);
         }
       } else if (val == "立即") {
         this.resultData = {};

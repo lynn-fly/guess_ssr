@@ -160,7 +160,7 @@ export default {
     this.find((imgw) => {
       console.log(imgw.width, 5555555);
       this.imgHeight = imgw.width / 1.5;
-      if(!this.imgHeight) this.imgHeight = 144;
+      if (!this.imgHeight) this.imgHeight = 144;
       console.log(this.imgHeight, 5555555555);
     });
     this.getList(true);
@@ -301,7 +301,6 @@ export default {
       }, 200);
     },
     upClick(item, index) {
-      ;
       // console.log(tiem, index, this.userInfor.userId);
       var thumbedList = item.thumbed.split(",");
       for (let k in thumbedList) {
@@ -434,8 +433,8 @@ export default {
   top: 1.3rem;
   width: 2.6rem;
 
-  animation: fade 6000ms infinite;
-  -webkit-animation: fade 6000ms infinite;
+  animation: fadeLongs 10000ms infinite;
+  -webkit-animation: fadeLongs 10000ms infinite;
 }
 
 .upImg {
