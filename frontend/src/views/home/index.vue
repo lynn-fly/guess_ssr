@@ -98,7 +98,7 @@ export default {
   },
   watch: {
     muteBgMusic(newValue, oldValue) {
-      if (newValue) {
+      if (!newValue) {
         // 开启静音
         // var audio = document.getElementById("bg-music");
         this.$store.commit("audio/play", "bj");
@@ -106,7 +106,7 @@ export default {
       } else {
         // 关闭 静音
         // var audio = document.getElementById("bg-music");
-        this.$store.commit("audio/puse", "bj");
+        this.$store.commit("audio/pause", "bj");
         // audio.play();
       }
     },
