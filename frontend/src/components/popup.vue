@@ -134,6 +134,40 @@ export default {
         }
       }
     },
+    // popupData: {
+    //   handler: () => {
+    //     if (this.popupData) {
+    //       let answers = [];
+    //       let leng = 0;
+    //       for (let k in this.popupData.subject.answer) {
+    //         let len = this.popupData.subject.answer[k].content.length;
+    //         if (leng < len) {
+    //           leng = len;
+    //         }
+    //         answers.push({
+    //           ...this.popupData.subject.answer[k],
+    //           icon: k == this.chouseIndexAns ? this.chouse : this.noChouse,
+    //           style: k == this.chouseIndexAns ? true : false,
+    //         });
+    //       }
+
+    //       // for (let k in this.answer) {
+    //       //   if (k == index) {
+    //       //     this.answer[k].icon = this.chouse;
+    //       //     this.answer[k].style = true;
+    //       //     continue;
+    //       //   }
+    //       //   this.answer[k].icon = this.noChouse;
+    //       //   this.answer[k].style = false;
+    //       // }
+    //       this.rightwidth = leng * 20;
+    //       console.log(answers, "8888888");
+    //       this.answer = answers;
+    //     }
+    //   },
+    //   deep: true,
+    //   immediate: true,
+    // },
   },
   computed: {
     lands() {
@@ -197,14 +231,16 @@ export default {
     chooseAnswer(item, index) {
       console.log(item, index);
       var selected = this.answer.find((x) => x.number == item.number);
-      console.log(selected);
+      // console.log(selected, "111111111111111");
       this.chouseIndexAns = index;
       if (selected.check) {
         // this.visible = false;
         this.chouseIndexAns = "";
         this.$store.commit("audio/play", "ok");
+        console.log(this.popupData.subject, "111111111111111");
         this.$emit("rightChoose", this.popupData.subject.number);
       } else {
+        // return;
         // this.visible = false;
         this.$store.commit("audio/play", "wrong");
         this.$emit("wrongChoose", this.popupData.subject.number);

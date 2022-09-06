@@ -138,7 +138,7 @@ export default {
     //   newRandomList.push(item);
     // });
     // this.subObj = newRandomList;
-    // console.log(newRandomList);
+    console.log(this.userInfor.answeredIds,'this.userInfor.answeredIds');
     this.subObj = this.shuffle(subject);
     for (let k in this.subObj) {
       var did = false;
@@ -238,11 +238,13 @@ export default {
             var nextIndex = currentItem.i;
             for (var startIndex = nextIndex; startIndex < 30; startIndex++) {
               var nextItem = this.subObj.find((x) => {
-                x.i == startIndex;
+                return x.i == startIndex;
               });
-              if (!nextItem.notDo) {
-                nextIndex = startIndex;
-              }
+              try {
+                if (!nextItem.notDo) {
+                  nextIndex = startIndex;
+                }
+              } catch (error) {}
             }
             if (nextIndex == 30) {
               //我是最后一套题
@@ -251,11 +253,11 @@ export default {
               this.resultData = this.result.answer;
               return;
             }
-
             if (this.userInfor.isAnswerMax) {
               //直接继续答题
               this.resultData = {};
               this.resultData = this.result.answer;
+              console.log(this.subObj[nextIndex], "888");
               this.resultData.subject = this.subObj[nextIndex];
               this.popupVisible = true;
             } else {
@@ -275,7 +277,9 @@ export default {
             }
             this.$store.commit("user/SET_HEARTVALUE", res.data.heartValue);
           })
-          .catch((error) => {});
+          .catch((error) => {
+            console.log(error, "8888");
+          });
       });
     },
     wrongChoose(val) {
