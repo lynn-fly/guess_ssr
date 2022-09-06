@@ -168,7 +168,7 @@ export default {
       //   }
       // }
 
-        const {lotteryNumber,lottery_count} = res.data;
+        const {lotteryNumber,lotteryCount} = res.data;
         let num = lotteryNumber < 1? 9: lotteryNumber - 1;
       
         let nowNum = 0;
@@ -177,13 +177,13 @@ export default {
             nowNum++;
             this.addIndex();
             if (nowNum > 30 && this.chouseIndex == num) {
-              this.state = lottery_count < 1;
+              this.state = lotteryCount < 1;
               this.chouseIndex = num;
               console.log(num);
               this.getResult(num);
               return;
             } else if (nowNum > 30 && num == 9) {
-              this.state = lottery_count < 1;
+              this.state = lotteryCount < 1;
               this.getResult(num);
               return;
             } else {

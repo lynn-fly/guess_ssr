@@ -162,7 +162,7 @@ def get_prize(db: Session = Depends(deps.get_db),user: User = Depends(deps.get_c
         db.refresh(user)
         return {
             'userId':user.id,
-            'lottery_count':user.lottery_count,
+            'lotteryCount':user.lottery_count,
             'lotteryNumber':giftlevel,
         }
     else:
@@ -189,7 +189,7 @@ def save_upload(
     upload_heart_value = user.upload_heart_value
     lottery_count = user.lottery_count
     heart_value = user.heart_value
-    if (upload_heart_value > 0):
+    if (upload_heart_value > 0 or lottery_count > 1):
         raise HTTPException(
             status_code=500, detail="uploaded yet"
         )
@@ -238,7 +238,7 @@ def save_upload(
         'userId':new_user.id,
         'userName':new_user.nick_name,
         'heartValue':new_user.heart_value,
-        'lotteryCount ':new_user.lottery_count,
+        'lotteryCount':new_user.lottery_count,
         'fileUrl':new_user.upload_file_url,
         'comment':new_user.upload_comment,
         'uploadTime':new_user.upload_time
