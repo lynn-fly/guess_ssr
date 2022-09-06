@@ -111,6 +111,8 @@ const actions = {
         } = response
         commit('SET_TOKEN', data['access_token'])
         setToken(data['access_token'])
+        setUser(data)
+        setName(data['userName'])
         setheart(data['heartValue'])
         resolve()
       }).catch(error => {

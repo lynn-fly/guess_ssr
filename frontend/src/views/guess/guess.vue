@@ -139,7 +139,7 @@ export default {
     //   newRandomList.push(item);
     // });
     // this.subObj = newRandomList;
-    console.log(this.userInfor.answeredIds,'this.userInfor.answeredIds');
+    console.log(this.userInfor.answeredIds, "this.userInfor.answeredIds");
     this.subObj = this.shuffle(subject);
     for (let k in this.subObj) {
       var did = false;
@@ -216,7 +216,7 @@ export default {
         if (val == "答对") {
           this.openAnwser(subjectIndex + 1);
         } else if (val == "答错") {
-          this.openAnwser(subjectIndex);
+          this.openAnwser(subjectIndex + 1);
         } else if (val == "继续") {
           this.openAnwser(subjectIndex + 1);
         }
@@ -244,6 +244,7 @@ export default {
               try {
                 if (!nextItem.notDo) {
                   nextIndex = startIndex;
+                  break;
                 }
               } catch (error) {}
             }
@@ -258,13 +259,14 @@ export default {
               //直接继续答题
               this.resultData = {};
               this.resultData = this.result.answer;
-              console.log(this.subObj[nextIndex], "888");
+              console.log(nextIndex, this.subObj[nextIndex], "8881");
               this.resultData.subject = this.subObj[nextIndex];
               this.popupVisible = true;
             } else {
               if (res.data.answerId.length == 6) {
                 this.resultData = {};
                 this.resultData = this.result.Accept;
+                console.log(this.subObj[nextIndex], "8882");
                 this.resultData.subject = this.subObj[nextIndex];
                 this.$store.commit("user/SET_HEART_IS_MAX", true);
                 this.$store.commit("user/SET_LOTTERY_COUNT", res.data.lotteryCount);
@@ -272,6 +274,7 @@ export default {
               } else {
                 this.resultData = {};
                 this.resultData = this.result.answer;
+                console.log(nextIndex, this.subObj[nextIndex], "8883");
                 this.resultData.subject = this.subObj[nextIndex];
                 this.popupVisible = true;
               }
@@ -296,11 +299,13 @@ export default {
 
             for (var startIndex = nextIndex; startIndex < 30; startIndex++) {
               var nextItem = this.subObj.find((x) => x.i == startIndex);
+              console.log(nextItem, "88851");
               if (!nextItem.notDo) {
                 nextIndex = startIndex;
+                break;
               }
             }
-
+            console.log(nextIndex, "8885");
             if (nextIndex == 30) {
               //我是最后一套题
               this.resultData = {};
@@ -310,6 +315,7 @@ export default {
               this.resultData = {};
               this.popupVisible = true;
               this.resultData = this.result.incorrectly;
+              console.log(this.subObj[nextIndex], "8884");
               this.resultData.subject = subject[nextIndex];
             }
           })

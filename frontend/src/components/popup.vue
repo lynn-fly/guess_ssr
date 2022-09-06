@@ -28,7 +28,7 @@
       </div>
       <div class="buttons" v-else-if="popupData.button && popupData.subject">
         <img
-          @click="clicks(item.value, popupData.subject.index)"
+          @click="clicks(item.value, popupData.subject.i,popupData)"
           v-for="(item, index) in popupData.button"
           :src="item.icon"
           :key="index"
@@ -220,7 +220,9 @@ export default {
     },
   },
   methods: {
-    clicks(val, subjectIndex) {
+    clicks(val, subjectIndex,popupData) {
+      // console.log(val, subjectIndex,popupData)
+      // return 
       if (val == "答对" || val == "答错" || val == "继续") {
         this.$emit("close", val + "-" + subjectIndex);
       } else {
@@ -241,6 +243,7 @@ export default {
         this.$emit("rightChoose", this.popupData.subject.number);
       } else {
         // return;
+        this.chouseIndexAns = "";
         // this.visible = false;
         this.$store.commit("audio/play", "wrong");
         this.$emit("wrongChoose", this.popupData.subject.number);
