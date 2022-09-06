@@ -59,6 +59,9 @@ const mutations = {
   SET_IS_UPLOAD: (state, value) => {
     state.userInfor.isUpload = value
   },
+  SET_ANSWERED_IDS: (state, value) => {
+    state.userInfor.answeredIds = value
+  },
 }
 
 const actions = {
@@ -127,6 +130,7 @@ const actions = {
         if (!data) {
           reject('验证失败，请重新登录。')
         }
+        debugger
         commit('SET_USER_INFO', data)
         resolve(data)
       }).catch(error => {
