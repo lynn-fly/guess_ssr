@@ -14,7 +14,7 @@ export default {
     ...mapGetters(["userInfor"]),
   },
   mounted() {
-    debugger
+    // debugger
     console.log('APP mounted', window.location.pathname);
     if (window.location.pathname == '/login' || window.location.pathname == '/') {
       setToken('');

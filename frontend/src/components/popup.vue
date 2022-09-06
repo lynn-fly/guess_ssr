@@ -98,6 +98,7 @@ export default {
       land: ["一", "二", "三", "四", "五", "六", "七", "八", "九", ""],
       rightwidth: 10,
       ChouseIcon: require("@/assets/guess/dt/dt2.png"),
+      chouseIndexAns: "",
     };
   },
   watch: {
@@ -157,10 +158,20 @@ export default {
         }
         answers.push({
           ...this.popupData.subject.answer[k],
-          icon: this.ChouseIcon,
-          style: false,
+          icon: k == this.chouseIndexAns ? this.chouse : this.noChouse,
+          style: k == this.chouseIndexAns ? true : false,
         });
       }
+
+      // for (let k in this.answer) {
+      //   if (k == index) {
+      //     this.answer[k].icon = this.chouse;
+      //     this.answer[k].style = true;
+      //     continue;
+      //   }
+      //   this.answer[k].icon = this.noChouse;
+      //   this.answer[k].style = false;
+      // }
       this.rightwidth = leng * 20;
       console.log(answers);
       return answers;
@@ -185,16 +196,16 @@ export default {
         // this.visible = false;
         this.$emit("wrongChoose", this.popupData.subject.index + 1);
       }
-      
-      for (let k in this.answer) {
-        if (k == index) {
-          this.answer[k].icon = this.chouse;
-          this.answer[k].style = true;
-          continue;
-        }
-        this.answer[k].icon = this.noChouse;
-        this.answer[k].style = false;
-      }
+      this.chouseIndexAns = index;
+      // for (let k in this.answer) {
+      //   if (k == index) {
+      //     this.answer[k].icon = this.chouse;
+      //     this.answer[k].style = true;
+      //     continue;
+      //   }
+      //   this.answer[k].icon = this.noChouse;
+      //   this.answer[k].style = false;
+      // }
     },
   },
 };
@@ -287,7 +298,7 @@ export default {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  font-size: 0.4rem;
+  font-size: 0.28rem;
 }
 .subject .land {
   margin: 0.25rem;
