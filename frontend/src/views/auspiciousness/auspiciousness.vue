@@ -39,14 +39,17 @@
       </div>
       <div class="centent" :style="{ height: contentHeight + 'px' }">
         <div class="cententOnce" v-for="(item, index) in imgData" :key="index">
-          <img
-            class="imgs"
-            :style="{ height: imgHeight + 'px !important' }"
-            :src="item.icon"
-            alt=""
-            srcset=""
-            @click="openBigIcon(item)"
-          />
+          <div class="cententOnceIn" :style="{ height: imgHeight + 'px !important' }">
+            <!-- :style="{ height: imgHeight + 'px !important' }" -->
+            <img
+              class="imgs"
+              :src="item.icon"
+              alt=""
+              srcset=""
+              @click="openBigIcon(item)"
+            />
+          </div>
+
           <div class="label">{{ item.nick_name }}</div>
           <!-- <div class="label">{{ item.name }}</div> -->
           <div classs="uppppp" style="width: 100% !important; color: #fff">
@@ -474,6 +477,13 @@ export default {
   flex-direction: column;
   margin-bottom: 0.2rem;
   position: relative;
+  overflow: hidden;
+}
+.centent .cententOnce .cententOnceIn {
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .centent .cententOnce .imgs {
