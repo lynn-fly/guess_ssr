@@ -135,6 +135,10 @@ export default {
       this.$store.commit("audio/play", "bj");
       // audio.play();
     }
+    this.$store
+        .dispatch("user/getInfo")
+        .then((data) => {})
+        .catch((err) => {});
   },
   computed: {
     ...mapGetters(["name", "userInfor"]),

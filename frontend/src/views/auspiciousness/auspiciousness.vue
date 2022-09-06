@@ -164,6 +164,10 @@ export default {
       console.log(this.imgHeight, 5555555555);
     });
     this.getList(true);
+    this.$store
+        .dispatch("user/getInfo")
+        .then((data) => {})
+        .catch((err) => {});
     console.log("userinfo:-------", this.userInfor);
     this.isUploaded = this.userInfor.isUpload;
     //this.heartValue = this.userInfor.heartValue;
