@@ -120,7 +120,7 @@ export default {
   },
   methods: {
     close(val) {
-      console.log(val);
+      this.popupVisible = false;
       var subjectIndex = -1;
       if (val.indexOf('-') > -1) {
         subjectIndex = parseInt(val.split('-')[1]);
@@ -129,7 +129,7 @@ export default {
       let close = ["关闭", "答对", "答错", "继续"];
       if (close.includes(val)) {
         this.resultData = {};
-        this.popupVisible = false;
+        //this.popupVisible = false;
         if (val == '答对') {
           this.openAnwser(subjectIndex + 1)
         } else if (val == "答错") {
@@ -148,21 +148,19 @@ export default {
       setsave_answer(val)
         .then((res) => { 
           if (this.userInfor.isAnswerMax) { //直接继续答题
-            this.popupVisible = false;
             this.resultData = {};
             this.popupVisible = true;
             this.resultData = this.result.answer;
             this.resultData.subject = subject[val-1];
           } else {
             if ( res.data.answerId.length == 6) {
-              this.popupVisible = false;
               this.resultData = {};
               this.popupVisible = true;
               this.resultData = this.result.Accept;
               this.resultData.subject = subject[val-1];
               this.$store.commit('user/SET_HEART_IS_MAX', true)
+              this.$store.commit('user/SET_LOTTERY_COUNT', res.data.lotteryCount)
             } else {
-              this.popupVisible = false;
               this.resultData = {};
               this.popupVisible = true;
               this.resultData = this.result.answer;
@@ -176,7 +174,6 @@ export default {
         });
     },
     wrongChoose(val) {
-      this.popupVisible = false;
       this.resultData = {};
       this.popupVisible = true;
       this.resultData = this.result.incorrectly;

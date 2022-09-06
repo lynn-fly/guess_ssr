@@ -94,9 +94,8 @@ export default {
       };
     }
     this.getList();
-    const userInfo = getUser();
-    console.log('userinfo:',userInfo);
-    this.isUploaded = userInfo.isUpload;
+    console.log('userinfo:',this.userInfor);
+    this.isUploaded = this.userInfor.isUpload; 
   },
   computed: {
     ...mapGetters(["userInfor"]),
