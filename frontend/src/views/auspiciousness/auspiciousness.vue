@@ -42,7 +42,7 @@
           <div class="cententOnceIn" :style="{ height: imgHeight + 'px !important' }">
             <!-- :style="{ height: imgHeight + 'px !important' }" -->
             <img
-              class="imgs"
+              class="imgs cententimgs"
               :src="item.icon"
               alt=""
               srcset=""
@@ -160,6 +160,7 @@ export default {
     this.find((imgw) => {
       console.log(imgw.width, 5555555);
       this.imgHeight = imgw.width / 1.5;
+      if(!this.imgHeight) this.imgHeight = 144;
       console.log(this.imgHeight, 5555555555);
     });
     this.getList(true);
@@ -172,7 +173,7 @@ export default {
   },
   methods: {
     find(fn) {
-      let imgs = document.getElementsByClassName("imgs");
+      let imgs = document.getElementsByClassName("cententimgs");
       let imgw = imgs[0];
       if (!imgw) {
         setTimeout(() => {
@@ -201,6 +202,9 @@ export default {
         }
       });
     },
+    // getUrl(url) {
+    //   return new URL(url, import.meta.url).href;
+    // },
     addTopHeight(arr) {
       let top = 0;
       for (let a in arr) {
