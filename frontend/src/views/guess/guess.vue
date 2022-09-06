@@ -127,20 +127,7 @@ export default {
     };
   },
   mounted() {
-    debugger
-    this.subObj = this.shuffle(subject);
-    for (let k in this.subObj) {
-      var did = false;
-      if (this.userInfor.answeredIds.indexOf(this.subObj[k].number + "") > -1) {
-        did = true;
-      }
-      this.subObj[k] = {
-        ...this.subObj[k],
-        i: ++k,
-        notDo: did,
-        icon: require("@/assets/guess/once.png"),
-      };
-    }
+    
 
     // let imgs = document.getElementsByClassName("imgs");
     // let imgw = imgs[0];
@@ -157,11 +144,6 @@ export default {
     for (let i = 0; i < 29; i++) {
       this.imgData.push(this.imgData[0]);
     }
-
-    this.$store
-        .dispatch("user/getInfo")
-        .then((data) => {})
-        .catch((err) => {});
         
   },
   computed: {
@@ -395,6 +377,27 @@ export default {
       this.resultData.subject = subject[index];
     },
   },
+  created() {
+    this.$store
+        .dispatch("user/getInfo")
+        .then((data) => {
+          debugger
+          this.subObj = this.shuffle(subject);
+          for (let k in this.subObj) {
+            var did = false;
+            if (this.userInfor.answeredIds.indexOf(this.subObj[k].number + "") > -1) {
+              did = true;
+            }
+            this.subObj[k] = {
+              ...this.subObj[k],
+              i: ++k,
+              notDo: did,
+              icon: require("@/assets/guess/once.png"),
+            };
+          }
+        })
+        .catch((err) => {});
+  }
 };
 </script>
 
