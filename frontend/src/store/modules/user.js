@@ -131,7 +131,9 @@ const actions = {
         if (!data) {
           reject('验证失败，请重新登录。')
         }
+        console.log(data, 'getinfor')
         commit('SET_USER_INFO', data)
+        setheart(data['heartValue'])
         resolve(data)
       }).catch(error => {
         reject(error)

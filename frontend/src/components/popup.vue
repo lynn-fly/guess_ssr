@@ -54,7 +54,7 @@
           <!-- {{ popupData.subject.title }} -->
         </div>
         <div v-else class="title">
-          <img :src="require('@/assets/guess/obj/' + popupData.subject.icon)" alt="" />
+          <img :src="require('@/assets/guess/obj/' + popupData.subject.icons)" alt="" />
         </div>
         <div class="answer">
           <div
@@ -138,8 +138,8 @@ export default {
   computed: {
     lands() {
       let num = this.popupData.subject.i + "";
+      console.log(this.popupData.subject);
       num = num.split("");
-      console.log(num);
       for (let k in num) {
         num[k] = this.land[num[k] - 1];
       }

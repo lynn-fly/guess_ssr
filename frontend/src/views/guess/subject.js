@@ -194,7 +194,7 @@ const subject = [{
   index: 12,
   number: 13,
   title: 'xsms.jpg',
-  icon: 'xsms.jpg',
+  icons: 'xsms.jpg',
   type: 'image',
   answer: [{
     number: 1,
@@ -215,7 +215,7 @@ const subject = [{
   index: 13,
   number: 14,
   title: 'hhyy.jpg',
-  icon: 'hhyy.jpg',
+  icons: 'hhyy.jpg',
   type: 'image',
   answer: [{
     number: 1,
@@ -233,7 +233,7 @@ const subject = [{
   index: 14,
   number: 15,
   title: 'xsbj.jpg',
-  icon: 'xsbj.jpg',
+  icons: 'xsbj.jpg',
   type: 'image',
   answer: [{
     number: 1,
@@ -251,7 +251,7 @@ const subject = [{
   index: 15,
   number: 16,
   title: 'hjty.jpg',
-  icon: 'hjty.jpg',
+  icons: 'hjty.jpg',
   type: 'image',
   answer: [{
     number: 1,

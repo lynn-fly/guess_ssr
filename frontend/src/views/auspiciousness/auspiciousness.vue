@@ -297,7 +297,7 @@ export default {
       }, 200);
     },
     upClick(item, index) {
-      debugger;
+      ;
       // console.log(tiem, index, this.userInfor.userId);
       var thumbedList = item.thumbed.split(",");
       for (let k in thumbedList) {
