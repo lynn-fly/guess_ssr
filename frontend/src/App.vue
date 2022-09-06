@@ -14,9 +14,9 @@ export default {
     ...mapGetters(["userInfor"]),
   },
   mounted() {
-    
-    console.log('APP mounted', this.$route.path);
-    if (this.$route.path == '/login' || this.$route.path == '/') {
+    debugger
+    console.log('APP mounted', window.location.pathname);
+    if (window.location.pathname == '/login' || window.location.pathname == '/') {
       setToken('');
       setUser([]);
       this.$store.commit('user/SET_USER_INFO', [])

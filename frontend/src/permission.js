@@ -18,7 +18,6 @@ const tokenCustomWhiteList = ['/home', '/answer', '/upload', '/prize']
 
 router.beforeEach(async (to, from, next) => {
   const hasToken = getToken()
-  
   // console.log(hasToken)
   if (hasToken) {
     const hasRoles = store.getters.roles && store.getters.roles.length > 0
