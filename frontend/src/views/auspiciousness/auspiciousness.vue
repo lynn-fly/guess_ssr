@@ -16,7 +16,7 @@
       />
       <img class="themes" src="@/assets/auspiciousness/msg.png" alt="" srcset="" />
       <img class="themes1" src="@/assets/auspiciousness/back.png" alt="" srcset="" />
-      <div class="upImg" >
+      <div class="upImg" v-if="!isUploaded">
         <img
           class="upImgs"
           @click="upImg"
@@ -25,7 +25,7 @@
           srcset=""
         />
       </div>
-      <div class="upImg" >
+      <div class="upImg" v-if="!isUploaded">
         <input
           class="upInput"
           v-model="textUp"
@@ -52,7 +52,7 @@
               alt=""
               @click="upClick(item, index)"
             />
-            {{ item.thumbed.length - 1 }}
+            {{ item.thumbed.split(',').length - 1 }}
           </div>
         </div>
       </div>
@@ -77,68 +77,7 @@ export default {
       name: "返回首页",
       state: false,
       startNum: 50,
-      imgData: [
-        // {
-        //   icon: require("@/assets/luckDraw/1.png"),
-        //   name: "户外桌椅-灰",
-        //   numUp: 200,
-        // },
-        // {
-        //   icon: require("@/assets/luckDraw/2.png"),
-        //   name: "阿峰塔定制保温杯",
-        //   numUp: 200,
-        // },
-        // {
-        //   icon: require("@/assets/luckDraw/3.png"),
-        //   name: "城市画展系列T恤衫-XL ",
-        //   numUp: 200,
-        // },
-        // {
-        //   icon: require("@/assets/luckDraw/4.png"),
-        //   name: "户外超声波防潮野餐地垫-灰",
-        //   numUp: 200,
-        // },
-        // {
-        //   icon: require("@/assets/luckDraw/5.png"),
-        //   name: "户外折叠整理箱-灰",
-        //   numUp: 200,
-        // },
-        // {
-        //   icon: require("@/assets/luckDraw/6.png"),
-        //   name: "AVATR环保東口包",
-        //   numUp: 200,
-        // },
-        // {
-        //   icon: require("@/assets/luckDraw/7.png"),
-        //   name: "AVATR精品帆布包(含定制徽章)",
-        //   numUp: 200,
-        // },
-        // {
-        //   icon: require("@/assets/luckDraw/8.png"),
-        //   name: "杜邦电脑包",
-        //   numUp: 200,
-        // },
-        // {
-        //   icon: require("@/assets/luckDraw/E66.png"),
-        //   name: "E值-66",
-        //   numUp: 200,
-        // },
-        // {
-        //   icon: require("@/assets/luckDraw/7.png"),
-        //   name: "AVATR精品帆布包(含定制徽章)",
-        //   numUp: 200,
-        // },
-        // {
-        //   icon: require("@/assets/luckDraw/8.png"),
-        //   name: "杜邦电脑包",
-        //   numUp: 200,
-        // },
-        // {
-        //   icon: require("@/assets/luckDraw/E66.png"),
-        //   name: "E值-66",
-        //   numUp: 200,
-        // },
-      ],
+      imgData: [],
       imgHeight: "auto",
       mainHeight: 800,
       contentHeight: "auto",
@@ -154,16 +93,6 @@ export default {
         this.imgHeight = imgw.clientWidth / 1.8;
       };
     }
-    // let main = document.getElementsByClassName("mainOut")[0];
-    // this.mainHeight = main.clientHeight;
-    // this.changeSIze((res) => {
-    //   let cententDom = document.getElementsByClassName("centent")[0];
-    //   let contentTop = this.addTopHeight(["upImgs2"]);
-    //   console.log(res, contentTop, cententDom.clientHeight, res - contentTop - 60);
-    //   let lastHeight = res - contentTop - 60;
-    //   this.contentHeight =
-    //     cententDom.clientHeight > lastHeight ? lastHeight : cententDom.clientHeight;
-    // });
     this.getList();
     const userInfo = getUser();
     console.log('userinfo:',userInfo);
@@ -176,10 +105,8 @@ export default {
     getList() {
       this.imgData = [];
       getupload_list().then((res) => {
-        //console.log(res);
         const {config,data} =res 
         const { baseURL } = config
-        console.log(baseURL.substring(0,baseURL.length - 7));
         for (let k in data) {
           this.imgData.push({
             //icon: "http://129.226.227.171" + data[k].upload_file_url,
@@ -242,7 +169,6 @@ export default {
     upLoad(files) {
       let size = this.getfilesize(files[0].size);
       let type = ["jpeg", "jpg", "png", "image/png", "image/jpg", "image/jpeg"];
-      // console.log(files[0]);
       if (!type.includes(files[0].type)) {
         alert("图片格式为jpeg,jpg,png");
         return;
@@ -261,6 +187,12 @@ export default {
           if (res.status == 201) {
             this.textUp = "";
             this.getList();
+            //TODO:弹出框
+            debugger
+            this.isUploaded = true;
+            this.$store.commit('user/SET_IS_UPLOAD', true)
+            this.$store.commit('user/SET_HEARTVALUE', res.data.heartValue)
+            this.$store.commit('user/SET_LOTTERY_COUNT', res.data.lotteryCount)
           }
         })
         .catch((error) => {
