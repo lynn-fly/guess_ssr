@@ -231,21 +231,15 @@ export default {
       }
     },
     chooseAnswer(item, index) {
-      console.log(item, index);
       var selected = this.answer.find((x) => x.number == item.number);
-      // console.log(selected, "111111111111111");
       this.chouseIndexAns = index;
       if (selected.check) {
-        // this.visible = false;
         this.chouseIndexAns = "";
         this.$store.commit("audio/play", "ok");
-        console.log(this.popupData.subject, "111111111111111");
         this.$emit("rightChoose", this.popupData.subject.number);
         this.$store.commit("heart/createAudios");
       } else {
-        // return;
         this.chouseIndexAns = "";
-        // this.visible = false;
         this.$store.commit("audio/play", "wrong");
         this.$emit("wrongChoose", this.popupData.subject.number);
       }

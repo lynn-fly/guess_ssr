@@ -127,6 +127,7 @@ export default {
     };
   },
   mounted() {
+    debugger
     this.subObj = this.shuffle(subject);
     for (let k in this.subObj) {
       var did = false;
@@ -200,13 +201,13 @@ export default {
       if (close.includes(val)) {
         this.resultData = {};
         //this.popupVisible = false;
-        console.log(val, subjectIndex, "4444444");
+        console.log(val, subjectIndex, "我的新题索引");
         if (val == "答对") {
-          this.openAnwser(subjectIndex + 1);
+          this.openAnwser(subjectIndex-1);
         } else if (val == "答错") {
-          this.openAnwser(subjectIndex);
+          this.openAnwser(subjectIndex-1);
         } else if (val == "继续") {
-          this.openAnwser(subjectIndex + 1);
+          this.openAnwser(subjectIndex-1);
         }
       } else if (val == "立即") {
         this.resultData = {};
@@ -218,28 +219,114 @@ export default {
     rightChoose(val) {
       this.popupVisible = false;
       this.$nextTick(() => {
-        setsave_answer(val, 1)
-          .then((res) => {
-            debugger;
-            //更新list
-            this.$store.commit("user/SET_ANSWERED_IDS", res.data.answeredIds);
-            var currentItem = this.subObj.find((x) => x.number == val);
-            currentItem.notDo = true;
-            var nextIndex = currentItem.i;
-            for (var startIndex = nextIndex; startIndex < 30; startIndex++) {
-              var nextItem = this.subObj.find((x) => x.i == startIndex);
-              if (!nextItem.notDo) {
-                nextIndex = startIndex;
-              }
-            }
+        this.saveChoose(val, 1);
+        // setsave_answer(val, 1)
+        //   .then((res) => {
+        //     debugger;
+        //     //更新list
+        //     this.$store.commit("user/SET_ANSWERED_IDS", res.data.answeredIds);
+        //     var currentItem = this.subObj.find((x) => x.number == val);
+        //     currentItem.notDo = true;
+        //     var nextIndex = currentItem.i;
+        //     for (var startIndex = nextIndex; startIndex < 30; startIndex++) {
+        //       var nextItem = this.subObj.find((x) => x.i == startIndex);
+        //       if (!nextItem.notDo) {
+        //         nextIndex = startIndex;
+        //       }
+        //     }
 
-            if (this.userInfor.isAnswerMax) {
-              //直接继续答题
+        //     if (this.userInfor.isAnswerMax) {
+        //       //直接继续答题
+        //       this.resultData = {};
+        //       this.resultData = this.result.answer;
+        //       this.resultData.subject = this.subObj[nextIndex];
+        //       this.popupVisible = true;
+        //     } else {
+        //       if (res.data.answerId.length == 6) {
+        //         this.resultData = {};
+        //         this.resultData = this.result.Accept;
+        //         this.resultData.subject = this.subObj[nextIndex];
+        //         this.$store.commit("user/SET_HEART_IS_MAX", true);
+        //         this.$store.commit("user/SET_LOTTERY_COUNT", res.data.lotteryCount);
+        //         this.popupVisible = true;
+        //       } else {
+        //         this.resultData = {};
+        //         this.resultData = this.result.answer;
+        //         this.resultData.subject = this.subObj[nextIndex];
+        //         this.popupVisible = true;
+        //       }
+        //     }
+        //     this.$store.commit("user/SET_HEARTVALUE", res.data.heartValue);
+        //   })
+        //   .catch((error) => {});
+      });
+    },
+    wrongChoose(val) {
+      this.popupVisible = false;
+      this.$nextTick(() => {
+        this.saveChoose(val, 0);
+        // setsave_answer(val, 0)
+        //   .then((res) => {
+        //     //更新list
+        //     this.$store.commit("user/SET_ANSWERED_IDS", res.data.answeredIds);
+        //     var currentItem = this.subObj.find((x) => x.number == val);
+        //     currentItem.notDo = true;
+        //     var nextIndex = currentItem.i;
+        //     for (var startIndex = nextIndex; startIndex < 30; startIndex++) {
+        //       var nextItem = this.subObj.find((x) => x.i == startIndex);
+        //       if (!nextItem.notDo) {
+        //         nextIndex = startIndex;
+        //       }
+        //     }
+
+        //     this.resultData = {};
+        //     this.popupVisible = true;
+        //     this.resultData = this.result.incorrectly;
+        //     this.resultData.subject = subject[nextIndex];
+        //   })
+        //   .catch((erro) => {});
+      });
+    },
+    saveChoose(val, isOK) {
+      setsave_answer(val, isOK).then(res => {
+        debugger
+        //更新list
+        this.$store.commit("user/SET_ANSWERED_IDS", res.data.answeredIds);
+        // 找到这题
+        var currentItem = this.subObj.find((x) => x.number == val);
+        // 设置为已作答
+        currentItem.notDo = true;
+        this.$forceUpdate();
+        // 找下一题的索引
+        var nextIndex = currentItem.i;
+        // 找到下一题
+        var nextItem = this.subObj[nextIndex];
+        // 如果已经作答，就找下一个索引
+        if (nextItem.notDo) {
+            var oldNextIndex = nextIndex;
+            for (var i = nextIndex + 1; i < 30 ; i ++ ) {
+              if (!this.subObj[i].notDo) {
+                nextIndex = i;
+                break;
+              }
+            }    
+            if (oldNextIndex == nextIndex) {//证明没有新题了
+              // todo 直接跳提示框
+              alert('回答错误，没有新题了');
+            }
+        }
+        // 正确的分支
+        if (isOK == 1) {
+          this.$store.commit("user/SET_HEARTVALUE", res.data.heartValue);
+          if (this.userInfor.isAnswerMax) {
+              //已满，直接继续答题
               this.resultData = {};
               this.resultData = this.result.answer;
               this.resultData.subject = this.subObj[nextIndex];
               this.popupVisible = true;
+              console.log(this.resultData.subject);
             } else {
+              // 刚好满5题
               if (res.data.answerId.length == 6) {
                 this.resultData = {};
                 this.resultData = this.result.Accept;
@@ -247,42 +334,24 @@ export default {
                 this.$store.commit("user/SET_HEART_IS_MAX", true);
                 this.$store.commit("user/SET_LOTTERY_COUNT", res.data.lotteryCount);
                 this.popupVisible = true;
+                console.log(this.resultData.subject);
               } else {
+                //不到5题
                 this.resultData = {};
                 this.resultData = this.result.answer;
                 this.resultData.subject = this.subObj[nextIndex];
                 this.popupVisible = true;
+                console.log(this.resultData.subject);
               }
             }
-            this.$store.commit("user/SET_HEARTVALUE", res.data.heartValue);
-          })
-          .catch((error) => {});
-      });
-    },
-    wrongChoose(val) {
-      this.popupVisible = false;
-      this.$nextTick(() => {
-        setsave_answer(val, 0)
-          .then((res) => {
-            //更新list
-            this.$store.commit("user/SET_ANSWERED_IDS", res.data.answeredIds);
-            var currentItem = this.subObj.find((x) => x.number == val);
-            currentItem.notDo = true;
-            var nextIndex = currentItem.i;
-            for (var startIndex = nextIndex; startIndex < 30; startIndex++) {
-              var nextItem = this.subObj.find((x) => x.i == startIndex);
-              if (!nextItem.notDo) {
-                nextIndex = startIndex;
-              }
-            }
-
-            this.resultData = {};
-            this.popupVisible = true;
-            this.resultData = this.result.incorrectly;
-            this.resultData.subject = subject[nextIndex];
-          })
-          .catch((erro) => {});
-      });
+        } else {
+          this.resultData = {};
+          this.popupVisible = true;
+          this.resultData = this.result.incorrectly;
+          this.resultData.subject = this.subObj[nextIndex];
+          console.log(this.resultData.subject);
+        }
+      })
     },
     addTopHeight(arr) {
       let top = 0;
