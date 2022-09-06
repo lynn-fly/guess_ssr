@@ -174,6 +174,10 @@ export default {
     // setTimeout(() => {
     // this.beginChouse();
     // }, 2000);
+    this.$store
+        .dispatch("user/getInfo")
+        .then((data) => {})
+        .catch((err) => {});
   },
   computed: {
     ...mapGetters(["userInfor"]),

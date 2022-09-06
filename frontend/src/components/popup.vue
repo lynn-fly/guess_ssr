@@ -231,6 +231,7 @@ export default {
       }
     },
     chooseAnswer(item, index) {
+      debugger
       console.log(item, index);
       var selected = this.answer.find((x) => x.number == item.number);
       // console.log(selected, "111111111111111");
