@@ -71,11 +71,11 @@ export default {
         },
         {
           icon: require("@/assets/luckDraw/4.png"),
-          name: "户外超声波防潮野餐地垫-灰",
+          name: "户外折叠整理箱-灰",
         },
         {
           icon: require("@/assets/luckDraw/5.png"),
-          name: "户外折叠整理箱-灰",
+          name: "户外超声波防潮野餐地垫-灰",
         },
         {
           icon: require("@/assets/luckDraw/6.png"),
@@ -83,7 +83,7 @@ export default {
         },
         {
           icon: require("@/assets/luckDraw/7.png"),
-          name: "AVATR精品帆布包(含定制徽章)",
+          name: "AVATR精品帆布包",
         },
         {
           icon: require("@/assets/luckDraw/8.png"),
