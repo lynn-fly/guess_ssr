@@ -258,10 +258,22 @@ export default {
       this.$nextTick(() => {
         setsave_answer(val, 0)
           .then((res) => {
+            //更新list
+            this.$store.commit("user/SET_ANSWERED_IDS", res.data.answeredIds);
+            var currentItem = this.subObj.find((x) => x.number == val);
+            currentItem.notDo = true;
+            var nextIndex = currentItem.i;
+            for (var startIndex = nextIndex; startIndex < 30; startIndex++) {
+              var nextItem = this.subObj.find((x) => x.i == startIndex);
+              if (!nextItem.notDo) {
+                nextIndex = startIndex;
+              }
+            }
+
             this.resultData = {};
             this.popupVisible = true;
             this.resultData = this.result.incorrectly;
-            this.resultData.subject = subject[val - 1];
+            this.resultData.subject = subject[nextIndex];
           })
           .catch((erro) => {});
       });
