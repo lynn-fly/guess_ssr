@@ -252,9 +252,9 @@ export default {
       }, 200);
     },
     upClick(item, index) {
-      debugger
+      debugger;
       // console.log(tiem, index, this.userInfor.userId);
-      var thumbedList = item.thumbed.split(',');
+      var thumbedList = item.thumbed.split(",");
       for (let k in thumbedList) {
         if (thumbedList[k] == this.userInfor.userId) {
           alert("不可重复点赞");
@@ -274,6 +274,10 @@ export default {
     close(item) {
       console.log(item);
       if (item == "关闭") {
+        this.popupVisible = false;
+      } else if (item == "抽奖") {
+        gotopPage("/guess");
+      } else {
         this.popupVisible = false;
       }
     },
