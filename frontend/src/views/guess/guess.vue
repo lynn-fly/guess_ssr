@@ -101,7 +101,8 @@ export default {
           icon: require("@/assets/guess/result/dc2.png"),
           button: [
             {
-              icon: require("@/assets/guess/result/dc1.png"),
+              icon: require("@/assets/guess/result/dd1.png"),
+              // icon: require("@/assets/guess/result/dc1.png"),
               value: "答错",
             },
           ],
