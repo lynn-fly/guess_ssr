@@ -1,11 +1,5 @@
 <template>
   <div class="login">
-    <!--<h1>登录</h1> flex-c-c-->
-    <!-- <div class="row" style="margin-top: 100px;">
-      <div class="offset-3 col-md-6">
-        <button @click="handleLogin">登陆</button>
-      </div>
-    </div> -->
     <img class="theme" src="@/assets/login/title.png" alt="" srcset="" />
     <div class="inputs flex-c-c">
       <div class="once flex-c-c">
@@ -33,6 +27,7 @@
 
 <script>
 import { gotopPage } from "@/utils/index";
+
 export default {
   name: "Login",
   data() {
@@ -48,55 +43,19 @@ export default {
     };
   },
   methods: {
-    handleLogin() {
-      // this.$refs['form'].validate(valid => {
-      //   if (valid) {
-      //     this.$store.dispatch('user/login', this.form).then(() => {
-      //       this.$router.push({ name: 'manage' })
-      //     }).catch(() => {
-
-      //     })
-      //   }
-      // })
-      this.$store
-        .dispatch("user/login", { username: "admin", password: "admin" })
-        .then(() => {
-          this.$router.push({ name: "manage" });
-        })
-        .catch(() => {});
-    },
-    isOk(name, pass) {
-      let names = ["1", "2", "3"],
-        passs = ["1", "2", "3"],
-        ki = -1;
-      for (let k in names) {
-        if (names[k] == name) {
-          ki = k;
-        }
-      }
-      if (ki == -1 || pass != passs[ki]) {
-        return false;
-      }
-      return true;
-    },
     loging() {
       this.$store
         .dispatch("user/login", {
           username: this.form.username + "",
           password: this.form.password,
         })
-        .then(() => {
+        .then(res => {
           this.$router.replace({ path: "/home" });
+        }).catch(err => { 
+          if (err) {
+            alert("姓名或工号错误！")
+          }
         });
-      // if (this.isOk(this.form.username, this.form.password)) {
-      //   console.log(this.$store, '登入成功')
-      //   this.$store.commit('user/SET_NAME', this.form.username)
-      //   setTimeout(() => {
-      //     gotopPage("/");
-      //   }, 100);
-      // } else {
-      //   console.log('账号密码错误')
-      // }
     },
   },
 };

@@ -46,6 +46,15 @@ const mutations = {
   SET_HEART_IS_MAX: (state, value) => {
     state.userInfor.isAnswerMax = value
   },
+  SET_USER_INFO: (state, value) => {
+    state.userInfor = value
+  },
+  SET_LOTTERY_COUNT: (state, value) => {
+    state.userInfor.lotteryCount = value
+  },
+  SET_IS_UPLOAD: (state, value) => {
+    state.userInfor.isUpload = value
+  },
 }
 
 const actions = {
@@ -64,21 +73,13 @@ const actions = {
         const {
           data
         } = response
-        // const data = {
-        //   access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjMwNzcxNTQsInN1YiI6IjIifQ.cQmYSh1A-nA3EEME2ZgTnsIaKVsvMUSKSN_Xm1_zMuU",
-        //   heartValue: 100,
-        //   isAnswerMax: true,
-        //   isLocal: true,
-        //   isUpload: true,
-        //   lotteryCount: 0,
-        //   userId: 2,
-        //   userName: "谭本宏",
-        // }
+        commit('SET_NAME', data['userName'])
         commit('SET_TOKEN', data['access_token'])
+        commit('SET_USER_INFO', data)
         setToken(data['access_token'])
         setUser(data)
         setName(data['userName'])
-        resolve()
+        resolve(response)
       }).catch(error => {
         reject(error)
       })
