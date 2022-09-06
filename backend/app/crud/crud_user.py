@@ -81,8 +81,7 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         second_prize_time = case when first_prize_time > 0 and second_prize_time = 0 then {now_time} else second_prize_time end,
         first_prize_level = case when first_prize_time = 0 and second_prize_time = 0 then {gift_level} else first_prize_level end,
         first_prize_time = case when first_prize_time = 0 and second_prize_time = 0 then {now_time} else first_prize_time end,
-        lottery_count = lottery_count - 1, heart_value = heart_value - 50
-        is_prize  = 1
+        lottery_count = lottery_count - 1, heart_value = heart_value - 50, is_prize  = 1 
         where id = {db_obj.id} and (first_prize_time = 0 or second_prize_time = 0)'''
         result = db.execute(sql)
 
