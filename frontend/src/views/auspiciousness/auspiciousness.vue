@@ -4,7 +4,7 @@
     <div class="luckDraw">
       <div class="top">
         <Buttons :msg="name" @back="back" />
-        <LampNumber :num="userInfor.heartValue" />
+        <LampNumber :num="heartValue" />
       </div>
       <img
         class="background"
@@ -92,6 +92,7 @@ export default {
       mainHeight: 800,
       contentHeight: "auto",
       textUp: "",
+      heartValue: 0,
       isUploaded: false,
       popupVisible: false,
       resultData: {},
@@ -135,8 +136,9 @@ export default {
       };
     }
     this.getList(true);
-    console.log("userinfo:", this.userInfor);
+    console.log("userinfo:-------", this.userInfor);
     this.isUploaded = this.userInfor.isUpload;
+    this.heartValue = this.userInfor.heartValue;
   },
   computed: {
     ...mapGetters(["userInfor"]),
