@@ -26,6 +26,7 @@ class User(Base):
     second_prize_level  =  Column(Integer,default=0)
     second_prize_time   =  Column(Integer,default=0)
     answerids  = Column(String(128),default='-1') #答对题目的id（1，2，3，4）
+    answeredids  = Column(String(128),default='-1') #答题历史
     upload_file_url = Column(String(128),default='')
     upload_file = Column(LargeBinary) #二进制保存上传的图片
     upload_comment  = Column(String(128),default='')

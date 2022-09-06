@@ -26,31 +26,41 @@ from app.models import User
 
 router = APIRouter()
 
-@router.post('/save_answer/{ans_id}',dependencies=[Depends(deps.get_current_user)], response_model=Any, status_code=status.HTTP_201_CREATED)
-def save_answer(db: Session = Depends(deps.get_db),user: User = Depends(deps.get_current_user),*,ans_id: str) -> Any:
+@router.post('/save_answer/{ans_id}/{is_ok}',dependencies=[Depends(deps.get_current_user)], response_model=Any, status_code=status.HTTP_201_CREATED)
+def save_answer(db: Session = Depends(deps.get_db),user: User = Depends(deps.get_current_user),*,ans_id: str,is_ok: int) -> Any:
      
      if not user:
         raise HTTPException(
             status_code=400, detail="用户不存在"
         )
      answerids = user.answerids.split(',')
+     answeredids = user.answeredids.split(',')
      answer_heart_value = user.answer_heart_value
      heart_value = user.heart_value
      lottery_count = user.lottery_count
-     if(answer_heart_value < 50 and not ans_id in answerids):
+     
+     if(ans_id in answeredids or ans_id in answerids):
+        raise HTTPException(
+            status_code=500, detail="曾经回答过的问题无论对错已经是曾经了！"
+        )
+
+     if(answer_heart_value < 50 and not ans_id in answerids and is_ok == 1):
         answer_heart_value += 10
         heart_value += 10
         answerids.append(ans_id)
         if answer_heart_value>=50:
             lottery_count += 1
      
-     
-     
+     if(not ans_id in answeredids):
+        answeredids.append(ans_id)
+        
      new_answerids = ','.join(answerids)
+     new_answeredids = ','.join(answeredids)
      obj_u = schemas.UserUpdate(
         answer_heart_value=answer_heart_value,
         heart_value =heart_value,
         answerids = new_answerids,
+        answeredids = new_answeredids,
         lottery_count = lottery_count
         )
      new_user = crud.user.update(db,db_obj=user,obj_in=obj_u)
@@ -59,7 +69,8 @@ def save_answer(db: Session = Depends(deps.get_db),user: User = Depends(deps.get
         'userName':user.nick_name,
         'heartValue':new_user.heart_value,
         'lotteryCount':new_user.lottery_count,
-        'answerId': new_user.answerids.split(',')
+        'answerId': new_user.answerids.split(','),
+        'answeredIds':new_user.answeredids.split(','),
     }
 
 #saveThumbed

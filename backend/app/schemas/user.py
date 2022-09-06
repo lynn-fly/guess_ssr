@@ -29,6 +29,7 @@ class UserUpdate(UserBase):
     second_prize_level  : Optional[int]
     second_prize_time   : Optional[int]
     answerids  : Optional[str]
+    answeredids: Optional[str]
     upload_file_url : Optional[str]
     upload_comment  : Optional[str]
     thumbed  : Optional[str]
