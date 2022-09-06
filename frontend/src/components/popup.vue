@@ -316,7 +316,7 @@ export default {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  height: 100%;
+  height: 80%;
   padding-bottom: 4rem;
 }
 .subject .answer .answerOnce {
