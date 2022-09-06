@@ -21,6 +21,7 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
             email=obj_in.email,
             nick_name = obj_in.nick_name,
             dept_name = obj_in.dept,
+            is_local = obj_in.is_local
         )
         db.add(db_obj)
         db.commit()

@@ -216,7 +216,7 @@ def save_upload(
     u_name = uuid.uuid4()
     file_location = f"uploads/{u_name}.{ext}"
     context_type = upload_file.content_type
-    allow_types = ['image/jpeg', 'image/jpg', 'image/png']
+    allow_types = ['image/jpeg', 'image/jpg', 'image/png','jpeg','jpg','png']
     if context_type not in allow_types:
         raise HTTPException(
             status_code=500, detail="文件类型不支持，请上传jpeg/jpg/png格式图片"

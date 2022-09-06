@@ -15,7 +15,7 @@ def init_db(db: Session) -> None:
             email='test@qq.com'
         )
         crud.user.create(db, obj_in=user_in)
-    nss_city_file = "uuuu.csv"
+    nss_city_file = "u0906.csv"
     with open(nss_city_file,'r',newline='',encoding='utf-8-sig') as csvfile:
         csv_reader = csv.reader(csvfile)
         birth_header = next(csv_reader)
@@ -24,12 +24,13 @@ def init_db(db: Session) -> None:
         for row in csv_reader:
             print(row)
             user_in = schemas.UserCreate(
-                username=row[1], 
+                username=row[0], 
                 password = '123456',
-                dept = row[3], 
+                dept = row[2], 
                 is_admin=False,
-                nick_name = row[2],
-                email=f'{row[1]}@qq.com'
+                nick_name = row[1],
+                is_local =  '中国' in row[3] ,
+                email=f'{row[0]}@qq.com'
                 )
             crud.user.create(db, obj_in=user_in)
             print(f'Done {row[1]}')

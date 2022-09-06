@@ -11,6 +11,7 @@ class UserCreate(UserBase):
     username: str
     password: str
     is_admin: Optional[bool]
+    is_local: Optional[bool]
     email: str
     dept:str
     nick_name:Optional[str]
