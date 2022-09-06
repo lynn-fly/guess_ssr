@@ -108,15 +108,15 @@ def get_prize(db: Session = Depends(deps.get_db),user: User = Depends(deps.get_c
 #@router.post('/get_prize', response_model=Any, status_code=status.HTTP_200_OK)
 #def get_prize(db: Session = Depends(deps.get_db)) -> Any:
     # for test  start
-    # randomUserId =random.sample(range(2,1912),1)
-    # user = crud.user.get(db,id=randomUserId)
+    #randomUserId =random.sample(range(2,1912),1)
+    #user = crud.user.get(db,id=randomUserId)
     # fot test end
     # if not access_user:
     #     raise HTTPException(
     #         status_code=400, detail="user not found"
     #     )
     user_updated = False
-    second_count = crud.user.get_second(db)
+    #second_count = crud.user.get_second(db)
     with db.begin(subtransactions=True):
         # user = None
         # try:
@@ -142,15 +142,15 @@ def get_prize(db: Session = Depends(deps.get_db),user: User = Depends(deps.get_c
                 status_code=500, detail="已经抽奖两次啦"
             )
         gifts = [1,2,2,3,3,3,4,4,4,5,5,5,6,6,6,6,7,7,7,7,8,8,8,8,9,9,9,9,9,9,9,9,9,9,9,9,9
-        ,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9
         ,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9]
         # 如果第一次已经抽取了，就在三等奖和四等奖中抽取，且中间总额不能大于总数量 -  总人数
         has_gifts = True
         if first_prize_level > 0:      
-            if second_count <= 150:
-                gifts = [6,7,8,9,10,10,10,10,10,10,10,10,10,10,10,10,10]
-            else:
-                has_gifts = False
+            #if second_count <= 150:
+            #    gifts = [6,7,8,9,10,10,10,10,10,10,10,10,10,10,10,10,10]
+            # else:
+            #     has_gifts = False
+            gifts = [9,9,9,9,9,9,9,9,9]
         random.shuffle(gifts)
         giftlevel = -1
         retry = 30
@@ -167,8 +167,9 @@ def get_prize(db: Session = Depends(deps.get_db),user: User = Depends(deps.get_c
                 giftlevel = -1
             retry -= 1
         
-        if retry < 1 or giftlevel == 10:
-            giftlevel = -1
+        #if retry < 1 or giftlevel == 10:
+        if retry < 1:
+            giftlevel = 9
 
         now_time = int(datetime.timestamp(datetime.utcnow()))
         user_updated = crud.user.update_giftlevel(db,db_obj=user,now_time=now_time,gift_level=giftlevel)
@@ -390,7 +391,7 @@ def fl_query(db: Session = Depends(deps.get_db), *,searchKey: str = Form(''), gi
      # 插入数据
      row = 1
      gifts = ['未中奖','户外座椅-灰','阿维塔定制保温杯','城市画展系列T恤衫-XL',
-     '户外超声波防潮野餐地垫-灰','户外折叠整理箱-灰','AVATR环保束口包','AVATR精品帆布包（含定制徽章）','杜邦电脑包','E值-66']
+     '户外超声波防潮野餐地垫-灰','户外折叠整理箱-灰','AVATR环保束口包','AVATR精品帆布包（含定制徽章）','杜邦电脑包','E值-10']
      for f_log in fls:
          table_sheet.write(row, 0, str(f_log['username']), style=c_style)
          table_sheet.write(row, 1, str(f_log['nick_name']), style=c_style)

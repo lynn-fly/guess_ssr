@@ -56,7 +56,8 @@ def login_user(db: Session = Depends(deps.get_db), *, ulogin: schemas.UserLogin)
         'isAnswerMax': user.answer_heart_value == 50,
         'isUpload': user.upload_heart_value == 50,
         'lotteryCount': user.lottery_count,
-        'isLocal':user.is_local
+        'isLocal':user.is_local,
+        'answeredIds':user.answeredids.split(','),
     }
 
 
@@ -72,7 +73,8 @@ def login_info(
         'isAnswerMax': current_user.answer_heart_value == 50,
         'isUpload': current_user.upload_heart_value == 50,
         'lotteryCount': current_user.lottery_count,
-        'isLocal':current_user.is_local
+        'isLocal':current_user.is_local,
+        'answeredIds':current_user.answeredids.split(','),
     }
     return JSONResponse(content=jsonable_encoder(data), status_code=status.HTTP_200_OK)
 
