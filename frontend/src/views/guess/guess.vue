@@ -127,7 +127,16 @@ export default {
     };
   },
   mounted() {
-    this.subObj = this.shuffle(subject);
+    var indexList = subject.map(x => x.index);
+    var randomList = this.shuffle(indexList);
+    var newRandomList = [];
+    randomList.forEach(index => {
+      var item = subject.find(x => x.index == index);
+      newRandomList.push(item);
+    });
+    this.subObj = newRandomList;
+
+    //this.subObj = this.shuffle(subject);
     for (let k in this.subObj) {
       var did = false;
       if (this.userInfor.answeredIds.indexOf(this.subObj[k].number + "") > -1) {
@@ -140,6 +149,7 @@ export default {
         icon: require("@/assets/guess/once.png"),
       };
     }
+ 
 
     // let imgs = document.getElementsByClassName("imgs");
     // let imgw = imgs[0];
@@ -226,6 +236,12 @@ export default {
                 nextIndex = startIndex;
               }
             }
+            if (nextIndex == 30) { //我是最后一套题
+              this.resultData = {};
+              this.popupVisible = true;
+              this.resultData = this.result.answer;
+              return
+            }  
 
             if (this.userInfor.isAnswerMax) {
               //直接继续答题
@@ -254,6 +270,7 @@ export default {
       });
     },
     wrongChoose(val) {
+      debugger
       this.popupVisible = false;
       this.$nextTick(() => {
         setsave_answer(val, 0)
@@ -263,6 +280,7 @@ export default {
             var currentItem = this.subObj.find((x) => x.number == val);
             currentItem.notDo = true;
             var nextIndex = currentItem.i;
+
             for (var startIndex = nextIndex; startIndex < 30; startIndex++) {
               var nextItem = this.subObj.find((x) => x.i == startIndex);
               if (!nextItem.notDo) {
@@ -270,10 +288,16 @@ export default {
               }
             }
 
-            this.resultData = {};
-            this.popupVisible = true;
-            this.resultData = this.result.incorrectly;
-            this.resultData.subject = subject[nextIndex];
+            if (nextIndex == 30) { //我是最后一套题
+              this.resultData = {};
+              this.popupVisible = true;
+              this.resultData = this.result.incorrectly;
+            } else {
+              this.resultData = {};
+              this.popupVisible = true;
+              this.resultData = this.result.incorrectly;
+              this.resultData.subject = subject[nextIndex];
+            }
           })
           .catch((erro) => {});
       });
