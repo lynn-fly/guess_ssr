@@ -131,7 +131,6 @@ const actions = {
         if (!data) {
           reject('验证失败，请重新登录。')
         }
-        debugger
         commit('SET_USER_INFO', data)
         resolve(data)
       }).catch(error => {
