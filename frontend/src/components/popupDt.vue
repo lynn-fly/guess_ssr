@@ -158,7 +158,7 @@ export default {
         this.visible = false;
         this.$emit("wrongChoose", this.popupData.subject.index + 1);
       }
-      //debugger
+      
       for (let k in this.answer) {
         if (k == index) {
           this.answer[k].icon = this.chouse;

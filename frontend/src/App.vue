@@ -14,7 +14,7 @@ export default {
     ...mapGetters(["userInfor"]),
   },
   mounted() {
-    debugger
+    
     console.log('APP mounted', this.$route.path);
     if (this.$route.path == '/login' || this.$route.path == '/') {
       setToken('');

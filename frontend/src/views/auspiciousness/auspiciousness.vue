@@ -56,6 +56,9 @@
           </div>
         </div>
       </div>
+      <div class="buttonDowns">
+        <div class="buttonDown" @click="changeLists">换一批</div>
+      </div>
     </div>
     <Popup :popupData="resultData" :visible="popupVisible" @close="close">
       <!-- @rightChoose="rightChoose"
@@ -138,9 +141,13 @@ export default {
     ...mapGetters(["userInfor"]),
   },
   methods: {
-    getList() {
+    getList(notFrist) {
       this.imgData = [];
-      getupload_list().then((res) => {
+      let d = true;
+      if (notFrist) {
+        d = false;
+      }
+      getupload_list(d).then((res) => {
         const { config, data } = res;
         const { baseURL } = config;
         for (let k in data) {
@@ -225,15 +232,16 @@ export default {
             this.textUp = "";
             this.getList();
             //TODO:弹出框
-            debugger;
             this.isUploaded = true;
             this.$store.commit("user/SET_IS_UPLOAD", true);
             this.$store.commit("user/SET_HEARTVALUE", res.data.heartValue);
             this.$store.commit("user/SET_LOTTERY_COUNT", res.data.lotteryCount);
           }
+          this.openPopup("luck");
         })
         .catch((error) => {
-          alert("图片上传失败,请联系管理员");
+          this.openPopup("error");
+          // alert("图片上传失败,请联系管理员");
         });
     },
     openPopup(num) {
@@ -297,6 +305,9 @@ export default {
       // n = (size / Math.pow(num, 4)).toFixed(2);
       // type = "TB";
       return [n, type];
+    },
+    changeLists() {
+      this.getList(true);
     },
   },
 };
@@ -419,5 +430,13 @@ export default {
 }
 .uppppp {
   width: 100% !important;
+}
+.buttonDowns {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 0.5rem;
 }
 </style>
