@@ -7,7 +7,7 @@ import {
 // const noTokenWhiteList = ['/login', '/home', '/', '/guess',
 //   '/auspiciousness',
 //   '/luckDraw']
-const noTokenWhiteList = ['/login'
+const noTokenWhiteList = ['/login', '/manage'
   // , '/home', '/', '/guess', '/manage',
   //   '/auspiciousness',
   //   '/luckDraw'
@@ -18,6 +18,7 @@ const tokenCustomWhiteList = ['/home', '/answer', '/upload', '/prize']
 
 router.beforeEach(async (to, from, next) => {
   const hasToken = getToken()
+  debugger
   // console.log(hasToken)
   if (hasToken) {
     const hasRoles = store.getters.roles && store.getters.roles.length > 0

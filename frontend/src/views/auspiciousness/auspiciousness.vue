@@ -16,7 +16,7 @@
       />
       <img class="themes" src="@/assets/auspiciousness/msg.png" alt="" srcset="" />
       <img class="themes1" src="@/assets/auspiciousness/back.png" alt="" srcset="" />
-      <div class="upImg" v-if="!isUploaded">
+      <div class="upImg" v-if="!this.userInfor.isUpload">
         <img
           class="upImgs"
           @click="upImg"
@@ -25,7 +25,7 @@
           srcset=""
         />
       </div>
-      <div class="upImg" v-if="!isUploaded">
+      <div class="upImg" v-if="!this.userInfor.isUpload">
         <input
           class="upInput"
           v-model="textUp"
@@ -183,7 +183,8 @@ export default {
       }
     },
     upImg() {
-      if (this.isUploaded) {
+      if (this.userInfor.isUpload) {
+        // if(this.isUploaded) {
         alert("你已经祈福过啦，请看看其他人的祝福吧！");
         return;
       }
@@ -229,12 +230,10 @@ export default {
             this.$store.commit("user/SET_IS_UPLOAD", true);
             this.$store.commit("user/SET_HEARTVALUE", res.data.heartValue);
             this.$store.commit("user/SET_LOTTERY_COUNT", res.data.lotteryCount);
-            this.openPopup("luck");
           }
         })
         .catch((error) => {
-          // alert("图片上传失败,请联系管理员");
-          this.openPopup("error");
+          alert("图片上传失败,请联系管理员");
         });
     },
     openPopup(num) {

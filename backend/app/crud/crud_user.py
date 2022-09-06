@@ -104,6 +104,32 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         #db.refresh(db_obj)
         return result.rowcount > 0
 
+    def update_upload(self, db: Session, *, db_obj: User) -> bool:
+        sql = f'''
+        update user set upload_heart_value = 50
+        lottery_count = lottery_count + 1,
+        is_prize  = 1
+        where id = {db_obj.id} and lottery_count < 2 and upload_heart_value = 0 '''
+        result = db.execute(sql)
+
+        #old_user = db.query(User).with_for_update(read=False, nowait=False).filter(User.id == db_obj.id).one()
+        # db_obj.lottery_count -=   1
+        # db_obj.is_prize = True
+        # update = 0
+        # if db_obj.first_prize_time == 0:
+        #     update = db.query(User).filter(User.id == db_obj.id, User.first_prize_time == 0)\
+        #         .update({"first_prize_level": gift_level,"first_prize_time":now_time,"lottery_count":db_obj.lottery_count,"is_prize":db_obj.is_prize})
+            
+        # else:
+        #     update = db.query(User).filter(User.id == db_obj.id, User.first_prize_time > 0, User.second_prize_time ==0)\
+        #         .update({"second_prize_level": gift_level,"second_prize_time":now_time,"lottery_count":db_obj.lottery_count,"is_prize":db_obj.is_prize})
+        if result.rowcount < 1:
+            print(f"用户:{db_obj.username} - {db_obj.nick_name}已经全部抽取！")
+        db.flush()
+        #db.commit()
+        #db.refresh(db_obj)
+        return result.rowcount > 0
+
     def authenticate(self, db: Session, *, username: str, password: str) -> Optional[User]:
         user = self.get_by_username(db, username=username)
         if not user:

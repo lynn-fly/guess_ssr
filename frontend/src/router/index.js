@@ -57,7 +57,6 @@ export const asyncRoutes = [
       path: 'manage',
       name: 'manage',
       component: () => import('@/views/manage/index'),
-      meta: { roles: ['admin'] }
     }]
   }
 ]

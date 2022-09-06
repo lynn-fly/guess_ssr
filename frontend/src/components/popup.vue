@@ -23,6 +23,7 @@
           @click="clicks(item.value, popupData.subject.index)"
           v-for="(item, index) in popupData.button"
           :src="item.icon"
+          :key="index"
         />
       </div>
       <div class="buttons" v-else-if="popupData.button && popupData.subject">
@@ -30,6 +31,7 @@
           @click="clicks(item.value, popupData.subject.index)"
           v-for="(item, index) in popupData.button"
           :src="item.icon"
+          :key="index"
         />
       </div>
       <div class="buttons" v-else-if="popupData.button">
@@ -59,6 +61,7 @@
             class="answerOnce"
             @click="chooseAnswer(item, index)"
             v-for="(item, index) in answer"
+            :key="index"
           >
             <div class="left" :class="[item.style ? 'style' : '']">
               <img :src="item.icon" alt="" />

@@ -44,8 +44,8 @@
 import { gotopPage } from "@/utils/index";
 import Popup from "@/components/popup.vue";
 import Buttons from "@/components/home/buttons.vue";
-import {goodLucky} from "@/api/user";
 
+import { mapGetters } from "vuex";
 export default {
   components: {
     Buttons,
@@ -136,6 +136,9 @@ export default {
     // this.beginChouse();
     // }, 2000);
   },
+  computed: {
+    ...mapGetters(["userInfor"]),
+  },
   methods: {
     changeSIze() {
       let backDom = document.getElementById("background");
@@ -160,15 +163,15 @@ export default {
       this.state = true;
       // let nums = parseInt(Math.random() * 101 + 1),
       //   num = 8;
-      goodLucky()
-      .then(res => {
+      this.$store.dispatch('user/luckyDraw')
+      .then(data => {
       //   for (let k in this.probability) {
       //   if (nums >= this.probability[k][0] && nums < this.probability[k][1]) {
       //     num = this.probability[k][2];
       //   }
       // }
 
-        const {lotteryNumber,lottery_count} = res.data;
+        const {lotteryNumber,lotteryCount} = data;
         let num = lotteryNumber < 1? 9: lotteryNumber - 1;
       
         let nowNum = 0;
@@ -177,13 +180,14 @@ export default {
             nowNum++;
             this.addIndex();
             if (nowNum > 30 && this.chouseIndex == num) {
-              this.state = lottery_count < 1;
+              this.state = lotteryCount < 1;
               this.chouseIndex = num;
               console.log(num);
               this.getResult(num);
               return;
             } else if (nowNum > 30 && num == 9) {
-              this.state = lottery_count < 1;
+              this.state = lotteryCount < 1;
+              console.log(num);
               this.getResult(num);
               return;
             } else {
@@ -219,8 +223,9 @@ export default {
       this.result.button[0].icon = icon;
       this.result.icon = main;
       this.result.name = name;
-      this.popupVisible = true;
       console.log(this.result);
+      this.popupVisible = true;
+      
     },
     close(val) {
       if (val == "关闭") {

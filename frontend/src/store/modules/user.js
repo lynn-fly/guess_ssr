@@ -116,22 +116,11 @@ const actions = {
   }) {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
-        const {
-          data
-        } = response
+        const { data } = response
         if (!data) {
           reject('验证失败，请重新登录。')
         }
-        const {
-          name,
-          roles
-        } = data
-        // console.log(data)
-        // if (!roles || roles.le <= 0) {
-        //   reject('getInfo: roles must be a non-null array!')
-        // }
-        commit('SET_ROLES', roles)
-        commit('SET_NAME', name)
+        commit('SET_USER_INFO', data)
         resolve(data)
       }).catch(error => {
         reject(error)
@@ -142,9 +131,10 @@ const actions = {
   luckyDraw({commit,state}) {
     return new Promise((resolve,reject) => {
       goodLucky().then(res=>{
-        const {lotteryNumber,lottery_count} = res.data;
+        const {lotteryNumber,lotteryCount} = res.data;
+        commit('SET_LOTTERY_COUNT', lotteryCount)
         let num = lotteryNumber < 1? 9: lotteryNumber - 1;
-        resolve(num);
+        resolve({lotteryNumber:num,lotteryCount});
       })
       .catch(err=>{
         reject(err);
