@@ -213,20 +213,20 @@ export default {
               //直接继续答题
               this.resultData = {};
               this.resultData = this.result.answer;
-              this.resultData.subject = subject[val - 1];
+              this.resultData.subject = this.subObj[val - 1];
               this.popupVisible = true;
             } else {
               if (res.data.answerId.length == 6) {
                 this.resultData = {};
                 this.resultData = this.result.Accept;
-                this.resultData.subject = subject[val - 1];
+                this.resultData.subject = this.subObj[val - 1];
                 this.$store.commit("user/SET_HEART_IS_MAX", true);
                 this.$store.commit("user/SET_LOTTERY_COUNT", res.data.lotteryCount);
                 this.popupVisible = true;
               } else {
                 this.resultData = {};
                 this.resultData = this.result.answer;
-                this.resultData.subject = subject[val - 1];
+                this.resultData.subject = this.subObj[val - 1];
                 this.popupVisible = true;
               }
             }
