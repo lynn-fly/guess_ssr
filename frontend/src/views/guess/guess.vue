@@ -30,7 +30,14 @@
       </div>
       <img class="down" src="@/assets/guess/down.png" alt="" srcset="" />
     </div>
-    <Popup :popupData="resultData" :visible="popupVisible" @close="close" @rightChoose="rightChoose" @wrongChoose="wrongChoose"> </Popup>
+    <Popup
+      :popupData="resultData"
+      :visible="popupVisible"
+      @close="close"
+      @rightChoose="rightChoose"
+      @wrongChoose="wrongChoose"
+    >
+    </Popup>
   </div>
 </template>
 
@@ -122,20 +129,21 @@ export default {
     close(val) {
       this.popupVisible = false;
       var subjectIndex = -1;
-      if (val.indexOf('-') > -1) {
-        subjectIndex = parseInt(val.split('-')[1]);
-        val = val.split('-')[0];
+      if (val.indexOf("-") > -1) {
+        subjectIndex = parseInt(val.split("-")[1]);
+        val = val.split("-")[0];
       }
       let close = ["关闭", "答对", "答错", "继续"];
       if (close.includes(val)) {
         this.resultData = {};
         //this.popupVisible = false;
-        if (val == '答对') {
-          this.openAnwser(subjectIndex + 1)
+        console.log(val, subjectIndex, "4444444");
+        if (val == "答对") {
+          this.openAnwser(subjectIndex + 1);
         } else if (val == "答错") {
-          this.openAnwser(subjectIndex)
-        } else if (val =="继续") {
-          this.openAnwser(subjectIndex + 1)
+          this.openAnwser(subjectIndex);
+        } else if (val == "继续") {
+          this.openAnwser(subjectIndex + 1);
         }
       } else if (val == "立即") {
         this.resultData = {};
@@ -145,39 +153,44 @@ export default {
       }
     },
     rightChoose(val) {
-      setsave_answer(val)
-        .then((res) => { 
-          if (this.userInfor.isAnswerMax) { //直接继续答题
-            this.resultData = {};
-            this.popupVisible = true;
-            this.resultData = this.result.answer;
-            this.resultData.subject = subject[val-1];
-          } else {
-            if ( res.data.answerId.length == 6) {
+      this.popupVisible = false;
+      this.$nextTick(() => {
+        setsave_answer(val)
+          .then((res) => {
+            if (this.userInfor.isAnswerMax) {
+              //直接继续答题
               this.resultData = {};
-              this.popupVisible = true;
-              this.resultData = this.result.Accept;
-              this.resultData.subject = subject[val-1];
-              this.$store.commit('user/SET_HEART_IS_MAX', true)
-              this.$store.commit('user/SET_LOTTERY_COUNT', res.data.lotteryCount)
-            } else {
-              this.resultData = {};
-              this.popupVisible = true;
               this.resultData = this.result.answer;
-              this.resultData.subject = subject[val-1];
+              this.resultData.subject = subject[val - 1];
+              this.popupVisible = true;
+            } else {
+              if (res.data.answerId.length == 6) {
+                this.resultData = {};
+                this.resultData = this.result.Accept;
+                this.resultData.subject = subject[val - 1];
+                this.$store.commit("user/SET_HEART_IS_MAX", true);
+                this.$store.commit("user/SET_LOTTERY_COUNT", res.data.lotteryCount);
+                this.popupVisible = true;
+              } else {
+                this.resultData = {};
+                this.resultData = this.result.answer;
+                this.resultData.subject = subject[val - 1];
+                this.popupVisible = true;
+              }
             }
-          }
-          this.$store.commit('user/SET_HEARTVALUE', res.data.heartValue)
-        })
-        .catch((error) => {
-           
-        });
+            this.$store.commit("user/SET_HEARTVALUE", res.data.heartValue);
+          })
+          .catch((error) => {});
+      });
     },
     wrongChoose(val) {
-      this.resultData = {};
-      this.popupVisible = true;
-      this.resultData = this.result.incorrectly;
-      this.resultData.subject = subject[val-1];
+      this.popupVisible = false;
+      this.$nextTick(() => {
+        this.resultData = {};
+        this.popupVisible = true;
+        this.resultData = this.result.incorrectly;
+        this.resultData.subject = subject[val - 1];
+      });
     },
     addTopHeight(arr) {
       let top = 0;

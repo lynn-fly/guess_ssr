@@ -26,7 +26,7 @@
           :key="index"
         />
       </div>
-      <div class="buttons" v-else-if="popupData.button">
+      <div class="buttons" v-else-if="popupData.button && popupData.subject">
         <img
           @click="clicks(item.value, popupData.subject.index)"
           v-for="(item, index) in popupData.button"
@@ -34,12 +34,27 @@
           :key="index"
         />
       </div>
+      <div class="buttons" v-else-if="popupData.button">
+        <img
+          @click="clicks(item.value)"
+          v-for="(item, index) in popupData.button"
+          :src="item.icon"
+        />
+      </div>
       <div class="subject" v-else-if="popupData.subject">
         <div class="land">
-          {{ popupData.subject.number }}
+          {{ lands }}
+          <!-- popupData.subject.number  -->
         </div>
-        <div class="title" v-html="popupData.subject.title">
+        <div
+          v-if="popupData.subject.type != 'image'"
+          class="title"
+          v-html="popupData.subject.title"
+        >
           <!-- {{ popupData.subject.title }} -->
+        </div>
+        <div v-else class="title">
+          <img :src="require('@/assets/guess/obj/' + popupData.subject.icon)" alt="" />
         </div>
         <div class="answer">
           <div
@@ -51,7 +66,9 @@
             <div class="left" :class="[item.style ? 'style' : '']">
               <img :src="item.icon" alt="" />
             </div>
-            <div class="right">{{ item.content }}</div>
+            <div class="right" :style="{ width: rightwidth + 'px' }">
+              {{ item.content }}
+            </div>
           </div>
         </div>
       </div>
@@ -75,10 +92,13 @@ export default {
   props: ["popupData", "visible"],
   data() {
     return {
-      answer: [],
+      // answer: [],
       chouse: require("@/assets/guess/dt/dt1.png"),
       noChouse: require("@/assets/guess/dt/dt2.png"),
-      land: ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十"],
+      land: ["一", "二", "三", "四", "五", "六", "七", "八", "九", ""],
+      rightwidth: 10,
+      ChouseIcon: require("@/assets/guess/dt/dt2.png"),
+      chouseIndexAns: "",
     };
   },
   watch: {
@@ -90,52 +110,104 @@ export default {
           title = "<p>" + title + "<p/>";
           // console.log(title);
           this.popupData.subject.title = title;
-          let num = this.popupData.subject.number + "";
-          num = num.split("");
-          for (let k in num) {
-            num[k] = this.land[num[k] - 1];
-          }
-          this.popupData.subject.number = num.join("");
-          this.answer = [];
-          for (let k in this.popupData.subject.answer) {
-            this.answer.push({
-              ...this.popupData.subject.answer[k],
-              icon: this.noChouse,
-              style: false,
-            });
-          }
-          console.log(this.answer);
+          // let num = this.popupData.subject.number + "";
+          // num = num.split("");
+          // for (let k in num) {
+          //   num[k] = this.land[num[k] - 1];
+          // }
+          // this.popupData.subject.number = num.join("");
+          // this.answer = [];
+          // let leng = 0;
+          // for (let k in this.popupData.subject.answer) {
+          //   let len = this.popupData.subject.answer[k].content.length;
+          //   if (leng < len) {
+          //     leng = len;
+          //   }
+          //   this.answer.push({
+          //     ...this.popupData.subject.answer[k],
+          //     icon: this.noChouse,
+          //     style: false,
+          //   });
+          // }
+          // this.rightwidth = leng * 20;
+          // console.log(this.answer);
         }
       }
     },
   },
+  computed: {
+    lands() {
+      let num = this.popupData.subject.index + "";
+      num = num.split("");
+      for (let k in num) {
+        num[k] = this.land[num[k]];
+      }
+      if (num.length == 2) {
+        num.splice(0, 1, this.land[num[0] - 1]);
+        num.splice(1, 0, "十");
+      }
+      console.log(num, "nnnnnnnnnnnnnnnn");
+      return num.join("");
+    },
+    answer() {
+      let answers = [];
+      let leng = 0;
+      for (let k in this.popupData.subject.answer) {
+        let len = this.popupData.subject.answer[k].content.length;
+        if (leng < len) {
+          leng = len;
+        }
+        answers.push({
+          ...this.popupData.subject.answer[k],
+          icon: k == this.chouseIndexAns ? this.chouse : this.noChouse,
+          style: k == this.chouseIndexAns ? true : false,
+        });
+      }
+
+      // for (let k in this.answer) {
+      //   if (k == index) {
+      //     this.answer[k].icon = this.chouse;
+      //     this.answer[k].style = true;
+      //     continue;
+      //   }
+      //   this.answer[k].icon = this.noChouse;
+      //   this.answer[k].style = false;
+      // }
+      this.rightwidth = leng * 20;
+      console.log(answers);
+      return answers;
+    },
+  },
   methods: {
     clicks(val, subjectIndex) {
-      if (val == '答对' || val == '答错' || val == '继续') {
-        this.$emit("close", val + '-' + subjectIndex);
+      if (val == "答对" || val == "答错" || val == "继续") {
+        this.$emit("close", val + "-" + subjectIndex);
       } else {
         this.$emit("close", val);
       }
     },
     chooseAnswer(item, index) {
-      var selected = this.answer.find(x => x.number == item.number); 
+      console.log(item, index);
+      var selected = this.answer.find((x) => x.number == item.number);
+      console.log(selected);
+      this.chouseIndexAns = index;
       if (selected.check) {
-        this.visible = false;
+        // this.visible = false;
+        this.chouseIndexAns = "";
         this.$emit("rightChoose", this.popupData.subject.index + 1);
       } else {
-        this.visible = false;
+        // this.visible = false;
         this.$emit("wrongChoose", this.popupData.subject.index + 1);
       }
-      //debugger
-      for (let k in this.answer) {
-        if (k == index) {
-          this.answer[k].icon = this.chouse;
-          this.answer[k].style = true;
-          continue;
-        }
-        this.answer[k].icon = this.noChouse;
-        this.answer[k].style = false;
-      }
+      // for (let k in this.answer) {
+      //   if (k == index) {
+      //     this.answer[k].icon = this.chouse;
+      //     this.answer[k].style = true;
+      //     continue;
+      //   }
+      //   this.answer[k].icon = this.noChouse;
+      //   this.answer[k].style = false;
+      // }
     },
   },
 };
@@ -228,7 +300,7 @@ export default {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  font-size: 0.4rem;
+  font-size: 0.28rem;
 }
 .subject .land {
   margin: 0.25rem;
@@ -246,7 +318,7 @@ export default {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  height: 100%;
+  height: 80%;
   padding-bottom: 4rem;
 }
 .subject .answer .answerOnce {
@@ -255,7 +327,7 @@ export default {
   align-items: center;
   justify-content: center;
   padding: 0.2rem;
-  height: 0.5rem;
+  /* height: 0.5rem; */
 }
 .subject .answer .answerOnce .left {
   margin: 0 0.3rem;

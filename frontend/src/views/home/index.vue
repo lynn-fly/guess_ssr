@@ -42,7 +42,6 @@
             @click="luckDraw"
             src="@/assets/home/luckDraw.png"
             alt=""
-            v-if="userInfor.lotteryCount > 0"
           />
         </div>
         <div class="bottomImg">

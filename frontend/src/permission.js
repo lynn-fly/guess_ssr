@@ -7,7 +7,7 @@ import {
 // const noTokenWhiteList = ['/login', '/home', '/', '/guess',
 //   '/auspiciousness',
 //   '/luckDraw']
-const noTokenWhiteList = ['/login'
+const noTokenWhiteList = ['/login', '/manage'
   // , '/home', '/', '/guess', '/manage',
   //   '/auspiciousness',
   //   '/luckDraw'

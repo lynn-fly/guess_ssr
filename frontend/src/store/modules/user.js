@@ -116,28 +116,11 @@ const actions = {
   }) {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
-        const {
-          data
-        } = response
+        const { data } = response
         if (!data) {
           reject('验证失败，请重新登录。')
         }
-        const {
-          userName,
-          userId,
-          roles,
-          heartValue,
-          isAnswerMax,
-          isLocal,
-          isUpload,
-          lotteryCount
-        } = data
-        commit('SET_ROLES', roles)
-        commit('SET_NAME', userName)
-        commit('SET_HEARTVALUE', heartValue)
-        commit('SET_LOTTERY_COUNT', lotteryCount)
-        commit('SET_HEART_IS_MAX', isAnswerMax)
-        commit('SET_IS_UPLOAD', isUpload)
+        commit('SET_USER_INFO', data)
         resolve(data)
       }).catch(error => {
         reject(error)
