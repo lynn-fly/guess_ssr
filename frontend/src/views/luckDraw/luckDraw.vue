@@ -32,7 +32,7 @@
         </div>
       </div>
       <div class="butBom">
-        <img src="@/assets/luckDraw/begin.png" @click="beginChouse" alt="" srcset="" />
+        <img src="@/assets/luckDraw/begin.png" @click="beginChouse2" alt="" srcset="" />
         <img src="@/assets/luckDraw/yue.png" alt="" srcset="" />
       </div>
     </div>
@@ -158,6 +158,14 @@ export default {
         gotopPage("/home");
       }
     },
+    async sleep(delay=1000){          
+      return new Promise(resolve=>{
+          setTimeout(()=>{
+                resolve()
+            },delay)
+        })        
+    },
+
     beginChouse() {
       if (this.state) return;
       this.state = true;
@@ -205,8 +213,53 @@ export default {
       })
       
     },
+    async beginChouse2() {
+      if (this.userInfor.lotteryCount < 1) {
+        alert("每人最多有两次抽奖机会哦！祈福或猜灯谜可以获取心动值哦~");
+        return;
+      };
+      if (this.state) return;
+      this.state = true;
+      try {
+        const data = await this.$store.dispatch('user/luckyDraw');
+        const {lotteryNumber,lotteryCount, heartValue} = data;
+        // this.$store.commit("user/SET_HEARTVALUE", heartValue);
+        // this.$store.commit("user/SET_LOTTERY_COUNT", lotteryCount);
+        let num = lotteryNumber < 1? 9: lotteryNumber - 1;
+        let nowNum = 0;
+        let draw = true;
+        while (draw) {
+          await this.sleep(nowNum * 10);
+          nowNum++;
+          this.addIndex();
+          if (nowNum > 30 && this.chouseIndex == num) {
+              this.state = lotteryCount < 1;
+              this.chouseIndex = num;
+              //console.log("中奖：",num);  
+              draw = false;
+              this.getResult(num);
+            } else if (nowNum > 30 && num == 9) {
+              this.state = lotteryCount < 1;
+              //console.log("未中奖：",num);  
+              this.chouseIndex = num;
+              draw = false;
+              this.getResult(num);
+            } 
+        }
+      }
+      catch(err){
+        console.log(err.response.data.detail);
+        let msg = '抽奖失败：';
+        if (err && err.response && err.response.data && err.response.data.detail) {
+          msg += err.response.data.detail;
+        }
+        alert(msg);
+        gotopPage("/home");
+      }
+    },
+
     addIndex() {
-      if (this.chouseIndex == 8) {
+      if (this.chouseIndex >= 8) {
         this.chouseIndex = 0;
       } else {
         this.chouseIndex++;

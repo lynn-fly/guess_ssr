@@ -131,10 +131,10 @@ const actions = {
   luckyDraw({commit,state}) {
     return new Promise((resolve,reject) => {
       goodLucky().then(res=>{
-        const {lotteryNumber,lotteryCount} = res.data;
+        const {lotteryNumber,lotteryCount,heartValue} = res.data;
         commit('SET_LOTTERY_COUNT', lotteryCount)
-        let num = lotteryNumber < 1? 9: lotteryNumber - 1;
-        resolve({lotteryNumber:num,lotteryCount});
+        commit('SET_HEARTVALUE', heartValue)
+        resolve({lotteryNumber,lotteryCount,heartValue});
       })
       .catch(err=>{
         reject(err);
