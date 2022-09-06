@@ -133,7 +133,7 @@ export default {
         this.imgHeight = imgw.clientWidth / 1.8;
       };
     }
-    this.getList();
+    this.getList(true);
     console.log("userinfo:", this.userInfor);
     this.isUploaded = this.userInfor.isUpload;
   },
@@ -141,11 +141,11 @@ export default {
     ...mapGetters(["userInfor"]),
   },
   methods: {
-    getList(notFrist) {
+    getList(isFirst) {
       this.imgData = [];
-      let d = true;
-      if (notFrist) {
-        d = false;
+      let d = false;
+      if (isFirst) {
+        d = true;
       }
       getupload_list(d).then((res) => {
         const { config, data } = res;
@@ -231,7 +231,6 @@ export default {
           if (res.status == 201) {
             this.textUp = "";
             this.getList();
-            //TODO:弹出框
             this.isUploaded = true;
             this.$store.commit("user/SET_IS_UPLOAD", true);
             this.$store.commit("user/SET_HEARTVALUE", res.data.heartValue);
@@ -252,10 +251,12 @@ export default {
         this.popupVisible = true;
       }, 200);
     },
-    upClick(tiem, index) {
+    upClick(item, index) {
+      debugger
       // console.log(tiem, index, this.userInfor.userId);
-      for (let k in tiem.thumbed) {
-        if (tiem.thumbed[k] == this.userInfor.userId) {
+      var thumbedList = item.thumbed.split(',');
+      for (let k in thumbedList) {
+        if (thumbedList[k] == this.userInfor.userId) {
           alert("不可重复点赞");
           return;
         }
@@ -307,7 +308,7 @@ export default {
       return [n, type];
     },
     changeLists() {
-      this.getList(true);
+      this.getList(false);
     },
   },
 };
