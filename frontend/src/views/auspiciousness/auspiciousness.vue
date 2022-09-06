@@ -1,6 +1,7 @@
 <template>
   <div class="mainOut">
     <!-- :style="{ height: mainHeight + 'px' }" -->
+    <div id="useInput" v-show="false"></div>
     <div class="luckDraw">
       <div class="top">
         <Buttons :msg="name" @back="back" />
@@ -202,7 +203,7 @@ export default {
         alert("需要先填写祝福语");
         return;
       }
-
+      let inputDom = document.getElementById("useInput");
       let that = this;
       function inputUpload() {
         that.upLoad(this.files);
@@ -212,6 +213,7 @@ export default {
       input.accept = "image/*";
       input.onchange = inputUpload;
       input.click();
+      inputDom.appendChild(input);
     },
     upLoad(files) {
       let size = this.getfilesize(files[0].size);

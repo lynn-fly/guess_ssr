@@ -49,11 +49,12 @@ export default {
           username: this.form.username + "",
           password: this.form.password,
         })
-        .then(res => {
+        .then((res) => {
           this.$router.replace({ path: "/home" });
-        }).catch(err => { 
+        })
+        .catch((err) => {
           if (err) {
-            alert("姓名或工号错误！")
+            alert("姓名或工号错误！");
           }
         });
     },
@@ -74,7 +75,7 @@ export default {
   box-sizing: border-box;
   justify-content: center !important;
   flex-direction: column;
-  background-size: 100% 100%;
+  background-size: 100% auto;
   background-repeat: no-repeat;
 }
 
