@@ -14,14 +14,14 @@ export function upFile(data) {
 }
 
 // 祈福列表
-export function getupload_list(data) {
-//   const form = new FormData()
-//   const keys = Object.keys(data)
-//   keys.forEach(key => {
-//     form.append(key, data[key])
-//   })
+export function getupload_list(data = true) {
+  //   const form = new FormData()
+  //   const keys = Object.keys(data)
+  //   keys.forEach(key => {
+  //     form.append(key, data[key])
+  //   })
   return request({
-    url: '/user/upload_list',
+    url: '/user/upload_list?isFirst=' + data,
     // data: data,
     method: 'get',
   })
@@ -30,15 +30,14 @@ export function getupload_list(data) {
 
 // 点赞
 export function setsave_thumbed(id) {
-    //   const form = new FormData()
-    //   const keys = Object.keys(data)
-    //   keys.forEach(key => {
-    //     form.append(key, data[key])
-    //   })
-      return request({
-        url: '/user/save_thumbed/' + id,
-        // data: data,
-        method: 'post',
-      })
-    }
-    
+  //   const form = new FormData()
+  //   const keys = Object.keys(data)
+  //   keys.forEach(key => {
+  //     form.append(key, data[key])
+  //   })
+  return request({
+    url: '/user/save_thumbed/' + id,
+    // data: data,
+    method: 'post',
+  })
+}
