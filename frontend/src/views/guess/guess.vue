@@ -101,8 +101,7 @@ export default {
           icon: require("@/assets/guess/result/dc2.png"),
           button: [
             {
-              icon: require("@/assets/guess/result/dd1.png"),
-              // icon: require("@/assets/guess/result/dc1.png"),
+              icon: require("@/assets/guess/result/dc1.png"),
               value: "答错",
             },
           ],
@@ -138,7 +137,7 @@ export default {
     //   var item = subject.find((x) => x.index == index);
     //   newRandomList.push(item);
     // });
-    // this.subObj = newRandomList;
+    // this.subObj = newRandomList; 
     console.log(this.userInfor.answeredIds, "this.userInfor.answeredIds");
     this.subObj = this.shuffle(subject);
     for (let k in this.subObj) {
@@ -232,6 +231,7 @@ export default {
       this.$nextTick(() => {
         setsave_answer(val, 1)
           .then((res) => {
+            debugger
             //更新list
             this.$store.commit("user/SET_ANSWERED_IDS", res.data.answeredIds);
             var currentItem = this.subObj.find((x) => x.number == val);
@@ -255,6 +255,8 @@ export default {
               this.resultData = this.result.answer;
               return;
             }
+
+            debugger
             if (this.userInfor.isAnswerMax) {
               //直接继续答题
               this.resultData = {};
@@ -287,7 +289,10 @@ export default {
       });
     },
     wrongChoose(val) {
+      debugger
       this.popupVisible = false;
+     
+
       this.$nextTick(() => {
         setsave_answer(val, 0)
           .then((res) => {
@@ -299,7 +304,6 @@ export default {
 
             for (var startIndex = nextIndex; startIndex < 30; startIndex++) {
               var nextItem = this.subObj.find((x) => x.i == startIndex);
-              console.log(nextItem, "88851");
               if (!nextItem.notDo) {
                 nextIndex = startIndex;
                 break;
@@ -315,7 +319,6 @@ export default {
               this.resultData = {};
               this.popupVisible = true;
               this.resultData = this.result.incorrectly;
-              console.log(this.subObj[nextIndex], "8884");
               this.resultData.subject = subject[nextIndex];
             }
           })
