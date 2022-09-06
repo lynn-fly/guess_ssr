@@ -338,6 +338,8 @@ export default {
 .luckDraw {
   background-color: black;
   padding: 0 0.5rem;
+  min-height: 100%;
+  /* min-width: 100vh; */
   /* position: fixed; */
   /* top: 0; */
   /* left: 0; */
@@ -415,6 +417,7 @@ export default {
   align-items: center;
   flex-direction: column;
   margin-bottom: 0.2rem;
+  position: relative;
 }
 
 .centent .cententOnce .imgs {
@@ -438,6 +441,8 @@ export default {
   align-items: center;
   justify-content: center;
   color: #fff;
-  font-size: 0.5rem;
+  font-size: 0.42rem;
+  padding: 0.5rem;
+  box-sizing: border-box;
 }
 </style>
