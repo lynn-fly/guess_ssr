@@ -52,25 +52,31 @@
               alt=""
               @click="upClick(item, index)"
             />
-            {{ item.thumbed.split(',').length - 1 }}
+            {{ item.thumbed.split(",").length - 1 }}
           </div>
         </div>
       </div>
     </div>
+    <Popup :popupData="resultData" :visible="popupVisible" @close="close">
+      <!-- @rightChoose="rightChoose"
+      @wrongChoose="wrongChoose" -->
+    </Popup>
   </div>
 </template>
 
 <script>
 import { gotopPage } from "@/utils/index";
-import { getUser} from "@/utils/auth";
+import { getUser } from "@/utils/auth";
 import LampNumber from "@/components/home/lampNumber.vue";
 import Buttons from "@/components/home/buttons.vue";
 import { upFile, getupload_list, setsave_thumbed } from "@/api/auspiciousness";
+import Popup from "@/components/popup.vue";
 import { mapGetters } from "vuex";
 export default {
   components: {
     Buttons,
     LampNumber,
+    Popup,
   },
   data() {
     return {
@@ -82,7 +88,38 @@ export default {
       mainHeight: 800,
       contentHeight: "auto",
       textUp: "",
-      isUploaded:false
+      isUploaded: false,
+      popupVisible: false,
+      resultData: {},
+      result: {
+        success: {
+          icon: require("@/assets/auspiciousness/result/cg2.png"),
+          button: [
+            {
+              icon: require("@/assets/auspiciousness/result/cg1.png"),
+              value: "成功",
+            },
+          ],
+        },
+        error: {
+          icon: require("@/assets/auspiciousness/result/sb2.png"),
+          button: [
+            {
+              icon: require("@/assets/auspiciousness/result/sb1.png"),
+              value: "失败",
+            },
+          ],
+        },
+        luck: {
+          icon: require("@/assets/auspiciousness/result/cj2.png"),
+          button: [
+            {
+              icon: require("@/assets/auspiciousness/result/cj1.png"),
+              value: "抽奖",
+            },
+          ],
+        },
+      },
     };
   },
   mounted() {
@@ -94,8 +131,8 @@ export default {
       };
     }
     this.getList();
-    console.log('userinfo:',this.userInfor);
-    this.isUploaded = this.userInfor.isUpload; 
+    console.log("userinfo:", this.userInfor);
+    this.isUploaded = this.userInfor.isUpload;
   },
   computed: {
     ...mapGetters(["userInfor"]),
@@ -104,12 +141,12 @@ export default {
     getList() {
       this.imgData = [];
       getupload_list().then((res) => {
-        const {config,data} =res 
-        const { baseURL } = config
+        const { config, data } = res;
+        const { baseURL } = config;
         for (let k in data) {
           this.imgData.push({
             //icon: "http://129.226.227.171" + data[k].upload_file_url,
-            icon:  baseURL.substring(0,baseURL.length - 7) + data[k].upload_file_url,
+            icon: baseURL.substring(0, baseURL.length - 7) + data[k].upload_file_url,
             name: data[k].upload_comment,
             ...data[k],
           });
@@ -146,7 +183,7 @@ export default {
       }
     },
     upImg() {
-      if(this.isUploaded) {
+      if (this.isUploaded) {
         alert("你已经祈福过啦，请看看其他人的祝福吧！");
         return;
       }
@@ -154,7 +191,7 @@ export default {
         alert("需要先填写祝福语");
         return;
       }
-      
+
       let that = this;
       function inputUpload() {
         that.upLoad(this.files);
@@ -187,16 +224,26 @@ export default {
             this.textUp = "";
             this.getList();
             //TODO:弹出框
-            debugger
+            debugger;
             this.isUploaded = true;
-            this.$store.commit('user/SET_IS_UPLOAD', true)
-            this.$store.commit('user/SET_HEARTVALUE', res.data.heartValue)
-            this.$store.commit('user/SET_LOTTERY_COUNT', res.data.lotteryCount)
+            this.$store.commit("user/SET_IS_UPLOAD", true);
+            this.$store.commit("user/SET_HEARTVALUE", res.data.heartValue);
+            this.$store.commit("user/SET_LOTTERY_COUNT", res.data.lotteryCount);
+            this.openPopup("luck");
           }
         })
         .catch((error) => {
-          alert("图片上传失败,请联系管理员");
+          // alert("图片上传失败,请联系管理员");
+          this.openPopup("error");
         });
+    },
+    openPopup(num) {
+      this.resultData = {};
+      this.resultData = this.result[num];
+      console.log(this.result[num], "1111111111111");
+      setTimeout(() => {
+        this.popupVisible = true;
+      }, 200);
     },
     upClick(tiem, index) {
       // console.log(tiem, index, this.userInfor.userId);
@@ -215,6 +262,12 @@ export default {
           alert("点赞失败,请联系管理员");
           this.getList();
         });
+    },
+    close(item) {
+      console.log(item);
+      if (item == "关闭") {
+        this.popupVisible = false;
+      }
     },
     getfilesize(size) {
       //把字节转换成正常文件大小
@@ -336,7 +389,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  margin-bottom: 0.7rem;
+  padding-bottom: 0.7rem;
   flex-wrap: wrap;
   position: relative;
   overflow-y: auto;
