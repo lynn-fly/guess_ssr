@@ -16,14 +16,18 @@
       <img class="themes" src="@/assets/guess/msg.png" alt="" srcset="" />
       <img class="themes1" src="@/assets/guess/back.png" alt="" srcset="" />
       <div class="centent" :style="{ height: contentHeight + 'px' }">
-        <div class="cententOnce" v-for="(item, index) in imgData" :key="index">
+        <div
+          class="cententOnce"
+          @click="openAnwser(index)"
+          v-for="(item, index) in imgData"
+          :key="index"
+        >
           <img
             class="imgs"
             :style="{ height: imgHeight + 'px' }"
             :src="item.icon"
             alt=""
             srcset=""
-            @click="openAnwser(index)"
           />
           <div class="label">{{ index + 1 }}</div>
         </div>

@@ -311,12 +311,12 @@ export default {
   font-size: 0.28rem;
 }
 .subject .land {
-  margin: 0.25rem;
+  margin: 0.5rem auto 0.2rem;
 }
 .subject .title {
   /* margin-bottom: 1.8rem; */
   line-height: 0.48rem;
-  margin: 0.45rem 0;
+  margin: 0.25rem 0 0.45rem;
   word-break: break-all;
   max-width: 4rem;
 }
