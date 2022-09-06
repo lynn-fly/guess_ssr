@@ -1,7 +1,7 @@
 <template>
   <div class="buttons">
     <!-- <div class="wrap"> -->
-    <img class="wrap" src="@/assets/home/heard.png" alt="" />
+    <img class="wrap" id="wrap" src="@/assets/home/heard.png" alt="" />
     <!-- <div class="wrap1">
         <img src="@/assets/home/heard.png" alt="" />
       </div> -->
