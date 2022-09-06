@@ -126,16 +126,20 @@ export default {
     };
   },
   mounted() {
-    console.log(this.userInfor, 55555);
     this.subObj = this.shuffle(subject);
     for (let k in this.subObj) {
+      var did = false;
+      if (this.userInfor.answeredIds.indexOf(this.subObj[k].number + '') > -1) {
+        did = true;
+      }
       this.subObj[k] = {
         ...this.subObj[k],
         i: ++k,
-        notDo: false,
+        notDo: did,
         icon: require("@/assets/guess/once.png"),
       };
     }
+
     // let imgs = document.getElementsByClassName("imgs");
     // let imgw = imgs[0];
     // imgw.onload = () => {
@@ -207,26 +211,39 @@ export default {
     rightChoose(val) {
       this.popupVisible = false;
       this.$nextTick(() => {
-        setsave_answer(val)
+        setsave_answer(val,1)
           .then((res) => {
+            debugger
+            //更新list
+            this.$store.commit("user/SET_ANSWERED_IDS", res.data.answeredIds); 
+            var currentItem = this.subObj.find(x => x.number == val);
+            currentItem.notDo = true;
+            var nextIndex = currentItem.i;
+              for( var startIndex = nextIndex; startIndex < 30; startIndex++) {
+                var nextItem = this.subObj.find(x => x.i == startIndex);
+                if (!nextItem.notDo) {
+                  nextIndex = startIndex;
+                }
+            }
+
             if (this.userInfor.isAnswerMax) {
               //直接继续答题
               this.resultData = {};
               this.resultData = this.result.answer;
-              this.resultData.subject = this.subObj[val - 1];
+              this.resultData.subject = this.subObj[nextIndex];
               this.popupVisible = true;
             } else {
               if (res.data.answerId.length == 6) {
                 this.resultData = {};
                 this.resultData = this.result.Accept;
-                this.resultData.subject = this.subObj[val - 1];
+                this.resultData.subject = this.subObj[nextIndex];
                 this.$store.commit("user/SET_HEART_IS_MAX", true);
                 this.$store.commit("user/SET_LOTTERY_COUNT", res.data.lotteryCount);
                 this.popupVisible = true;
               } else {
                 this.resultData = {};
                 this.resultData = this.result.answer;
-                this.resultData.subject = this.subObj[val - 1];
+                this.resultData.subject = this.subObj[nextIndex];
                 this.popupVisible = true;
               }
             }
@@ -238,10 +255,13 @@ export default {
     wrongChoose(val) {
       this.popupVisible = false;
       this.$nextTick(() => {
-        this.resultData = {};
-        this.popupVisible = true;
-        this.resultData = this.result.incorrectly;
-        this.resultData.subject = subject[val - 1];
+        setsave_answer(val, 0)
+          .then((res) => {
+            this.resultData = {};
+            this.popupVisible = true;
+            this.resultData = this.result.incorrectly;
+            this.resultData.subject = subject[val - 1];
+          }).catch((erro) => {});
       });
     },
     addTopHeight(arr) {
@@ -273,11 +293,17 @@ export default {
         gotopPage("/home");
       }
     },
-    openAnwser(i) {
+    openAnwser(index) { 
+      //已经答过了就不答了
+      var currentItem = this.subObj.find(x => x.i == index + 1);
+      if (currentItem.notDo) {
+        return;
+      }
+
       this.popupVisible = true;
       this.resultData = this.result.answering;
-      console.log(subject[i]);
-      this.resultData.subject = subject[i];
+      console.log(subject[index]);
+      this.resultData.subject = subject[index];
     },
   },
 };

@@ -202,10 +202,10 @@ export default {
       if (selected.check) {
         // this.visible = false;
         this.chouseIndexAns = "";
-        this.$emit("rightChoose", this.popupData.subject.i + 1);
+        this.$emit("rightChoose", this.popupData.subject.number);
       } else {
         // this.visible = false;
-        this.$emit("wrongChoose", this.popupData.subject.i + 1);
+        this.$emit("wrongChoose", this.popupData.subject.number);
       }
       // for (let k in this.answer) {
       //   if (k == index) {
