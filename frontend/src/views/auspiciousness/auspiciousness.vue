@@ -39,10 +39,11 @@
       </div>
       <div class="centent" :style="{ height: contentHeight + 'px' }">
         <div class="cententOnce" v-for="(item, index) in imgData" :key="index">
-          <div class="cententOnceIn" :style="{ height: imgHeight + 'px !important' }">
+          <div class="cententOnceIn" :ref="'cententOnceIn_'+index" :style="{ height: imgHeight + 'px !important' }">
             <!-- :style="{ height: imgHeight + 'px !important' }" -->
             <img
               class="imgs cententimgs"
+              :ref="'cententimgs_'+index" 
               :src="item.icon"
               alt=""
               srcset=""
@@ -157,11 +158,43 @@ export default {
     //     console.log(this.imgHeight, 5555555555);
     //   };
     // }
+    // this.find((imgw) => {
+    //   console.log(imgw.width, 5555555);
+    //   this.imgHeight = imgw.width / 1.5;
+    //   if (!this.imgHeight) this.imgHeight = 144;
+    //   console.log(this.imgHeight, 5555555555);
+
+    //   this.imgData.forEach((val,index,arr)=>{
+    //         const imgw2 = this.$refs[`cententimgs_${index}`][0];
+            
+    //         if(index > 0 )
+    //         {
+    //           let h = imgw2.offsetHeight;
+    //           console.log(imgw2)
+    //           if(h< this.imgHeight) {
+    //             imgw2.style.height= this.imgHeight + 'px'
+    //           }
+    //         }   
+    //       })
+    // });
     this.find((imgw) => {
       console.log(imgw.width, 5555555);
       this.imgHeight = imgw.width / 1.5;
       if (!this.imgHeight) this.imgHeight = 144;
       console.log(this.imgHeight, 5555555555);
+
+      this.imgData.forEach((val,index,arr)=>{
+            const imgw2 = this.$refs[`cententimgs_${index}`][0];
+            
+            if(index > 0 )
+            {
+              let h = imgw2.offsetHeight;
+              console.log(imgw2)
+              if(h< this.imgHeight) {
+                imgw2.style.height= this.imgHeight + 'px'
+              }
+            }   
+          })
     });
     this.getList(true);
     this.$store
@@ -187,6 +220,13 @@ export default {
         fn(imgw);
       }
     },
+
+    adjustImgs(){
+
+      
+
+    },
+
     getList(isFirst) {
       this.imgData = [];
       let d = false;
@@ -204,6 +244,26 @@ export default {
             ...data[k],
           });
         }
+        this.$nextTick(() => {
+          
+          
+             
+
+              this.imgData.forEach((val,index,arr)=>{
+                    const imgw2 = this.$refs[`cententimgs_${index}`][0];
+                    
+                    if(index > 0 )
+                    {
+                      let h = imgw2.offsetHeight;
+                      console.log(imgw2)
+                      if(h< this.imgHeight) {
+                        imgw2.style.height= this.imgHeight + 'px'
+                      }
+                    }   
+                  })
+           
+          
+        })
       });
     },
     // getUrl(url) {
