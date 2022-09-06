@@ -66,8 +66,7 @@ export default {
 .login {
   /* background-color: #000; */
   width: 100vw;
-  /* height: 100vh; */
-  min-height: 100vh;
+  height: 100vh;
   position: fixed;
   top: 0;
   left: 0;
@@ -76,7 +75,7 @@ export default {
   box-sizing: border-box;
   justify-content: center !important;
   flex-direction: column;
-  background-size: 100% 100%;
+  background-size: 100% auto;
   background-repeat: no-repeat;
 }
 
