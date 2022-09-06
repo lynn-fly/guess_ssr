@@ -158,12 +158,12 @@ export default {
         gotopPage("/home");
       }
     },
-    async sleep(delay=1000){          
-      return new Promise(resolve=>{
-          setTimeout(()=>{
-                resolve()
-            },delay)
-        })        
+    async sleep(delay = 1000) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve();
+        }, delay);
+      });
     },
 
     beginChouse() {
@@ -171,61 +171,61 @@ export default {
       this.state = true;
       // let nums = parseInt(Math.random() * 101 + 1),
       //   num = 8;
-      this.$store.dispatch('user/luckyDraw')
-      .then(data => {
-      //   for (let k in this.probability) {
-      //   if (nums >= this.probability[k][0] && nums < this.probability[k][1]) {
-      //     num = this.probability[k][2];
-      //   }
-      // }
+      this.$store
+        .dispatch("user/luckyDraw")
+        .then((data) => {
+          //   for (let k in this.probability) {
+          //   if (nums >= this.probability[k][0] && nums < this.probability[k][1]) {
+          //     num = this.probability[k][2];
+          //   }
+          // }
 
-        const {lotteryNumber,lotteryCount, heartValue} = data;
-        this.$store.commit("user/SET_HEARTVALUE", heartValue);
-        this.$store.commit("user/SET_LOTTERY_COUNT", lotteryCount);
-        let num = lotteryNumber < 1? 9: lotteryNumber - 1;
-      
-        let nowNum = 0;
-        let doit = () => {
-          setTimeout(() => {
-            nowNum++;
-            this.addIndex();
-            if (nowNum > 30 && this.chouseIndex == num) {
-              this.state = lotteryCount < 1;
-              this.chouseIndex = num;
-              console.log(num);
-              this.getResult(num);
-              return;
-            } else if (nowNum > 30 && num == 9) {
-              this.state = lotteryCount < 1;
-              console.log(num);
-              this.getResult(num);
-              return;
-            } else {
-              doit();
-            }
-          }, nowNum * 10);
-        };
-        doit();
-      })
-      .catch(err=>{
-        alert("抽奖次数不足，请努力答题或参与祈福！每人仅有两次抽奖机会！");
-        gotopPage("/home");
-      })
-      
+          const { lotteryNumber, lotteryCount, heartValue } = data;
+          this.$store.commit("user/SET_HEARTVALUE", heartValue);
+          this.$store.commit("user/SET_LOTTERY_COUNT", lotteryCount);
+          let num = lotteryNumber < 1 ? 9 : lotteryNumber - 1;
+
+          let nowNum = 0;
+          let doit = () => {
+            setTimeout(() => {
+              nowNum++;
+              this.addIndex();
+              if (nowNum > 30 && this.chouseIndex == num) {
+                this.state = lotteryCount < 1;
+                this.chouseIndex = num;
+                console.log(num);
+                this.getResult(num);
+                return;
+              } else if (nowNum > 30 && num == 9) {
+                this.state = lotteryCount < 1;
+                console.log(num);
+                this.getResult(num);
+                return;
+              } else {
+                doit();
+              }
+            }, nowNum * 10);
+          };
+          doit();
+        })
+        .catch((err) => {
+          alert("抽奖次数不足，请努力答题或参与祈福！每人仅有两次抽奖机会！");
+          gotopPage("/home");
+        });
     },
     async beginChouse2() {
       if (this.userInfor.lotteryCount < 1) {
         alert("每人最多有两次抽奖机会哦！祈福或猜灯谜可以获取心动值哦~");
         return;
-      };
+      }
       if (this.state) return;
       this.state = true;
       try {
-        const data = await this.$store.dispatch('user/luckyDraw');
-        const {lotteryNumber,lotteryCount, heartValue} = data;
+        const data = await this.$store.dispatch("user/luckyDraw");
+        const { lotteryNumber, lotteryCount, heartValue } = data;
         // this.$store.commit("user/SET_HEARTVALUE", heartValue);
         // this.$store.commit("user/SET_LOTTERY_COUNT", lotteryCount);
-        let num = lotteryNumber < 1? 9: lotteryNumber - 1;
+        let num = lotteryNumber < 1 ? 9 : lotteryNumber - 1;
         let nowNum = 0;
         let draw = true;
         while (draw) {
@@ -233,23 +233,23 @@ export default {
           nowNum++;
           this.addIndex();
           if (nowNum > 30 && this.chouseIndex == num) {
-              this.state = lotteryCount < 1;
-              this.chouseIndex = num;
-              //console.log("中奖：",num);  
-              draw = false;
-              this.getResult(num);
-            } else if (nowNum > 30 && num == 9) {
-              this.state = lotteryCount < 1;
-              //console.log("未中奖：",num);  
-              this.chouseIndex = num;
-              draw = false;
-              this.getResult(num);
-            } 
+            this.state = lotteryCount < 1;
+            this.chouseIndex = num;
+            //console.log("中奖：",num);
+            draw = false;
+            this.$store.commit("audio/play", "lucky");
+            this.getResult(num);
+          } else if (nowNum > 30 && num == 9) {
+            this.state = lotteryCount < 1;
+            //console.log("未中奖：",num);
+            this.chouseIndex = num;
+            draw = false;
+            this.getResult(num);
+          }
         }
-      }
-      catch(err){
+      } catch (err) {
         console.log(err.response.data.detail);
-        let msg = '抽奖失败：';
+        let msg = "抽奖失败：";
         if (err && err.response && err.response.data && err.response.data.detail) {
           msg += err.response.data.detail;
         }
@@ -280,7 +280,6 @@ export default {
       this.result.name = name;
       console.log(this.result);
       this.popupVisible = true;
-      
     },
     close(val) {
       if (val == "关闭") {

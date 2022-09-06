@@ -22,13 +22,13 @@
           :class="[muteBgMusic ? 'pause' : 'start']"
           @click="playMusic"
         />
-        <audio
+        <!-- <audio
           style="display: none; height: 0"
           id="bg-music"
           autoplay="autoplay"
           src="http://129.226.227.171/upload/7scmx-u2mhm-4.mp3 "
           loop="loop"
-        ></audio>
+        ></audio> -->
         <div class="cententTop">
           <!-- <img class="up" src="@/assets/home/otherTitle.png" alt="" />
           <img class="down" src="@/assets/home/theme.png" alt="" />
@@ -100,12 +100,14 @@ export default {
     muteBgMusic(newValue, oldValue) {
       if (newValue) {
         // 开启静音
-        var audio = document.getElementById("bg-music");
-        audio.pause();
+        // var audio = document.getElementById("bg-music");
+        this.$store.commit("audio/play", "bj");
+        // audio.pause();
       } else {
         // 关闭 静音
-        var audio = document.getElementById("bg-music");
-        audio.play();
+        // var audio = document.getElementById("bg-music");
+        this.$store.commit("audio/puse", "bj");
+        // audio.play();
       }
     },
   },
@@ -124,12 +126,14 @@ export default {
     if (IS_IN_WX) {
       // 是否微信环境
       if (IS_IN_IOS) {
-        var audio = document.getElementById("bg-music");
-        audio.play();
+        // var audio = document.getElementById("bg-music");
+        this.$store.commit("audio/play", "bj");
+        // audio.play();
       }
     } else {
-      var audio = document.getElementById("bg-music");
-      audio.play();
+      // var audio = document.getElementById("bg-music");
+      this.$store.commit("audio/play", "bj");
+      // audio.play();
     }
   },
   computed: {
