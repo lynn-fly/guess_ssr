@@ -21,7 +21,7 @@
         <img
           class="upImgs"
           @click="upImg"
-          src="@/assets/auspiciousness/upDown.png"
+          :src="upState ? upImgLogin : upImg"
           alt=""
           srcset=""
         />
@@ -46,7 +46,8 @@
             alt=""
             srcset=""
           />
-          <div class="label">{{ item.name }}</div>
+          <div class="label">{{ item.nick_name }}</div>
+          <!-- <div class="label">{{ item.name }}</div> -->
           <div classs="uppppp" style="width: 100% !important; color: #fff">
             <img
               src="@/assets/auspiciousness/up.png"
@@ -126,6 +127,9 @@ export default {
           ],
         },
       },
+      upState: false,
+      upImg: require("@/assets/auspiciousness/upDown.png"),
+      upImgLogin: require("@/assets/auspiciousness/upDown.png"),
     };
   },
   mounted() {
@@ -206,6 +210,7 @@ export default {
       let inputDom = document.getElementById("useInput");
       let that = this;
       function inputUpload() {
+        that.upState = true;
         that.upLoad(this.files);
       }
       let input = document.createElement("input");
@@ -242,10 +247,12 @@ export default {
             this.$store.commit("user/SET_LOTTERY_COUNT", res.data.lotteryCount);
           }
           this.openPopup("luck");
+          this.upState = false;
         })
         .catch((error) => {
           this.openPopup("error");
           // alert("图片上传失败,请联系管理员");
+          this.upState = false;
         });
     },
     openPopup(num) {
