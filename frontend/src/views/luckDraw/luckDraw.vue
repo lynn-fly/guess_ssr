@@ -223,8 +223,8 @@ export default {
       try {
         const data = await this.$store.dispatch('user/luckyDraw');
         const {lotteryNumber,lotteryCount, heartValue} = data;
-        this.$store.commit("user/SET_HEARTVALUE", heartValue);
-        this.$store.commit("user/SET_LOTTERY_COUNT", lotteryCount);
+        // this.$store.commit("user/SET_HEARTVALUE", heartValue);
+        // this.$store.commit("user/SET_LOTTERY_COUNT", lotteryCount);
         let num = lotteryNumber < 1? 9: lotteryNumber - 1;
         let nowNum = 0;
         let draw = true;
