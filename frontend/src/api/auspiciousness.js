@@ -14,7 +14,7 @@ export function upFile(data) {
 }
 
 // 祈福列表
-export function getupload_list(data = true) {
+export function getupload_list(data = false) {
   //   const form = new FormData()
   //   const keys = Object.keys(data)
   //   keys.forEach(key => {
