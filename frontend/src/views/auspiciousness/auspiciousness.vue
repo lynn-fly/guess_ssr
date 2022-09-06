@@ -262,7 +262,7 @@ export default {
           return;
         }
       }
-      setsave_thumbed(this.userInfor.userId)
+      setsave_thumbed(item.id)
         .then((res) => {
           console.log(res);
           this.getList();

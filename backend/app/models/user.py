@@ -31,5 +31,6 @@ class User(Base):
     upload_comment  = Column(String(128),default='')
     upload_time = Column(Integer,default=0) # Javascript 获取时间 new Date(1661991352 * 1000) 这个是UTC时间根据时区自己转换
     thumbed  = Column(Text,default='-1') # 保存点赞人的id，如“1，2，3”
+    thumbe_times   =  Column(Integer,default=0)
     # gift_id = Column(Integer, ForeignKey('gift.id'))
     # gift = relationship('Gift', back_populates='gifts')
