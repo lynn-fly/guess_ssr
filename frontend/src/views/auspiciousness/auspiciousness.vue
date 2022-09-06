@@ -57,7 +57,8 @@
         </div>
       </div>
       <div class="buttonDowns">
-        <div class="buttonDown" @click="changeLists">换一批</div>
+        <!-- <div class="buttonDown" @click="changeLists"></div> -->
+        <Buttons :msg="'换一批'" @back="changeLists"></Buttons>
       </div>
     </div>
     <Popup :popupData="resultData" :visible="popupVisible" @close="close">

@@ -238,14 +238,14 @@ export default {
 }
 .buttons {
   position: absolute;
-  bottom: 5%;
+  bottom: 10%;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
 }
 .buttons img {
-  width: 85%;
+  width: 65%;
 }
 .closeIcon {
   width: 0.8rem !important;
