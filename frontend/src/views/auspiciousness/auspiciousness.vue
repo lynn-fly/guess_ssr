@@ -279,7 +279,7 @@ export default {
       if (item == "关闭") {
         this.popupVisible = false;
       } else if (item == "抽奖") {
-        gotopPage("/guess");
+        gotopPage("/luckDraw");
       } else {
         this.popupVisible = false;
       }
