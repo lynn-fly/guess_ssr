@@ -90,8 +90,8 @@ export default {
           name: "杜邦电脑包",
         },
         {
-          icon: require("@/assets/luckDraw/E66.png"),
-          name: "E值-66",
+          icon: require("@/assets/v2/cj/e1.png"),
+          name: "E值",
         },
       ],
       imgHeight: "auto",

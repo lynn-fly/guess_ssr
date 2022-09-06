@@ -137,7 +137,7 @@ export default {
   },
   computed: {
     lands() {
-      let num = this.popupData.subject.number + "";
+      let num = this.popupData.subject.i + "";
       num = num.split("");
       console.log(num);
       for (let k in num) {
@@ -202,10 +202,10 @@ export default {
       if (selected.check) {
         // this.visible = false;
         this.chouseIndexAns = "";
-        this.$emit("rightChoose", this.popupData.subject.index + 1);
+        this.$emit("rightChoose", this.popupData.subject.i + 1);
       } else {
         // this.visible = false;
-        this.$emit("wrongChoose", this.popupData.subject.index + 1);
+        this.$emit("wrongChoose", this.popupData.subject.i + 1);
       }
       // for (let k in this.answer) {
       //   if (k == index) {

@@ -14,6 +14,9 @@ import {
   getName,
   setName,
   removeName,
+  getheart,
+  setheart,
+  removeheart,
 } from '@/utils/auth'
 
 const getDefaultState = () => {
@@ -21,7 +24,8 @@ const getDefaultState = () => {
     token: getToken(),
     name: getName() || '',
     roles: [],
-    userInfor: getUser()
+    userInfor: getUser(),
+    heart: getheart()
   }
 }
 
@@ -79,6 +83,7 @@ const actions = {
         setToken(data['access_token'])
         setUser(data)
         setName(data['userName'])
+        setheart(data['heartValue'])
         resolve(response)
       }).catch(error => {
         reject(error)
@@ -116,7 +121,9 @@ const actions = {
   }) {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
-        const { data } = response
+        const {
+          data
+        } = response
         if (!data) {
           reject('验证失败，请重新登录。')
         }
@@ -128,17 +135,28 @@ const actions = {
     })
   },
   // luckyDraw
-  luckyDraw({commit,state}) {
-    return new Promise((resolve,reject) => {
-      goodLucky().then(res=>{
-        const {lotteryNumber,lotteryCount,heartValue} = res.data;
-        commit('SET_LOTTERY_COUNT', lotteryCount)
-        commit('SET_HEARTVALUE', heartValue)
-        resolve({lotteryNumber,lotteryCount,heartValue});
-      })
-      .catch(err=>{
-        reject(err);
-      })
+  luckyDraw({
+    commit,
+    state
+  }) {
+    return new Promise((resolve, reject) => {
+      goodLucky().then(res => {
+          const {
+            lotteryNumber,
+            lotteryCount,
+            heartValue
+          } = res.data;
+          commit('SET_LOTTERY_COUNT', lotteryCount)
+          commit('SET_HEARTVALUE', heartValue)
+          resolve({
+            lotteryNumber,
+            lotteryCount,
+            heartValue
+          });
+        })
+        .catch(err => {
+          reject(err);
+        })
     })
   },
   // logout

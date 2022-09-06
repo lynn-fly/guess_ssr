@@ -14,17 +14,27 @@
         srcset=""
       />
       <img class="themes" src="@/assets/guess/msg.png" alt="" srcset="" />
-      <img class="themes1" src="@/assets/guess/back.png" alt="" srcset="" />
+      <div class="themes1">
+        <img class="t1" src="@/assets/v2/dm/d1.png" alt="" srcset="" />
+        <img class="t2" src="@/assets/v2/dm/d2.png" alt="" srcset="" />
+        <img class="h1" src="@/assets/v2/dm/h1.png" alt="" srcset="" />
+        <img class="h2" src="@/assets/v2/dm/h2.png" alt="" srcset="" />
+        <img class="h3" src="@/assets/v2/dm/h1.png" alt="" srcset="" />
+        <img class="h4" src="@/assets/v2/dm/h2.png" alt="" srcset="" />
+      </div>
       <div class="centent" :style="{ height: contentHeight + 'px' }">
         <div
           class="cententOnce"
           @click="openAnwser(index)"
-          v-for="(item, index) in imgData"
+          v-for="(item, index) in subObj"
           :key="index"
         >
           <img
             class="imgs"
-            :style="{ height: imgHeight + 'px' }"
+            :style="{
+              height: imgHeight + 'px',
+              animation: 'fade ' + getMath(item.notDo),
+            }"
             :src="item.icon"
             alt=""
             srcset=""
@@ -112,14 +122,30 @@ export default {
           subject: {},
         },
       },
+      subObj: [],
     };
   },
   mounted() {
-    let imgs = document.getElementsByClassName("imgs");
-    let imgw = imgs[0];
-    imgw.onload = () => {
-      this.imgHeight = imgw.clientWidth / 2.5;
-    };
+    console.log(this.userInfor, 55555);
+    this.subObj = this.shuffle(subject);
+    for (let k in this.subObj) {
+      this.subObj[k] = {
+        ...this.subObj[k],
+        i: ++k,
+        notDo: false,
+        icon: require("@/assets/guess/once.png"),
+      };
+    }
+    // let imgs = document.getElementsByClassName("imgs");
+    // let imgw = imgs[0];
+    // imgw.onload = () => {
+    //   this.imgHeight = imgw.clientWidth / 2.5;
+    // };
+    this.find((imgw) => {
+      imgw.onload = () => {
+        this.imgHeight = imgw.clientWidth / 2.5;
+      };
+    });
 
     this.changeSIze();
     for (let i = 0; i < 29; i++) {
@@ -130,6 +156,28 @@ export default {
     ...mapGetters(["userInfor"]),
   },
   methods: {
+    find(fn) {
+      let imgs = document.getElementsByClassName("imgs");
+      let imgw = imgs[0];
+      if (!imgw) {
+        setTimeout(() => {
+          this.find(fn);
+        }, 200);
+      } else {
+        fn(imgw);
+      }
+    },
+    getMath(val) {
+      if (val) return 1111111111111111;
+      return Math.random() * 500 + 800 + "ms infinite";
+    },
+    shuffle(arr) {
+      for (let i = 0; i < arr.length; i++) {
+        const randomIndex = Math.round(Math.random() * (arr.length - 1 - i)) + i;
+        [arr[i], arr[randomIndex]] = [arr[randomIndex], arr[i]];
+      }
+      return arr;
+    },
     close(val) {
       this.popupVisible = false;
       var subjectIndex = -1;
@@ -286,11 +334,54 @@ export default {
 
 .themes1 {
   position: absolute;
-  right: 1.3rem;
+  right: 1rem;
   top: 0rem;
   width: 2rem;
 }
-
+.themes1 .t1 {
+  z-index: 20;
+  position: relative;
+  width: 75%;
+}
+.themes1 .t2 {
+  position: absolute;
+  left: -0.7rem;
+  width: 1.2rem;
+}
+.h1,
+.h2,
+.h3,
+.h4 {
+  width: 80%;
+  position: absolute;
+  z-index: 10;
+  width: 0.8rem;
+}
+.h2 {
+  top: 1.1rem;
+  right: 2rem;
+  animation: movesR100 9000ms infinite;
+  -webkit-animation: movesR100 9000ms infinite;
+}
+.h4 {
+  top: 4rem;
+  animation: movesL100 11000ms infinite;
+  -webkit-animation: movesL100 11000ms infinite;
+}
+.h3 {
+  width: 0.8rem;
+  top: 3rem;
+  right: 1.5rem;
+  animation: movesR50 7000ms infinite;
+  -webkit-animation: movesR50 7000ms infinite;
+}
+.h1 {
+  width: 0.8rem;
+  top: 1.8rem;
+  right: 0.2rem;
+  animation: movesL50 10000ms infinite;
+  -webkit-animation: movesL50 10000ms infinite;
+}
 .upImg {
   width: 100%;
   display: flex;
@@ -341,6 +432,8 @@ export default {
 
 .centent .cententOnce .imgs {
   width: 90%;
+  /* animation: fade 600ms infinite;
+  -webkit-animation: fade 600ms infinite; */
 }
 
 .centent .cententOnce .label {

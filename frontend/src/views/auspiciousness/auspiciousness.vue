@@ -20,7 +20,7 @@
       <div class="upImg" v-if="!this.userInfor.isUpload">
         <img
           class="upImgs"
-          @click="upImg"
+          @click="upImgs"
           :src="upState ? upImgLogin : upImg"
           alt=""
           srcset=""
@@ -41,7 +41,7 @@
         <div class="cententOnce" v-for="(item, index) in imgData" :key="index">
           <img
             class="imgs"
-            :style="{ height: imgHeight + 'px' }"
+            :style="{ height: imgHeight + 'px !important' }"
             :src="item.icon"
             alt=""
             srcset=""
@@ -97,7 +97,7 @@ export default {
       state: false,
       startNum: 50,
       imgData: [],
-      imgHeight: "auto",
+      imgHeight: "",
       mainHeight: 800,
       contentHeight: "auto",
       textUp: "",
@@ -143,13 +143,22 @@ export default {
     };
   },
   mounted() {
-    let imgs = document.getElementsByClassName("imgs");
-    let imgw = imgs[0];
-    if (imgw) {
-      imgw.onload = () => {
-        this.imgHeight = imgw.clientWidth / 1.8;
-      };
-    }
+    // let imgs = document.getElementsByClassName("imgs");
+    // let imgw = imgs[0];
+    // imgs.then(() => {
+    //   console.log(imgs[0], 5555555555);
+    // });
+    // if (imgw) {
+    //   imgw.onload = () => {
+    //     this.imgHeight = imgw.clientWidth / 1.8;
+    //     console.log(this.imgHeight, 5555555555);
+    //   };
+    // }
+    this.find((imgw) => {
+      console.log(imgw.width, 5555555);
+      this.imgHeight = imgw.width / 1.5;
+      console.log(this.imgHeight, 5555555555);
+    });
     this.getList(true);
     console.log("userinfo:-------", this.userInfor);
     this.isUploaded = this.userInfor.isUpload;
@@ -159,6 +168,17 @@ export default {
     ...mapGetters(["userInfor"]),
   },
   methods: {
+    find(fn) {
+      let imgs = document.getElementsByClassName("imgs");
+      let imgw = imgs[0];
+      if (!imgw) {
+        setTimeout(() => {
+          this.find(fn);
+        }, 200);
+      } else {
+        fn(imgw);
+      }
+    },
     getList(isFirst) {
       this.imgData = [];
       let d = false;
@@ -207,7 +227,7 @@ export default {
         gotopPage("/home");
       }
     },
-    upImg() {
+    upImgs() {
       if (this.userInfor.isUpload) {
         // if(this.isUploaded) {
         alert("你已经祈福过啦，请看看其他人的祝福吧！");

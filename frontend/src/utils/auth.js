@@ -34,3 +34,17 @@ export function setName(name) {
 export function removeName() {
   return localStorage.removeItem('name')
 }
+
+
+
+export function getheart() {
+  return localStorage.getItem('heart')
+}
+
+export function setheart(heart) {
+  return localStorage.setItem('heart', heart)
+}
+
+export function removeheart() {
+  return localStorage.removeItem('heart')
+}

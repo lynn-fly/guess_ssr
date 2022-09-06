@@ -9,31 +9,33 @@ import { mapGetters } from "vuex";
 import { setUser, setToken } from "@/utils/auth";
 
 export default {
-  name: 'App',
+  name: "App",
   computed: {
     ...mapGetters(["userInfor"]),
   },
   mounted() {
     // debugger
-    console.log('APP mounted', window.location.pathname);
-    if (window.location.pathname == '/login' || window.location.pathname == '/') {
-      setToken('');
+    console.log("APP mounted", window.location.pathname);
+    if (window.location.pathname == "/login" || window.location.pathname == "/") {
+      setToken("");
       setUser([]);
-      this.$store.commit('user/SET_USER_INFO', [])
+      this.$store.commit("user/SET_USER_INFO", []);
     } else {
-      this.$store.dispatch("user/getInfo")
-      .then(data=>{})
-      .catch(err=>{})
+      this.$store
+        .dispatch("user/getInfo")
+        .then((data) => {})
+        .catch((err) => {});
     }
-  }
-}
+  },
+};
 </script>
 
 <style>
+@import "./keyframes.css";
 * {
   font-family: "ph Dinpro" !important;
 }
-.flex-c-c{
+.flex-c-c {
   display: flex;
   justify-content: center;
   justify-content: center;
