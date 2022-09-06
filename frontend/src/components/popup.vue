@@ -12,13 +12,13 @@
     >
       <img class="popupMain" :src="popupData.icon" alt="" />
 
-      <div v-if="popupData.type == 'luckDraw' && popupData.name">
-        <div class="msg">
+      <div class="luckDrawBout" v-if="popupData.type == 'luckDraw' && popupData.name">
+        <!-- <div class="msg">
           <div class="left">恭喜！</div>
           <div class="name">
             {{ popupData.name }}
           </div>
-        </div>
+        </div> -->
         <img
           @click="clicks(item.value)"
           v-for="(item, index) in popupData.button"
@@ -265,8 +265,8 @@ export default {
 }
 
 .luckDrawPopup.main {
-  background-color: #fff !important;
-  box-shadow: 0 0 6px 6px #c53939;
+  /* background-color: #fff !important; */
+  /* box-shadow: 0 0 6px 6px #c53939; */
 }
 .luckDrawPopup.main .popupMain {
   border-radius: 0.7rem;
@@ -291,6 +291,11 @@ export default {
 }
 .luckDrawPopup .buttons {
   position: relative !important;
+}
+.luckDrawPopup .luckDrawBout {
+  position: absolute !important;
+  bottom: 8% !important;
+  padding: 0 1.1rem;
 }
 .luckDrawPopupNot .buttons {
   bottom: 10% !important;

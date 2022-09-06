@@ -21,6 +21,7 @@
           v-for="(item, index) in imgData"
           :key="index"
         >
+          <!-- @click="getResult(index + 1)" -->
           <img
             class="imgs"
             :style="{ height: imgHeight + 'px' }"
@@ -58,39 +59,77 @@ export default {
       state: false,
       imgData: [
         {
-          icon: require("@/assets/luckDraw/1.png"),
+          icon: require("@/assets/luckDraw/111.png"),
           name: "户外桌椅-灰",
         },
         {
-          icon: require("@/assets/luckDraw/2.png"),
+          icon: require("@/assets/luckDraw/222.png"),
           name: "阿峰塔定制保温杯",
         },
         {
-          icon: require("@/assets/luckDraw/3.png"),
+          icon: require("@/assets/luckDraw/333.png"),
           name: "城市画展系列T恤衫-XL ",
         },
         {
-          icon: require("@/assets/luckDraw/4.png"),
+          icon: require("@/assets/luckDraw/444.png"),
           name: "户外折叠整理箱-灰",
         },
         {
-          icon: require("@/assets/luckDraw/5.png"),
+          icon: require("@/assets/luckDraw/555.png"),
           name: "户外超声波防潮野餐地垫-灰",
         },
         {
-          icon: require("@/assets/luckDraw/6.png"),
+          icon: require("@/assets/luckDraw/666.png"),
           name: "AVATR环保東口包",
         },
         {
-          icon: require("@/assets/luckDraw/7.png"),
+          icon: require("@/assets/luckDraw/777.png"),
           name: "AVATR精品帆布包",
         },
         {
-          icon: require("@/assets/luckDraw/8.png"),
+          icon: require("@/assets/luckDraw/888.png"),
           name: "杜邦电脑包",
         },
         {
-          icon: require("@/assets/v2/cj/e1.png"),
+          icon: require("@/assets/luckDraw/e1.png"),
+          name: "E值",
+        },
+      ],
+      imgDataRseult: [
+        {
+          icon: require("@/assets/luckDraw/result/1/1.png"),
+          name: "户外桌椅-灰",
+        },
+        {
+          icon: require("@/assets/luckDraw/result/1/2.png"),
+          name: "阿峰塔定制保温杯",
+        },
+        {
+          icon: require("@/assets/luckDraw/result/1/3.png"),
+          name: "城市画展系列T恤衫-XL ",
+        },
+        {
+          icon: require("@/assets/luckDraw/result/1/4.png"),
+          name: "户外折叠整理箱-灰",
+        },
+        {
+          icon: require("@/assets/luckDraw/result/1/5.png"),
+          name: "户外超声波防潮野餐地垫-灰",
+        },
+        {
+          icon: require("@/assets/luckDraw/result/1/6.png"),
+          name: "AVATR环保東口包",
+        },
+        {
+          icon: require("@/assets/luckDraw/result/1/7.png"),
+          name: "AVATR精品帆布包",
+        },
+        {
+          icon: require("@/assets/luckDraw/result/1/8.png"),
+          name: "杜邦电脑包",
+        },
+        {
+          icon: require("@/assets/luckDraw/result/1/9.png"),
           name: "E值",
         },
       ],
@@ -275,6 +314,8 @@ export default {
         main = this.imgData[num].icon;
         name = this.imgData[num].name;
       }
+      main = this.imgDataRseult[num - 1].icon;
+      console.log(main);
       this.result.button[0].icon = icon;
       this.result.icon = main;
       this.result.name = name;
