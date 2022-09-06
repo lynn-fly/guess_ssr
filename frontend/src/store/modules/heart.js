@@ -15,8 +15,10 @@ const mutations = {
     dom.append(img)
     dom.style.filter = 'drop-shadow(0 0 0.08rem #14c9c9) drop-shadow(0 0 0.08rem #14c9c9)';
     dom.style.position = 'fixed';
-    dom.style.top = option.top + 'px';
-    dom.style.left = option.left + 'px';
+    // dom.style.top = option.top + 'px';
+    // dom.style.left = option.left + 'px';
+    dom.style.top = '50%';
+    dom.style.left = '50%';
     console.log(option)
     dom.style.transition = "all 3s"
     document.body.appendChild(dom)
