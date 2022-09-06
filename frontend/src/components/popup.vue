@@ -137,14 +137,21 @@ export default {
   },
   computed: {
     lands() {
-      let num = this.popupData.subject.index + "";
+      let num = this.popupData.subject.number + "";
       num = num.split("");
+      console.log(num);
       for (let k in num) {
-        num[k] = this.land[num[k]];
+        num[k] = this.land[num[k] - 1];
       }
       if (num.length == 2) {
-        num.splice(0, 1, this.land[num[0] - 1]);
+        // num.splice(0, 1, this.land[num[0] - 1]);
+        // if (num[0] == "一" && num[1] == "十") {
+        //   num.splice(0, num.length - 1, "十");
+        // }
         num.splice(1, 0, "十");
+      }
+      if (num[0] == "一" && num[1] == "十") {
+        num.splice(0, num.length - 1, "十");
       }
       console.log(num, "nnnnnnnnnnnnnnnn");
       return num.join("");
@@ -183,6 +190,7 @@ export default {
       if (val == "答对" || val == "答错" || val == "继续") {
         this.$emit("close", val + "-" + subjectIndex);
       } else {
+        this.chouseIndexAns = "";
         this.$emit("close", val);
       }
     },
