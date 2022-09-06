@@ -32,7 +32,7 @@
         </div>
       </div>
       <div class="butBom">
-        <img src="@/assets/luckDraw/begin.png" @click="beginChouse" alt="" srcset="" />
+        <img src="@/assets/luckDraw/begin.png" @click="beginChouse2" alt="" srcset="" />
         <img src="@/assets/luckDraw/yue.png" alt="" srcset="" />
       </div>
     </div>
@@ -158,6 +158,14 @@ export default {
         gotopPage("/home");
       }
     },
+    async sleep(delay=1000){          
+      return new Promise(resolve=>{
+          setTimeout(()=>{
+                resolve()
+            },delay)
+        })        
+    },
+
     beginChouse() {
       if (this.state) return;
       this.state = true;
@@ -205,6 +213,44 @@ export default {
       })
       
     },
+    async beginChouse2() {
+      if (this.state) return;
+      this.state = true;
+      try {
+        const data = await this.$store.dispatch('user/luckyDraw');
+        const {lotteryNumber,lotteryCount, heartValue} = data;
+        this.$store.commit("user/SET_HEARTVALUE", heartValue);
+        this.$store.commit("user/SET_LOTTERY_COUNT", lotteryCount);
+        let num = lotteryNumber < 1? 9: lotteryNumber - 1;
+        let nowNum = 0;
+        let draw = true;
+        while (draw) {
+          await this.sleep(nowNum * 10);
+          nowNum++;
+          this.addIndex();
+          if (nowNum > 30 && this.chouseIndex == num) {
+              this.state = lotteryCount < 1;
+              this.chouseIndex = num;
+              console.log(num);
+              
+              draw = false;
+              this.getResult(num);
+            } else if (nowNum > 30 && num == 9) {
+              this.state = lotteryCount < 1;
+              console.log(num);
+              
+              draw = false;
+              this.getResult(num);
+            } 
+        }
+      }
+      catch(err){
+        console.log(err);
+        alert("抽奖次数不足，请努力答题或参与祈福！每人仅有两次抽奖机会！");
+        gotopPage("/home");
+      }
+    },
+
     addIndex() {
       if (this.chouseIndex == 8) {
         this.chouseIndex = 0;
