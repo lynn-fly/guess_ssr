@@ -20,7 +20,7 @@
           </div>
         </div>
         <img
-          @click="clicks(item.value, popupData.subject.index)"
+          @click="clicks(item.value)"
           v-for="(item, index) in popupData.button"
           :src="item.icon"
           :key="index"
