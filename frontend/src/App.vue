@@ -5,8 +5,21 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
-  name: 'App'
+  name: 'App',
+  computed: {
+    ...mapGetters(["userInfor"]),
+  },
+  mounted() {
+    console.log('APP mounted');
+    
+      this.$store.dispatch("user/getInfo")
+      .then(data=>{})
+      .catch(err=>{
+
+      })
+  }
 }
 </script>
 

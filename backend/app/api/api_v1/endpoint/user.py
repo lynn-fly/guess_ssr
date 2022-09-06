@@ -30,7 +30,7 @@ def save_answer(db: Session = Depends(deps.get_db),user: User = Depends(deps.get
      
      if not user:
         raise HTTPException(
-            status_code=400, detail="user not found"
+            status_code=400, detail="用户不存在"
         )
      answerids = user.answerids.split(',')
      answer_heart_value = user.answer_heart_value
@@ -57,7 +57,7 @@ def save_answer(db: Session = Depends(deps.get_db),user: User = Depends(deps.get
         'userId':user.id,
         'userName':user.nick_name,
         'heartValue':new_user.heart_value,
-        'lotteryCount ':new_user.lottery_count,
+        'lotteryCount':new_user.lottery_count,
         'answerId': new_user.answerids.split(',')
     }
 
@@ -66,12 +66,12 @@ def save_answer(db: Session = Depends(deps.get_db),user: User = Depends(deps.get
 def save_thumbed(db: Session = Depends(deps.get_db),user: User = Depends(deps.get_current_user),*,user_id:int) -> Any:
      if not user:
         raise HTTPException(
-            status_code=400, detail="user not found"
+            status_code=400, detail="用户不存在"
         )
      thumbed_user = crud.user.get(db,id=user_id)
      if not thumbed_user:
         raise HTTPException(
-            status_code=400, detail="thumbed user not found"
+            status_code=400, detail="用户不存在"
         )
      thumbeds = thumbed_user.thumbed.split(',')
      if(not str(user.id) in thumbeds):
@@ -110,7 +110,7 @@ def get_prize(db: Session = Depends(deps.get_db),user: User = Depends(deps.get_c
         #     print(f"抽奖异常:{e.__str__()}")
         if not user:
             raise HTTPException(
-                status_code=400, detail="user not found"
+                status_code=400, detail="用户不存在"
             )
         lottery_count = user.lottery_count
         first_prize_time = user.first_prize_time
@@ -120,11 +120,11 @@ def get_prize(db: Session = Depends(deps.get_db),user: User = Depends(deps.get_c
 
         if lottery_count < 1:
             raise HTTPException(
-                status_code=500, detail="lottery count is 0"
+                status_code=500, detail="抽奖次数不足"
             )
         if second_prize_time > 0 and first_prize_time > 0:
             raise HTTPException(
-                status_code=500, detail="you had prize towice"
+                status_code=500, detail="已经抽奖两次啦"
             )
         gifts = [1,2,2,3,3,3,4,4,4,5,5,5,6,6,6,6,7,7,7,7,8,8,8,8,9,9,9,9,9,9,9,9,9,9,9,9,9
         ,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9
@@ -169,7 +169,7 @@ def get_prize(db: Session = Depends(deps.get_db),user: User = Depends(deps.get_c
         db.rollback()
         print("user update false")
         raise HTTPException(
-                status_code=500, detail="you had prize towice"
+                status_code=500, detail="两次抽奖次数已经用完"
             )
     
             
@@ -184,14 +184,14 @@ def save_upload(
         upload_file: UploadFile = File(...), comment: str = Form(...)) -> Any:
     if not user:
         raise HTTPException(
-            status_code=400, detail="user not found"
+            status_code=400, detail="用户不存在"
         )
     upload_heart_value = user.upload_heart_value
     lottery_count = user.lottery_count
     heart_value = user.heart_value
     if (upload_heart_value > 0 or lottery_count > 1):
         raise HTTPException(
-            status_code=500, detail="uploaded yet"
+            status_code=500, detail="您已经祈福过啦，不用再次祈福！"
         )
     upload_heart_value = 50
     lottery_count += 1

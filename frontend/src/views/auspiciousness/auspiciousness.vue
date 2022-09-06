@@ -16,7 +16,7 @@
       />
       <img class="themes" src="@/assets/auspiciousness/msg.png" alt="" srcset="" />
       <img class="themes1" src="@/assets/auspiciousness/back.png" alt="" srcset="" />
-      <div class="upImg" v-if="!isUploaded">
+      <div class="upImg" v-if="!this.userInfor.isUpload">
         <img
           class="upImgs"
           @click="upImg"
@@ -25,7 +25,7 @@
           srcset=""
         />
       </div>
-      <div class="upImg" v-if="!isUploaded">
+      <div class="upImg" v-if="!this.userInfor.isUpload">
         <input
           class="upInput"
           v-model="textUp"
@@ -94,9 +94,9 @@ export default {
       };
     }
     this.getList();
-    const userInfo = getUser();
-    console.log('userinfo:',userInfo);
-    this.isUploaded = userInfo.isUpload;
+
+    console.log(this.userInfor)
+   
   },
   computed: {
     ...mapGetters(["userInfor"]),
@@ -147,7 +147,7 @@ export default {
       }
     },
     upImg() {
-      if(this.isUploaded) {
+      if(this.userInfor.isUpload) {
         alert("你已经祈福过啦，请看看其他人的祝福吧！");
         return;
       }
@@ -188,14 +188,14 @@ export default {
             this.textUp = "";
             this.getList();
             //TODO:弹出框
-            debugger
-            this.isUploaded = true;
+            //debugger
             this.$store.commit('user/SET_IS_UPLOAD', true)
             this.$store.commit('user/SET_HEARTVALUE', res.data.heartValue)
             this.$store.commit('user/SET_LOTTERY_COUNT', res.data.lotteryCount)
           }
         })
-        .catch((error) => {
+        .catch((error,msg) => {
+          console.log(error,msg);
           alert("图片上传失败,请联系管理员");
         });
     },
