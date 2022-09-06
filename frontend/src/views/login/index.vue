@@ -49,11 +49,12 @@ export default {
           username: this.form.username + "",
           password: this.form.password,
         })
-        .then(res => {
+        .then((res) => {
           this.$router.replace({ path: "/home" });
-        }).catch(err => { 
+        })
+        .catch((err) => {
           if (err) {
-            alert("姓名或工号错误！")
+            alert("姓名或工号错误！");
           }
         });
     },
@@ -65,7 +66,8 @@ export default {
 .login {
   /* background-color: #000; */
   width: 100vw;
-  height: 100vh;
+  /* height: 100vh; */
+  min-height: 100vh;
   position: fixed;
   top: 0;
   left: 0;
