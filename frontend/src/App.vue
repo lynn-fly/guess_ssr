@@ -47,7 +47,7 @@ export default {
     // setTimeout(() => {
     //   this.$store.commit("audio/play", "wrong");
     // }, 6000);
-    // debugger
+    // 
     console.log("APP mounted", window.location.pathname);
     if (window.location.pathname == "/login" || window.location.pathname == "/") {
       setToken("");

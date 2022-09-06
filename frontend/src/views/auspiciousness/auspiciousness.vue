@@ -301,7 +301,7 @@ export default {
       }, 200);
     },
     upClick(item, index) {
-      debugger;
+      ;
       // console.log(tiem, index, this.userInfor.userId);
       var thumbedList = item.thumbed.split(",");
       for (let k in thumbedList) {
@@ -433,6 +433,9 @@ export default {
   right: 0.5rem;
   top: 1.5rem;
   width: 2.6rem;
+
+  animation: fade 6000ms infinite;
+  -webkit-animation: fade 6000ms infinite;
 }
 
 .upImg {

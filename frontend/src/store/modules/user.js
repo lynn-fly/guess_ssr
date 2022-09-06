@@ -111,6 +111,7 @@ const actions = {
         } = response
         commit('SET_TOKEN', data['access_token'])
         setToken(data['access_token'])
+        setheart(data['heartValue'])
         resolve()
       }).catch(error => {
         reject(error)
@@ -130,8 +131,9 @@ const actions = {
         if (!data) {
           reject('验证失败，请重新登录。')
         }
-        debugger
+        console.log(data, 'getinfor')
         commit('SET_USER_INFO', data)
+        setheart(data['heartValue'])
         resolve(data)
       }).catch(error => {
         reject(error)

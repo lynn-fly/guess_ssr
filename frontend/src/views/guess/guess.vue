@@ -25,6 +25,7 @@
       <div class="centent" :style="{ height: contentHeight + 'px' }">
         <div
           class="cententOnce"
+          v-if="seeSUb"
           @click="openAnwser(index)"
           v-for="(item, index) in subObj"
           :key="index"
@@ -35,6 +36,7 @@
               height: imgHeight + 'px',
               animation: 'fade ' + getMath(item.notDo),
             }"
+            :key="item.notDo"
             :src="item.icon"
             :class="[item.notDo ? 'notDo' : '']"
             alt=""
@@ -99,7 +101,8 @@ export default {
           icon: require("@/assets/guess/result/dc2.png"),
           button: [
             {
-              icon: require("@/assets/guess/result/dc1.png"),
+              icon: require("@/assets/guess/result/dd1.png"),
+              // icon: require("@/assets/guess/result/dc1.png"),
               value: "答错",
             },
           ],
@@ -124,23 +127,38 @@ export default {
         },
       },
       subObj: [],
+      seeSUb: false,
     };
   },
   mounted() {
+    // var indexList = subject.map((x) => x.index);
+    // var randomList = this.shuffle(indexList);
+    // var newRandomList = [];
+    // randomList.forEach((index) => {
+    //   var item = subject.find((x) => x.index == index);
+    //   newRandomList.push(item);
+    // });
+    // this.subObj = newRandomList;
+    console.log(this.userInfor.answeredIds,'this.userInfor.answeredIds');
     this.subObj = this.shuffle(subject);
     for (let k in this.subObj) {
       var did = false;
       if (this.userInfor.answeredIds.indexOf(this.subObj[k].number + "") > -1) {
         did = true;
       }
-      this.subObj[k] = {
-        ...this.subObj[k],
+      // this.subObj[k] = {
+      //   ...this.subObj[k],
+      //   i: ++k,
+      //   notDo: did,
+      //   icon: require("@/assets/guess/once.png"),
+      // };
+      Object.assign(this.subObj[k], {
         i: ++k,
         notDo: did,
         icon: require("@/assets/guess/once.png"),
-      };
+      });
     }
-
+    this.seeSUb = true;
     // let imgs = document.getElementsByClassName("imgs");
     // let imgw = imgs[0];
     // imgw.onload = () => {
@@ -214,23 +232,33 @@ export default {
       this.$nextTick(() => {
         setsave_answer(val, 1)
           .then((res) => {
-            debugger;
             //更新list
             this.$store.commit("user/SET_ANSWERED_IDS", res.data.answeredIds);
             var currentItem = this.subObj.find((x) => x.number == val);
             currentItem.notDo = true;
             var nextIndex = currentItem.i;
             for (var startIndex = nextIndex; startIndex < 30; startIndex++) {
-              var nextItem = this.subObj.find((x) => x.i == startIndex);
-              if (!nextItem.notDo) {
-                nextIndex = startIndex;
-              }
+              var nextItem = this.subObj.find((x) => {
+                return x.i == startIndex;
+              });
+              try {
+                if (!nextItem.notDo) {
+                  nextIndex = startIndex;
+                }
+              } catch (error) {}
             }
-
+            if (nextIndex == 30) {
+              //我是最后一套题
+              this.resultData = {};
+              this.popupVisible = true;
+              this.resultData = this.result.answer;
+              return;
+            }
             if (this.userInfor.isAnswerMax) {
               //直接继续答题
               this.resultData = {};
               this.resultData = this.result.answer;
+              console.log(this.subObj[nextIndex], "888");
               this.resultData.subject = this.subObj[nextIndex];
               this.popupVisible = true;
             } else {
@@ -250,7 +278,9 @@ export default {
             }
             this.$store.commit("user/SET_HEARTVALUE", res.data.heartValue);
           })
-          .catch((error) => {});
+          .catch((error) => {
+            console.log(error, "8888");
+          });
       });
     },
     wrongChoose(val) {
@@ -263,6 +293,7 @@ export default {
             var currentItem = this.subObj.find((x) => x.number == val);
             currentItem.notDo = true;
             var nextIndex = currentItem.i;
+
             for (var startIndex = nextIndex; startIndex < 30; startIndex++) {
               var nextItem = this.subObj.find((x) => x.i == startIndex);
               if (!nextItem.notDo) {
@@ -270,10 +301,17 @@ export default {
               }
             }
 
-            this.resultData = {};
-            this.popupVisible = true;
-            this.resultData = this.result.incorrectly;
-            this.resultData.subject = subject[nextIndex];
+            if (nextIndex == 30) {
+              //我是最后一套题
+              this.resultData = {};
+              this.popupVisible = true;
+              this.resultData = this.result.incorrectly;
+            } else {
+              this.resultData = {};
+              this.popupVisible = true;
+              this.resultData = this.result.incorrectly;
+              this.resultData.subject = subject[nextIndex];
+            }
           })
           .catch((erro) => {});
       });
@@ -310,8 +348,10 @@ export default {
     openAnwser(index) {
       //已经答过了就不答了
       var currentItem = this.subObj.find((x) => x.i == index + 1);
-      if (currentItem.notDo) {
-        return;
+      if (currentItem) {
+        if (currentItem.notDo) {
+          return;
+        }
       }
 
       this.popupVisible = true;
