@@ -214,6 +214,10 @@ export default {
       
     },
     async beginChouse2() {
+      if (this.userInfor.lotteryCount < 1) {
+        alert("每人最多有两次抽奖机会哦！祈福或猜灯谜可以获取心动值哦~");
+        return;
+      };
       if (this.state) return;
       this.state = true;
       try {
@@ -231,28 +235,31 @@ export default {
           if (nowNum > 30 && this.chouseIndex == num) {
               this.state = lotteryCount < 1;
               this.chouseIndex = num;
-              console.log(num);
-              
+              //console.log("中奖：",num);  
               draw = false;
               this.getResult(num);
             } else if (nowNum > 30 && num == 9) {
               this.state = lotteryCount < 1;
-              console.log(num);
-              
+              //console.log("未中奖：",num);  
+              this.chouseIndex = num;
               draw = false;
               this.getResult(num);
             } 
         }
       }
       catch(err){
-        console.log(err);
-        alert("抽奖次数不足，请努力答题或参与祈福！每人仅有两次抽奖机会！");
+        console.log(err.response.data.detail);
+        let msg = '抽奖失败：';
+        if (err && err.response && err.response.data && err.response.data.detail) {
+          msg += err.response.data.detail;
+        }
+        alert(msg);
         gotopPage("/home");
       }
     },
 
     addIndex() {
-      if (this.chouseIndex == 8) {
+      if (this.chouseIndex >= 8) {
         this.chouseIndex = 0;
       } else {
         this.chouseIndex++;

@@ -133,8 +133,7 @@ const actions = {
       goodLucky().then(res=>{
         const {lotteryNumber,lotteryCount} = res.data;
         commit('SET_LOTTERY_COUNT', lotteryCount)
-        let num = lotteryNumber < 1? 9: lotteryNumber - 1;
-        resolve({lotteryNumber:num,lotteryCount});
+        resolve({lotteryNumber:lotteryNumber,lotteryCount});
       })
       .catch(err=>{
         reject(err);
