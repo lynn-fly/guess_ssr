@@ -431,7 +431,7 @@ export default {
 .themes1 {
   position: absolute;
   right: 0.5rem;
-  top: 1.5rem;
+  top: 1.3rem;
   width: 2.6rem;
 
   animation: fade 6000ms infinite;

@@ -241,6 +241,10 @@ export default {
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  
+
+  animation: fadeLong 10000ms infinite;
+  -webkit-animation: fadeLong 10000ms infinite;
 }
 
 .cententTop .up {
@@ -281,7 +285,7 @@ export default {
   transition: all 3s;
 }
 .onloadRabbit {
-  width: 70%;
+  width: 60%;
   left: 1rem;
   /* justify-content: center; */
 }
@@ -310,6 +314,9 @@ export default {
   align-items: center;
   justify-content: center;
   flex-direction: column;
+
+  animation: fade 6000ms infinite;
+  -webkit-animation: fade 6000ms infinite;
 }
 
 .buttonsOur .buttonsCenter {
