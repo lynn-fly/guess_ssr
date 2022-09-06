@@ -5,7 +5,7 @@
     <div class="luckDraw">
       <div class="top">
         <Buttons :msg="name" @back="back" />
-        <LampNumber :num="heartValue" />
+        <LampNumber :num="userInfor.heartValue" />
       </div>
       <img
         class="background"
@@ -166,7 +166,7 @@ export default {
     this.getList(true);
     console.log("userinfo:-------", this.userInfor);
     this.isUploaded = this.userInfor.isUpload;
-    this.heartValue = this.userInfor.heartValue;
+    //this.heartValue = this.userInfor.heartValue;
   },
   computed: {
     ...mapGetters(["userInfor"]),
@@ -274,7 +274,7 @@ export default {
       };
       upFile(d)
         .then((res) => {
-          console.log(res);
+          console.log('upload data:',res);
           if (res.status == 201) {
             this.textUp = "";
             this.getList();
