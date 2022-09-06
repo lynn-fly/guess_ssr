@@ -1,4 +1,5 @@
 from functools import reduce
+from itertools import count
 from math import fabs
 import random
 import base64
@@ -74,18 +75,21 @@ def save_thumbed(db: Session = Depends(deps.get_db),user: User = Depends(deps.ge
             status_code=400, detail="用户不存在"
         )
      thumbeds = thumbed_user.thumbed.split(',')
+     thumbe_times = thumbed_user.thumbe_times
      if(not str(user.id) in thumbeds):
         thumbeds.append(str(user.id))
-
+        thumbe_times += 1
      new_thumbeds= ','.join(thumbeds)
      obj_u = schemas.UserUpdate(
         thumbed=new_thumbeds,
+        thumbe_times=thumbe_times
         )
      new_user = crud.user.update(db,db_obj=thumbed_user,obj_in=obj_u)
      return {
         'thumbedUserId':new_user.id,
         'thumbedUserName':new_user.nick_name,
-        'thumbeUsers': new_user.thumbed.split(',')
+        'thumbeUsers': new_user.thumbed.split(','),
+        'thumbeTimes':new_user.thumbe_times
     }
 
 @router.post('/get_prize',dependencies=[Depends(deps.get_current_user)], response_model=Any, status_code=status.HTTP_200_OK)
@@ -164,6 +168,7 @@ def get_prize(db: Session = Depends(deps.get_db),user: User = Depends(deps.get_c
             'userId':user.id,
             'lotteryCount':user.lottery_count,
             'lotteryNumber':giftlevel,
+            'heartValue':user.heart_value,
         }
     else:
         db.rollback()
@@ -249,9 +254,23 @@ def save_upload(
              response_model=Any, status_code=status.HTTP_200_OK)
 def upload_list(
         db: Session = Depends(deps.get_db), 
-        user: User = Depends(deps.get_current_user),*,page: int = 1, limit: int = 10) -> Any:
-    filters = (and_(User.upload_heart_value==50),) # 逗号不能少，如果只有一个条件的时候
-    order_by =desc(User.upload_time)
+        user: User = Depends(deps.get_current_user),*,page: int = 1, limit: int = 12,isFirst:bool = False) -> Any:
+    uids = crud.user.get_uploaded_uids(db)
+    ids = [u["id"] for u in uids]
+    if len(ids) > 12:
+        if isFirst:
+            max = ids[-4:]
+            max.reverse()
+            max.extend(random.sample(ids[0:-4], 8) )
+            print(max)
+            ids = max
+            print(ids)
+        else:
+            ids = random.sample(ids, 12)
+    else:
+        ids.reverse()
+    filters = (and_(User.id.in_(tuple(ids))),) # 逗号不能少，如果只有一个条件的时候
+    order_by =desc(User.thumbe_times)
     data = crud.user.get_uploads(db,order_by=order_by,filters=filters,page=page,limit=limit)
     return JSONResponse(content=data, status_code=status.HTTP_200_OK)
 

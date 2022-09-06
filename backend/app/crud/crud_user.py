@@ -81,7 +81,7 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         second_prize_time = case when first_prize_time > 0 and second_prize_time = 0 then {now_time} else second_prize_time end,
         first_prize_level = case when first_prize_time = 0 and second_prize_time = 0 then {gift_level} else first_prize_level end,
         first_prize_time = case when first_prize_time = 0 and second_prize_time = 0 then {now_time} else first_prize_time end,
-        lottery_count = lottery_count - 1,
+        lottery_count = lottery_count - 1, heart_value = heart_value - 50
         is_prize  = 1
         where id = {db_obj.id} and (first_prize_time = 0 or second_prize_time = 0)'''
         result = db.execute(sql)
@@ -143,7 +143,7 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
             page: int = 1,
             limit: int = 10):
         query = db.query(
-            self.model.id, self.model.nick_name, self.model.upload_file_url,self.model.upload_comment,self.model.thumbed
+            self.model.id, self.model.nick_name, self.model.upload_file_url,self.model.upload_comment,self.model.thumbed,self.model.thumbe_times
         )
         offset = limit * (page - 1)
         if filters is not None:
@@ -152,6 +152,14 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         if order_by is not None:
             query = query.order_by(order_by)
         query = query.offset(offset).limit(limit)
+        return [r._asdict() for r in query.all()]
+
+    def get_uploaded_uids(self, db: Session):
+        query = db.query(
+            self.model.id
+        )
+        query = query.filter(and_(User.upload_heart_value==50))
+        query = query.order_by(User.thumbe_times)
         return [r._asdict() for r in query.all()]
     
     # 获取中奖人员列表

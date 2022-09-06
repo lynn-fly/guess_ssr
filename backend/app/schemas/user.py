@@ -34,6 +34,7 @@ class UserUpdate(UserBase):
     thumbed  : Optional[str]
     upload_file: Optional[bytes]
     upload_time:Optional[int]
+    thumbe_times:Optional[int]
 class UserLogin(UserBase):
     username: str
     nick_name:str
