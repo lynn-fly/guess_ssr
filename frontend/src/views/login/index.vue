@@ -1,10 +1,10 @@
 <template>
   <div class="login">
-    <img class="theme" src="@/assets/login/title.png" alt="" srcset="" />
+    <img class="theme" src="@/assets/v2/dl.png" alt="" srcset="" />
     <div class="inputs flex-c-c">
       <div class="once flex-c-c">
         <div class="title">
-          <img class="titleImg" src="@/assets/v2/dl.png" alt="" srcset="" />
+          <img class="titleImg" src="@/assets/login/number2.png" alt="" srcset="" />
         </div>
         <input type="text" v-model="form.username" placeholder="请输入姓名" />
       </div>

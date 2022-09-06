@@ -188,6 +188,12 @@ export default {
   methods: {
     clicks(val, subjectIndex) {
       if (val == "答对" || val == "答错" || val == "继续") {
+        if (val == "答对") {
+          this.$store.commit("audio/play", "ok");
+        }
+        if (val == "答错") {
+          this.$store.commit("audio/play", "wrong");
+        }
         this.$emit("close", val + "-" + subjectIndex);
       } else {
         this.chouseIndexAns = "";

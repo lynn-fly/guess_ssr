@@ -36,6 +36,7 @@
               animation: 'fade ' + getMath(item.notDo),
             }"
             :src="item.icon"
+            :class="[item.notDo ? 'notDo' : '']"
             alt=""
             srcset=""
           />
@@ -129,7 +130,7 @@ export default {
     this.subObj = this.shuffle(subject);
     for (let k in this.subObj) {
       var did = false;
-      if (this.userInfor.answeredIds.indexOf(this.subObj[k].number + '') > -1) {
+      if (this.userInfor.answeredIds.indexOf(this.subObj[k].number + "") > -1) {
         did = true;
       }
       this.subObj[k] = {
@@ -211,19 +212,19 @@ export default {
     rightChoose(val) {
       this.popupVisible = false;
       this.$nextTick(() => {
-        setsave_answer(val,1)
+        setsave_answer(val, 1)
           .then((res) => {
-            debugger
+            debugger;
             //更新list
-            this.$store.commit("user/SET_ANSWERED_IDS", res.data.answeredIds); 
-            var currentItem = this.subObj.find(x => x.number == val);
+            this.$store.commit("user/SET_ANSWERED_IDS", res.data.answeredIds);
+            var currentItem = this.subObj.find((x) => x.number == val);
             currentItem.notDo = true;
             var nextIndex = currentItem.i;
-              for( var startIndex = nextIndex; startIndex < 30; startIndex++) {
-                var nextItem = this.subObj.find(x => x.i == startIndex);
-                if (!nextItem.notDo) {
-                  nextIndex = startIndex;
-                }
+            for (var startIndex = nextIndex; startIndex < 30; startIndex++) {
+              var nextItem = this.subObj.find((x) => x.i == startIndex);
+              if (!nextItem.notDo) {
+                nextIndex = startIndex;
+              }
             }
 
             if (this.userInfor.isAnswerMax) {
@@ -261,7 +262,8 @@ export default {
             this.popupVisible = true;
             this.resultData = this.result.incorrectly;
             this.resultData.subject = subject[val - 1];
-          }).catch((erro) => {});
+          })
+          .catch((erro) => {});
       });
     },
     addTopHeight(arr) {
@@ -293,9 +295,9 @@ export default {
         gotopPage("/home");
       }
     },
-    openAnwser(index) { 
+    openAnwser(index) {
       //已经答过了就不答了
-      var currentItem = this.subObj.find(x => x.i == index + 1);
+      var currentItem = this.subObj.find((x) => x.i == index + 1);
       if (currentItem.notDo) {
         return;
       }
@@ -460,6 +462,9 @@ export default {
   width: 90%;
   /* animation: fade 600ms infinite;
   -webkit-animation: fade 600ms infinite; */
+}
+.notDo {
+  opacity: 0.5 !important;
 }
 
 .centent .cententOnce .label {
