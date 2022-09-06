@@ -45,6 +45,7 @@
             :src="item.icon"
             alt=""
             srcset=""
+            @click="openBigIcon(item)"
           />
           <div class="label">{{ item.nick_name }}</div>
           <!-- <div class="label">{{ item.name }}</div> -->
@@ -67,6 +68,12 @@
       <!-- @rightChoose="rightChoose"
       @wrongChoose="wrongChoose" -->
     </Popup>
+    <div v-if="seeBigIcon" @click="closeBigIcon" class="seeBigIcon">
+      <img class="imgs" :src="seeBigIconSrc" alt="" />
+      <div class="msg">
+        {{ seeBigIconMsg }}
+      </div>
+    </div>
   </div>
 </template>
 
@@ -97,6 +104,9 @@ export default {
       heartValue: 0,
       isUploaded: false,
       popupVisible: false,
+      seeBigIcon: false,
+      seeBigIconSrc: "",
+      seeBigIconMsg: "",
       resultData: {},
       result: {
         success: {
@@ -326,6 +336,16 @@ export default {
     changeLists() {
       this.getList(false);
     },
+    openBigIcon(item) {
+      this.seeBigIconSrc = item.icon;
+      this.seeBigIconMsg = item.name;
+      this.seeBigIcon = true;
+    },
+    closeBigIcon() {
+      this.seeBigIcon = false;
+      this.seeBigIconSrc = "";
+      this.seeBigIconMsg = "";
+    },
   },
 };
 </script>
@@ -460,5 +480,35 @@ export default {
   font-size: 0.42rem;
   padding: 0.5rem;
   box-sizing: border-box;
+}
+
+.seeBigIcon {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: url(../../assets/guess/result/mb.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.seeBigIcon .imgs {
+  max-width: 80%;
+  box-shadow: 0 0 10px 3px #f323ca;
+  border-radius: 0.4rem;
+  margin: 0 auto;
+  margin-bottom: 0.8rem;
+}
+.seeBigIcon .msg {
+  font-size: 0.4rem;
+  margin-top: 0.8rem;
+  max-width: 80%;
+  margin: 0 auto;
+  word-break: break-all;
 }
 </style>
