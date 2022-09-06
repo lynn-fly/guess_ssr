@@ -120,8 +120,10 @@ export default {
     chooseAnswer(item, index) {
       var selected = this.answer.find(x => x.number == item.number); 
       if (selected.check) {
+        this.visible = false;
         this.$emit("rightChoose", this.popupData.subject.index + 1);
       } else {
+        this.visible = false;
         this.$emit("wrongChoose", this.popupData.subject.index + 1);
       }
       //debugger
