@@ -175,7 +175,7 @@ export default {
     find(fn) {
       let imgs = document.getElementsByClassName("cententimgs");
       let imgw = imgs[0];
-      if (!imgw) {
+      if (!imgw || !imgw.width) {
         setTimeout(() => {
           this.find(fn);
         }, 200);
