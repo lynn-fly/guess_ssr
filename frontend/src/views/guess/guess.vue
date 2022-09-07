@@ -275,6 +275,8 @@ export default {
         var currentItem = this.subObj.find((x) => x.number == val);
         // 设置为已作答
         currentItem.notDo = true;
+        //设置答题完的图片
+        currentItem.icon = require("@/assets/v2/dm/dm2.png");
         this.$forceUpdate();
         // 找下一题的索引
         var nextIndex = currentItem.i;
