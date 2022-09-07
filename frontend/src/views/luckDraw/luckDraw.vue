@@ -80,7 +80,7 @@ export default {
         },
         {
           icon: require("@/assets/luckDraw/666.png"),
-          name: "AVATR环保東口包",
+          name: "AVATR环保束口包",
         },
         {
           icon: require("@/assets/luckDraw/777.png"),
