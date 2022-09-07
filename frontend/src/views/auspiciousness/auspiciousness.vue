@@ -380,7 +380,7 @@ export default {
             this.openPopup("luck");
           }
           else {
-            alert("你的祝福已经送达！");
+            //alert("你的祝福已经送达！"); //上传完成 
           }
         })
         .catch((error) => {
