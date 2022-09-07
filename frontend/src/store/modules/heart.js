@@ -37,7 +37,7 @@ const mutations = {
     }
     setTimeout(() => {
       document.body.removeChild(dom)
-    }, time + 100);
+    }, time + 300);
     return
     let doit = () => {
 
