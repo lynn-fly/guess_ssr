@@ -127,8 +127,6 @@ export default {
     };
   },
   mounted() {
-    
-
     // let imgs = document.getElementsByClassName("imgs");
     // let imgw = imgs[0];
     // imgw.onload = () => {
@@ -144,7 +142,6 @@ export default {
     for (let i = 0; i < 29; i++) {
       this.imgData.push(this.imgData[0]);
     }
-        
   },
   computed: {
     ...mapGetters(["userInfor"]),
@@ -185,11 +182,11 @@ export default {
         //this.popupVisible = false;
         console.log(val, subjectIndex, "我的新题索引");
         if (val == "答对") {
-          this.openAnwser(subjectIndex-1);
+          this.openAnwser(subjectIndex - 1);
         } else if (val == "答错") {
-          this.openAnwser(subjectIndex-1);
+          this.openAnwser(subjectIndex - 1);
         } else if (val == "继续") {
-          this.openAnwser(subjectIndex-1);
+          this.openAnwser(subjectIndex - 1);
         }
       } else if (val == "立即") {
         this.resultData = {};
@@ -270,8 +267,8 @@ export default {
       });
     },
     saveChoose(val, isOK) {
-      setsave_answer(val, isOK).then(res => {
-        debugger
+      setsave_answer(val, isOK).then((res) => {
+        debugger;
         //更新list
         this.$store.commit("user/SET_ANSWERED_IDS", res.data.answeredIds);
         // 找到这题
@@ -285,47 +282,48 @@ export default {
         var nextItem = this.subObj[nextIndex];
         // 如果已经作答，就找下一个索引
         if (nextItem.notDo) {
-            var oldNextIndex = nextIndex;
-            for (var i = nextIndex + 1; i < 30 ; i ++ ) {
-              if (!this.subObj[i].notDo) {
-                nextIndex = i;
-                break;
-              }
-            }    
-            if (oldNextIndex == nextIndex) {//证明没有新题了
-              // todo 直接跳提示框
-              alert('回答错误，没有新题了');
+          var oldNextIndex = nextIndex;
+          for (var i = nextIndex + 1; i < 30; i++) {
+            if (!this.subObj[i].notDo) {
+              nextIndex = i;
+              break;
             }
+          }
+          if (oldNextIndex == nextIndex) {
+            //证明没有新题了
+            // todo 直接跳提示框
+            alert("回答错误，没有新题了");
+          }
         }
         // 正确的分支
         if (isOK == 1) {
           this.$store.commit("user/SET_HEARTVALUE", res.data.heartValue);
           if (this.userInfor.isAnswerMax) {
-              //已满，直接继续答题
+            //已满，直接继续答题
+            this.resultData = {};
+            this.resultData = this.result.answer;
+            this.resultData.subject = this.subObj[nextIndex];
+            this.popupVisible = true;
+            console.log(this.resultData.subject);
+          } else {
+            // 刚好满5题
+            if (res.data.answerId.length == 6) {
+              this.resultData = {};
+              this.resultData = this.result.Accept;
+              this.resultData.subject = this.subObj[nextIndex];
+              this.$store.commit("user/SET_HEART_IS_MAX", true);
+              this.$store.commit("user/SET_LOTTERY_COUNT", res.data.lotteryCount);
+              this.popupVisible = true;
+              console.log(this.resultData.subject);
+            } else {
+              //不到5题
               this.resultData = {};
               this.resultData = this.result.answer;
               this.resultData.subject = this.subObj[nextIndex];
               this.popupVisible = true;
               console.log(this.resultData.subject);
-            } else {
-              // 刚好满5题
-              if (res.data.answerId.length == 6) {
-                this.resultData = {};
-                this.resultData = this.result.Accept;
-                this.resultData.subject = this.subObj[nextIndex];
-                this.$store.commit("user/SET_HEART_IS_MAX", true);
-                this.$store.commit("user/SET_LOTTERY_COUNT", res.data.lotteryCount);
-                this.popupVisible = true;
-                console.log(this.resultData.subject);
-              } else {
-                //不到5题
-                this.resultData = {};
-                this.resultData = this.result.answer;
-                this.resultData.subject = this.subObj[nextIndex];
-                this.popupVisible = true;
-                console.log(this.resultData.subject);
-              }
             }
+          }
         } else {
           this.resultData = {};
           this.popupVisible = true;
@@ -333,7 +331,7 @@ export default {
           this.resultData.subject = this.subObj[nextIndex];
           console.log(this.resultData.subject);
         }
-      })
+      });
     },
     addTopHeight(arr) {
       let top = 0;
@@ -379,25 +377,27 @@ export default {
   },
   created() {
     this.$store
-        .dispatch("user/getInfo")
-        .then((data) => {
-          debugger
-          this.subObj = this.shuffle(subject);
-          for (let k in this.subObj) {
-            var did = false;
-            if (this.userInfor.answeredIds.indexOf(this.subObj[k].number + "") > -1) {
-              did = true;
-            }
-            this.subObj[k] = {
-              ...this.subObj[k],
-              i: ++k,
-              notDo: did,
-              icon: require("@/assets/guess/once.png"),
-            };
+      .dispatch("user/getInfo")
+      .then((data) => {
+        debugger;
+        this.subObj = this.shuffle(subject);
+        for (let k in this.subObj) {
+          var did = false;
+          if (this.userInfor.answeredIds.indexOf(this.subObj[k].number + "") > -1) {
+            did = true;
           }
-        })
-        .catch((err) => {});
-  }
+          this.subObj[k] = {
+            ...this.subObj[k],
+            i: ++k,
+            notDo: did,
+            icon: did
+              ? require("@/assets/v2/dm/dm2.png")
+              : require("@/assets/guess/once.png"),
+          };
+        }
+      })
+      .catch((err) => {});
+  },
 };
 </script>
 
@@ -554,7 +554,7 @@ export default {
   -webkit-animation: fade 600ms infinite; */
 }
 .notDo {
-  opacity: 0.5 !important;
+  /* opacity: 0.5 !important; */
 }
 
 .centent .cententOnce .label {

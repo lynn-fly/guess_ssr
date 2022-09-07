@@ -247,8 +247,8 @@ export default {
   flex-direction: column;
   
 
-  animation: fadeLong 10000ms infinite;
-  -webkit-animation: fadeLong 10000ms infinite;
+  animation: fadeLong 6000ms infinite;
+  -webkit-animation: fadeLong 6000ms infinite;
 }
 
 .cententTop .up {
@@ -319,8 +319,8 @@ export default {
   justify-content: center;
   flex-direction: column;
 
-  animation: fade 6000ms infinite;
-  -webkit-animation: fade 6000ms infinite;
+  animation: fade 400ms infinite;
+  -webkit-animation: fade 400ms infinite;
 }
 
 .buttonsOur .buttonsCenter {

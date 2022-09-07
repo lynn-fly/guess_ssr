@@ -236,8 +236,8 @@ export default {
       if (selected.check) {
         this.chouseIndexAns = "";
         this.$store.commit("audio/play", "ok");
-        this.$emit("rightChoose", this.popupData.subject.number);
         this.$store.commit("heart/createAudios");
+        this.$emit("rightChoose", this.popupData.subject.number);
       } else {
         this.chouseIndexAns = "";
         this.$store.commit("audio/play", "wrong");
@@ -270,6 +270,7 @@ export default {
   background-image: url(../assets/guess/result/mb.png);
   background-size: 100% 100%;
   background-repeat: no-repeat;
+  z-index: 99;
 }
 .main {
   width: 80%;
