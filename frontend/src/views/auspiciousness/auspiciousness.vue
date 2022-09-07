@@ -305,18 +305,23 @@ export default {
       };
     },
     back(val) {
+      if(this.upState) return;
       if (val == "返回首页") {
         gotopPage("/home");
       }
     },
     upImgs() {
+      if(this.upState){
+        alert("正在努力接受你的祝福，请稍后……(I am trying to accept your blessing, please hold on...)");
+        return;
+      }
       if (this.userInfor.isUpload) {
         // if(this.isUploaded) {
-        alert("你已经祈福过啦，请看看其他人的祝福吧！");
+        alert("你已经祈福过啦，请看看其他人的祝福吧！(You have prayed, please look at the blessings of others!)");
         return;
       }
       if (!this.textUp) {
-        alert("需要先填写祝福语");
+        alert("需要先填写祝福语！(You need to fill out a message first!)");
         return;
       }
       let inputDom = document.getElementById("useInput");
@@ -336,12 +341,16 @@ export default {
       let size = this.getfilesize(files[0].size);
       let type = ["jpeg", "jpg", "png", "image/png", "image/jpg", "image/jpeg"];
       if (!type.includes(files[0].type)) {
-        alert("图片格式为jpeg,jpg,png");
+        alert("图片格式为(The image format is)jpeg,jpg,png");
         return;
       }
-      if (size[1] == "MB") {
-        alert("图片需要小于5M");
-        if (+size[0] >= 5) return;
+      if (size[1] == "MB" && +size[0] >= 5) {
+        alert("图片需要小于(The image needs to be less than)5M");
+        return;
+      }
+      if(this.textUp.length > 100 ) {
+        alert("亲，100字足以表达你的真诚的祝福！(Dear, 100 words is enough to express your sincere blessing)");
+        return;
       }
       let d = {
         upload_file: files[0],
