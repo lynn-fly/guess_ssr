@@ -291,8 +291,8 @@ export default {
           }
         }
       } catch (err) {
-        console.log(err.response.data.detail);
-        let msg = "抽奖失败：";
+        console.log(err);
+        let msg = "抽奖失败!";
         if (err && err.response && err.response.data && err.response.data.detail) {
           msg += err.response.data.detail;
         }
