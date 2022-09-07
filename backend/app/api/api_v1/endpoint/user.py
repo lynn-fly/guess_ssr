@@ -20,7 +20,7 @@ from fastapi.responses import JSONResponse,StreamingResponse
 from app import crud, schemas
 from app.utils import utils
 from app.api import deps
-from app.models import User
+from app.models import User,Blue
 
 
 
@@ -74,33 +74,33 @@ def save_answer(db: Session = Depends(deps.get_db),user: User = Depends(deps.get
     }
 
 #saveThumbed
-@router.post('/save_thumbed/{user_id}',dependencies=[Depends(deps.get_current_user)], response_model=Any, status_code=status.HTTP_201_CREATED)
-def save_thumbed(db: Session = Depends(deps.get_db),user: User = Depends(deps.get_current_user),*,user_id:int) -> Any:
+@router.post('/save_thumbed/{blue_id}',dependencies=[Depends(deps.get_current_user)], response_model=Any, status_code=status.HTTP_201_CREATED)
+def save_thumbed(db: Session = Depends(deps.get_db),user: User = Depends(deps.get_current_user),*,blue_id:int) -> Any:
      if not user:
         raise HTTPException(
             status_code=400, detail="用户不存在"
         )
-     thumbed_user = crud.user.get(db,id=user_id)
-     if not thumbed_user:
+     thumbed_blue = crud.blue.get(db,id=blue_id)
+     if not thumbed_blue:
         raise HTTPException(
-            status_code=400, detail="用户不存在"
+            status_code=400, detail="内容不存在"
         )
-     thumbeds = thumbed_user.thumbed.split(',')
-     thumbe_times = thumbed_user.thumbe_times
+     thumbeds = thumbed_blue.thumbed.split(',')
+     thumbe_times = thumbed_blue.thumbe_times
      if(not str(user.id) in thumbeds):
         thumbeds.append(str(user.id))
         thumbe_times += 1
      new_thumbeds= ','.join(thumbeds)
-     obj_u = schemas.UserUpdate(
+     obj_u = schemas.BlueUpdate(
         thumbed=new_thumbeds,
         thumbe_times=thumbe_times
         )
-     new_user = crud.user.update(db,db_obj=thumbed_user,obj_in=obj_u)
+     new_blue = crud.blue.update(db,db_obj=thumbed_blue,obj_in=obj_u)
      return {
-        'thumbedUserId':new_user.id,
-        'thumbedUserName':new_user.nick_name,
-        'thumbeUsers': new_user.thumbed.split(','),
-        'thumbeTimes':new_user.thumbe_times
+        'thumbedUserId':user.id,
+        'thumbedUserName':user.nick_name,
+        'thumbeUsers': new_blue.thumbed.split(','),
+        'thumbeTimes':new_blue.thumbe_times
     }
 
 @router.post('/get_prize',dependencies=[Depends(deps.get_current_user)], response_model=Any, status_code=status.HTTP_200_OK)
@@ -203,16 +203,7 @@ def save_upload(
         raise HTTPException(
             status_code=400, detail="用户不存在"
         )
-    upload_heart_value = user.upload_heart_value
-    lottery_count = user.lottery_count
-    heart_value = user.heart_value
-    if (upload_heart_value > 0 or lottery_count > 1):
-        raise HTTPException(
-            status_code=500, detail="您已经祈福过啦，不用再次祈福！"
-        )
-    upload_heart_value = 50
-    lottery_count += 1
-    heart_value += 50
+    
     ext = upload_file.filename.split('.')[-1]
     u_name = uuid.uuid4()
     file_location = f"uploads/{u_name}.{ext}"
@@ -245,10 +236,32 @@ def save_upload(
         raise HTTPException(
             status_code=500, detail=f"图片处理异常，{e.__str__()}"
         )
+    
+    blue_in = schemas.BlueCreate(user_id=user.id, upload_comment=comment,upload_file_url=f"/upload/{u_name}_c.{ext}")
+    new_blue = crud.blue.create(db, obj_in=blue_in)
+    
+    upload_heart_value = user.upload_heart_value
+    lottery_count = user.lottery_count
+    heart_value = user.heart_value
+    if (upload_heart_value > 0 or lottery_count > 1):
+        return {
+        'userId':user.id,
+        'userName':user.nick_name,
+        'heartValue':user.heart_value,
+        'lotteryCount':user.lottery_count,
+        'fileUrl':user.upload_file_url,
+        'comment':user.upload_comment,
+        'uploadTime':user.upload_time,
+        'isFirst':False
+    }
+
+    upload_heart_value = 50
+    lottery_count += 1
+    heart_value += 50
+    
 
     user_up = schemas.UserUpdate(
         upload_heart_value=upload_heart_value,heart_value=heart_value,lottery_count=lottery_count,
-        upload_comment=comment,upload_file_url=f"/upload/{u_name}_c.{ext}",upload_time=int(datetime.timestamp(datetime.utcnow()))
     )
     new_user = crud.user.update(db,db_obj=user,obj_in=user_up)
     return {
@@ -258,7 +271,8 @@ def save_upload(
         'lotteryCount':new_user.lottery_count,
         'fileUrl':new_user.upload_file_url,
         'comment':new_user.upload_comment,
-        'uploadTime':new_user.upload_time
+        'uploadTime':new_user.upload_time,
+        'isFirst':True
     }
 
 @router.get('/upload_list',
@@ -267,7 +281,8 @@ def save_upload(
 def upload_list(
         db: Session = Depends(deps.get_db), 
         user: User = Depends(deps.get_current_user),*,page: int = 1, limit: int = 12,isFirst:bool = False) -> Any:
-    uids = crud.user.get_uploaded_uids(db)
+    
+    uids = crud.blue.get_uploaded_uids(db)
     ids = [u["id"] for u in uids]
     if len(ids) > 12:
         if isFirst:
@@ -281,9 +296,9 @@ def upload_list(
             ids = random.sample(ids, 12)
     else:
         ids.reverse()
-    filters = (and_(User.id.in_(tuple(ids))),) # 逗号不能少，如果只有一个条件的时候
-    order_by =desc(User.thumbe_times)
-    data = crud.user.get_uploads(db,order_by=order_by,filters=filters,page=page,limit=limit)
+    filters = (and_(Blue.id.in_(tuple(ids))),) # 逗号不能少，如果只有一个条件的时候
+    order_by =desc(Blue.thumbe_times)
+    data = crud.blue.get_uploads(db,order_by=order_by,filters=filters,page=page,limit=limit)
     return JSONResponse(content=data, status_code=status.HTTP_200_OK)
 
 @router.post('/result',

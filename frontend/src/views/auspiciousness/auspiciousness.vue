@@ -17,7 +17,8 @@
       />
       <img class="themes" src="@/assets/auspiciousness/msg.png" alt="" srcset="" />
       <img class="themes1" src="@/assets/auspiciousness/back.png" alt="" srcset="" />
-      <div class="upImg" v-if="!this.userInfor.isUpload">
+      <div class="upImg">
+        
         <img
           class="upImgs"
           @click="upImgs"
@@ -25,8 +26,10 @@
           alt=""
           srcset=""
         />
+       
       </div>
-      <div class="upImg" v-if="!this.userInfor.isUpload">
+
+      <div class="upImg">
         <input
           class="upInput"
           v-model="textUp"
@@ -214,7 +217,7 @@ export default {
       .then((data) => {})
       .catch((err) => {});
     console.log("userinfo:-------", this.userInfor);
-    this.isUploaded = this.userInfor.isUpload;
+    //this.isUploaded = this.userInfor.isUpload;
     //this.heartValue = this.userInfor.heartValue;
   },
   computed: {
@@ -315,11 +318,11 @@ export default {
         alert("正在努力接受你的祝福，请稍后……(I am trying to accept your blessing, please hold on...)");
         return;
       }
-      if (this.userInfor.isUpload) {
-        // if(this.isUploaded) {
-        alert("你已经祈福过啦，请看看其他人的祝福吧！(You have prayed, please look at the blessings of others!)");
-        return;
-      }
+      // if (this.userInfor.isUpload) {
+      //   // if(this.isUploaded) {
+      //   alert("你已经祈福过啦，请看看其他人的祝福吧！(You have prayed, please look at the blessings of others!)");
+      //   return;
+      // }
       if (!this.textUp) {
         alert("需要先填写祝福语！(You need to fill out a message first!)");
         return;
@@ -359,21 +362,25 @@ export default {
       upFile(d)
         .then((res) => {
           console.log("upload data:", res);
-          if (res.status == 201) {
-            this.textUp = "";
-            this.getList();
-            this.isUploaded = true;
-            this.$store.commit("user/SET_IS_UPLOAD", true);
-            this.$store.commit("user/SET_HEARTVALUE", res.data.heartValue);
-            this.$store.commit("user/SET_LOTTERY_COUNT", res.data.lotteryCount);
-          }
-          this.openPopup("luck");
           this.upState = false;
+          
+          this.textUp = "";
+          this.getList();
+          //this.isUploaded = true;
+          //this.$store.commit("user/SET_IS_UPLOAD", true);
+          this.$store.commit("user/SET_HEARTVALUE", res.data.heartValue);
+          this.$store.commit("user/SET_LOTTERY_COUNT", res.data.lotteryCount);
+          if( res.data.isFirst) {
+            this.openPopup("luck");
+          }
+          else {
+            alert("你的祝福已经送达！");
+          }
         })
         .catch((error) => {
+          this.upState = false;
           this.openPopup("error");
           // alert("图片上传失败,请联系管理员");
-          this.upState = false;
         });
     },
     openPopup(num) {
