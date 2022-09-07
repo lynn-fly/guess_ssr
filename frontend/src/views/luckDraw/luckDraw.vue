@@ -19,8 +19,7 @@
           class="cententOnce"
           :class="[chouseIndex == index ? 'avtive' : '']"
           v-for="(item, index) in imgData"
-          :key="index"
-          @click="getResult(index + 1)"
+          :key="index" 
         >
           <img
             class="imgs"

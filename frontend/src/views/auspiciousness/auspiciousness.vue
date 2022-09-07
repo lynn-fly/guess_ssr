@@ -34,7 +34,7 @@
           class="upInput"
           v-model="textUp"
           type="text"
-          placeholder="在这里写下你的祝福，100字以内"
+          placeholder="100字以内哦～not more than 100 characters"
         />
       </div>
       <div class="upImg">
@@ -646,6 +646,7 @@ export default {
   border-radius: 0.4rem;
   margin: 0 auto;
   margin-bottom: 0.8rem;
+  max-height: 75%;
 }
 .seeBigIcon .msg {
   font-size: 0.4rem;
