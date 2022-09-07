@@ -199,7 +199,8 @@ export default {
             let h2 = imgw2.clientHeight;
             console.log('mounted：',h,h2,this.imgHeight)
             if(  h < this.imgHeight) {
-              imgw2.style.height= this.imgHeight + 'px'
+              imgw2.style.height= this.imgHeight + 'px';
+              imgw2.style.width= '150%';
             }
               
           })
@@ -269,6 +270,7 @@ export default {
                       console.log('nextTick:',h,h2,this.imgHeight)
                       if( h < this.imgHeight) {
                         imgw2.style.height= this.imgHeight + 'px'
+                        imgw2.style.width= '150%'
                       }
                        
                   })
