@@ -213,12 +213,18 @@ export default {
 
  
     async beginChouse2() {
-      if (this.state || this.drawing) return;
-      
+
       if (this.userInfor.lotteryCount < 1) {
         alert("每人最多有两次抽奖机会哦！祈福或猜灯谜可以获取心动值哦~");
         return;
       }
+
+      if (this.state || this.drawing) {
+        alert("奖品正在路上，祝君好运~");
+        return;
+      }
+
+      
       
       this.state = true;
       this.drawing = true;
