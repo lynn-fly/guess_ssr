@@ -39,11 +39,15 @@
       </div>
       <div class="centent" :style="{ height: contentHeight + 'px' }">
         <div class="cententOnce" v-for="(item, index) in imgData" :key="index">
-          <div class="cententOnceIn" :ref="'cententOnceIn_'+index" :style="{ height: imgHeight + 'px !important' }">
+          <div
+            class="cententOnceIn"
+            :ref="'cententOnceIn_' + index"
+            :style="{ height: imgHeight + 'px !important' }"
+          >
             <!-- :style="{ height: imgHeight + 'px !important' }" -->
             <img
               class="imgs cententimgs"
-              :ref="'cententimgs_'+index" 
+              :ref="'cententimgs_' + index"
               :src="item.icon"
               alt=""
               srcset=""
@@ -51,8 +55,8 @@
             />
           </div>
 
-          <div class="label">{{ item.nick_name }}</div>
-          <!-- <div class="label">{{ item.name }}</div> -->
+          <!-- <div class="label">{{ item.nick_name }}</div> -->
+          <div class="label">{{ item.name }}</div>
           <div classs="uppppp" style="width: 100% !important; color: #fff">
             <img
               src="@/assets/auspiciousness/up.png"
@@ -166,7 +170,7 @@ export default {
 
     //   this.imgData.forEach((val,index,arr)=>{
     //         const imgw2 = this.$refs[`cententimgs_${index}`][0];
-            
+
     //         if(index > 0 )
     //         {
     //           let h = imgw2.offsetHeight;
@@ -174,22 +178,21 @@ export default {
     //           if(h< this.imgHeight) {
     //             imgw2.style.height= this.imgHeight + 'px'
     //           }
-    //         }   
+    //         }
     //       })
     // });
     this.find((imgs) => {
-      
       let avralH = 0;
-      for(let i=0;i<imgs.length;i++){
+      for (let i = 0; i < imgs.length; i++) {
         console.log(imgs[i].width, 44444444444);
         avralH += imgs[i].width / 1.5;
       }
 
-      if(imgs.length>0){
+      if (imgs.length > 0) {
         this.imgHeight = avralH / imgs.length;
       }
       if (!this.imgHeight) this.imgHeight = 144;
-      
+
       console.log(this.imgHeight, 5555555555);
 
       this.imgData.forEach((val,index,arr)=>{
@@ -207,9 +210,9 @@ export default {
     });
     this.getList(true);
     this.$store
-        .dispatch("user/getInfo")
-        .then((data) => {})
-        .catch((err) => {});
+      .dispatch("user/getInfo")
+      .then((data) => {})
+      .catch((err) => {});
     console.log("userinfo:-------", this.userInfor);
     this.isUploaded = this.userInfor.isUpload;
     //this.heartValue = this.userInfor.heartValue;
@@ -222,10 +225,10 @@ export default {
       let imgs = document.getElementsByClassName("cententimgs");
       let imgw = imgs[0];
       let loadAll = true;
-      for(let i=0;i<imgs.length;i++){
-        if(!imgs[i].width) {
-          loadAll = false
-          break
+      for (let i = 0; i < imgs.length; i++) {
+        if (!imgs[i].width) {
+          loadAll = false;
+          break;
         }
       }
       if (!imgw || !loadAll) {
@@ -237,11 +240,7 @@ export default {
       }
     },
 
-    adjustImgs(){
-
-      
-
-    },
+    adjustImgs() {},
 
     getList(isFirst) {
       this.imgData = [];
@@ -350,7 +349,7 @@ export default {
       };
       upFile(d)
         .then((res) => {
-          console.log('upload data:',res);
+          console.log("upload data:", res);
           if (res.status == 201) {
             this.textUp = "";
             this.getList();
@@ -573,12 +572,19 @@ export default {
 }
 
 .centent .cententOnce .label {
-  width: 100%;
-  height: 0.8rem;
+  width: 80%;
+  min-height: 0.8rem;
   color: #fff;
   text-align: center;
   font-size: 0.2rem;
   margin-top: 0.2rem;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  word-break: break-all;
 }
 .uppppp {
   width: 100% !important;
