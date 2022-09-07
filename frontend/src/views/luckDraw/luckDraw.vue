@@ -98,27 +98,27 @@ export default {
       imgDataRseult: [
         {
           icon: require("@/assets/luckDraw/result/1/1.png"),
-          name: "户外桌椅-灰",
+          name: "AVATR户外桌椅-灰",
         },
         {
           icon: require("@/assets/luckDraw/result/1/2.png"),
-          name: "阿峰塔定制保温杯",
+          name: "AVATR定制保温杯",
         },
         {
           icon: require("@/assets/luckDraw/result/1/3.png"),
-          name: "城市画展系列T恤衫-XL ",
+          name: "AVATR城市画展系列T恤衫",
         },
         {
           icon: require("@/assets/luckDraw/result/1/4.png"),
-          name: "户外折叠整理箱-灰",
+          name: "AVATR户外折叠整理箱-灰",
         },
         {
           icon: require("@/assets/luckDraw/result/1/5.png"),
-          name: "户外超声波防潮野餐地垫-灰",
+          name: "AVATR户外超声波防潮野餐地垫-灰",
         },
         {
           icon: require("@/assets/luckDraw/result/1/6.png"),
-          name: "AVATR环保東口包",
+          name: "AVATR环保束口包",
         },
         {
           icon: require("@/assets/luckDraw/result/1/7.png"),
@@ -126,11 +126,11 @@ export default {
         },
         {
           icon: require("@/assets/luckDraw/result/1/8.png"),
-          name: "杜邦电脑包",
+          name: "AVATR杜邦电脑包",
         },
         {
           icon: require("@/assets/luckDraw/result/1/9.png"),
-          name: "E值",
+          name: "AVATR E值",
         },
       ],
       imgHeight: "auto",
