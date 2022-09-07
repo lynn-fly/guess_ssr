@@ -572,8 +572,10 @@ export default {
 }
 
 .centent .cententOnce .label {
-  width: 80%;
-  min-height: 0.8rem;
+  line-height: 0.5rem;
+  width: 90%;
+  text-align: left !important;
+  min-height: 1.5rem;
   color: #fff;
   text-align: center;
   font-size: 0.2rem;
@@ -585,6 +587,8 @@ export default {
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   word-break: break-all;
+  letter-spacing: 0.05rem;
+  line-height: 0.35rem;
 }
 .uppppp {
   width: 100% !important;
