@@ -363,6 +363,9 @@ export default {
       }
     },
     openAnwser(index) {
+      //   this.$store.commit("heart/createAudios");
+      // console.log(213545)
+      // return
       //已经答过了就不答了
       var currentItem = this.subObj.find((x) => x.i == index + 1);
       if (currentItem.notDo) {
@@ -439,6 +442,7 @@ export default {
   justify-content: space-between;
   margin-bottom: 0.7rem;
   padding-top: 0.5rem;
+  z-index: 999;
 }
 
 .top .theme {
