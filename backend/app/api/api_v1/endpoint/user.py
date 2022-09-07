@@ -7,6 +7,7 @@ import shutil
 import uuid
 import xlwt
 import os
+import exifread
 from PIL import Image
 from io import BytesIO
 from datetime import datetime
@@ -226,8 +227,35 @@ def save_upload(
         img_file_size = 1
     file_location_c = f"uploads/{u_name}_c.{ext}"
     try:
+        f = open(file_location, 'rb')
+        tags = exifread.process_file(f)
+        need_ori_L = 0
+        need_ori_R = 0
+        need_ori_180 = 0
+        if 'Image Orientation' in tags.keys():
+            if 'Rotated' in str(tags['Image Orientation']):
+                if 'Rotated 90 CW' in str(tags['Image Orientation']): # right, top
+                    need_ori_L = 1
+                elif 'Rotated 90 CCW' in str(tags['Image Orientation']): # left, bottom
+                    need_ori_R = 1
+                elif 'Rotated 180' in str(tags['Image Orientation']): #
+                    need_ori_180 = 1
+
+                # 还有Horizontal(normal)为正常情况
+
+                # 还有些情况未考虑到， 比如镜像等， 由于数量少，就偷个懒暂时忽略了
+
+        f.close()
         
         sImg=Image.open(file_location)
+        if need_ori_L == 1:
+            sImg = sImg.transpose(Image.ROTATE_270)
+        elif need_ori_R == 1:
+            sImg = sImg.transpose(Image.ROTATE_90)
+        elif need_ori_180 == 1:
+            sImg = sImg.transpose(Image.ROTATE_180)
+
+        
         w,h=sImg.size
         dImg=sImg.resize((int(w/img_file_size),int(h/img_file_size)),Image.ANTIALIAS)  
         dImg.save(file_location_c) 
