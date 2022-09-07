@@ -319,8 +319,8 @@ export default {
   justify-content: center;
   flex-direction: column;
 
-  animation: fade 400ms infinite;
-  -webkit-animation: fade 400ms infinite;
+  animation: fade 1500ms infinite;
+  -webkit-animation: fade 1500ms infinite;
 }
 
 .buttonsOur .buttonsCenter {
