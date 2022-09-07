@@ -282,6 +282,7 @@ export default {
         var nextIndex = currentItem.i;
         // 找到下一题
         var nextItem = this.subObj[nextIndex];
+        var noNewItem = false;
         // 如果已经作答，就找下一个索引
         if (nextItem.notDo) {
           var oldNextIndex = nextIndex;
@@ -293,8 +294,7 @@ export default {
           }
           if (oldNextIndex == nextIndex) {
             //证明没有新题了
-            // todo 直接跳提示框
-            alert("回答错误，没有新题了");
+            noNewItem = true;
           }
         }
         // 正确的分支
@@ -305,6 +305,10 @@ export default {
             this.resultData = {};
             this.resultData = this.result.answer;
             this.resultData.subject = this.subObj[nextIndex];
+            if (noNewItem) {
+              alert("回答正确，已经没有下一题了哟！");
+              return
+            }
             this.popupVisible = true;
             console.log(this.resultData.subject);
           } else {
@@ -315,6 +319,10 @@ export default {
               this.resultData.subject = this.subObj[nextIndex];
               this.$store.commit("user/SET_HEART_IS_MAX", true);
               this.$store.commit("user/SET_LOTTERY_COUNT", res.data.lotteryCount);
+              if (noNewItem) {
+                alert("回答正确，已经没有下一题了哟！");
+                return
+              }
               this.popupVisible = true;
               console.log(this.resultData.subject);
             } else {
@@ -322,15 +330,23 @@ export default {
               this.resultData = {};
               this.resultData = this.result.answer;
               this.resultData.subject = this.subObj[nextIndex];
+              if (noNewItem) {
+                alert("回答正确，已经没有下一题了哟！");
+                return
+              }
               this.popupVisible = true;
               console.log(this.resultData.subject);
             }
           }
         } else {
           this.resultData = {};
-          this.popupVisible = true;
           this.resultData = this.result.incorrectly;
           this.resultData.subject = this.subObj[nextIndex];
+          if (noNewItem) {
+            alert("回答错误，已经没有下一题了哟！");
+            return
+          }
+          this.popupVisible = true;
           console.log(this.resultData.subject);
         }
       });
