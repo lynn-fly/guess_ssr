@@ -21,7 +21,6 @@ const mutations = {
     dom.style.top = '50%';
     dom.style.left = '50%';
     dom.className = 'heardsss';
-    console.log(option)
     dom.style.transition = "all 3s"
     document.body.appendChild(dom)
     setTimeout(() => {

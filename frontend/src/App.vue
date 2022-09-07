@@ -75,5 +75,6 @@ export default {
 }
 .heardsss {
   z-index: 9999999 !important;
+  transition: all 3s !important;
 }
 </style>
