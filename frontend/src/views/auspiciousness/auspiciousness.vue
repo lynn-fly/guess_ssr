@@ -195,7 +195,7 @@ export default {
         this.imgHeight = avralH / imgs.length;
       }
       if (this.imgHeight < 60) {
-        alert(`${this.imgHeight}祝福的图片正在路上，刷新没准就来了！`);
+        //alert(`${this.imgHeight}祝福的图片正在路上，刷新没准就来了！`);
         this.imgHeight = 101;
       }
 
