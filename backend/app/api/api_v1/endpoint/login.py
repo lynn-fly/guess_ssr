@@ -1,7 +1,7 @@
 from typing import Any
 from datetime import timedelta
 from sqlalchemy.orm import Session
-
+import re
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.encoders import jsonable_encoder
 from fastapi.security import OAuth2PasswordRequestForm
@@ -41,7 +41,9 @@ def login_access_token(
 @router.post('/login/user', response_model=Any, status_code=status.HTTP_201_CREATED)
 def login_user(db: Session = Depends(deps.get_db), *, ulogin: schemas.UserLogin) -> Any:
      user = crud.user.get_by_username(db=db,username=ulogin.username)
-     if not user or user.nick_name != ulogin.nick_name:
+     db_nick_name =  re.sub(r"\s+", "", user.nick_name).lower()
+     input_nick_name = re.sub(r"\s+", "", ulogin.nick_name).lower()
+     if not user or db_nick_name != input_nick_name:
         raise HTTPException(
             status_code=400, detail="姓名和工号匹配错误！"
         )

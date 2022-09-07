@@ -93,7 +93,7 @@ export default {
         },
         {
           icon: require("@/assets/luckDraw/e1.png"),
-          name: "AVATR E值",
+          name: "E值",
         },
       ],
       imgDataRseult: [
@@ -131,7 +131,7 @@ export default {
         },
         {
           icon: require("@/assets/luckDraw/result/1/9.png"),
-          name: "AVATR E值",
+          name: "E值",
         },
       ],
       imgHeight: "auto",
@@ -212,11 +212,13 @@ export default {
     },
 
     async beginChouse2() {
+      if (this.state || this.drawing) return;
+      
       if (this.userInfor.lotteryCount < 1) {
         alert("每人最多有两次抽奖机会哦！祈福或猜灯谜可以获取心动值哦~");
         return;
       }
-      if (this.state) return;
+      
       this.state = true;
       this.drawing = true;
       try {
