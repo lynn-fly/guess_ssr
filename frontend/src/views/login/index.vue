@@ -80,19 +80,27 @@ export default {
 }
 
 .theme {
-  width: 100%;
+  width: 90%;
   margin-bottom: 1rem;
   margin-top: 1rem;
+  position: relative;
+  top: -0.8rem;
+  left: 0.4rem;
 }
 
 .luckDraw {
   width: 100%;
+  position: relative;
+  top: -1.5rem;
 }
 
 .inputs {
-  width: 100%;
+  width: 90%;
   flex-direction: column;
   margin-bottom: 1rem;
+  position: relative;
+  top: -1rem;
+  /* left: 0.5rem; */
 }
 
 .inputs .once {
