@@ -194,7 +194,10 @@ export default {
       if (imgs.length > 0) {
         this.imgHeight = avralH / imgs.length;
       }
-      if (this.imgHeight < 100) this.imgHeight = 101;
+      if (this.imgHeight < 60) {
+        alert(`${this.imgHeight}祝福的图片正在路上，刷新没准就来了！`);
+        this.imgHeight = 101;
+      }
 
       console.log(this.imgHeight, 5555555555);
 
@@ -345,8 +348,7 @@ export default {
       let type = ["jpeg", "jpg", "png", "image/png", "image/jpg", "image/jpeg"];
       if (!type.includes(files[0].type)) {
         this.upState = false;
-        alert("图片格式为(The image format is)jpeg,jpg,png");
-        
+        alert("图片格式为(The image format is)jpeg,jpg,png"); 
         return;
       }
       if (size[1] == "MB" && +size[0] >= 5) {
