@@ -344,15 +344,21 @@ export default {
       let size = this.getfilesize(files[0].size);
       let type = ["jpeg", "jpg", "png", "image/png", "image/jpg", "image/jpeg"];
       if (!type.includes(files[0].type)) {
+        this.upState = false;
         alert("图片格式为(The image format is)jpeg,jpg,png");
+        
         return;
       }
       if (size[1] == "MB" && +size[0] >= 5) {
+        this.upState = false;
         alert("图片需要小于(The image needs to be less than)5M");
+        
         return;
       }
       if(this.textUp.length > 100 ) {
+        this.upState = false;
         alert("亲，100字足以表达你的真诚的祝福！(Dear, 100 words is enough to express your sincere blessing)");
+        
         return;
       }
       let d = {
