@@ -184,13 +184,13 @@ export default {
       console.log(this.imgHeight, 5555555555);
 
       this.imgData.forEach((val,index,arr)=>{
-            const imgw2 = this.$refs[`cententimgs_${index}`][0];
-            
+            const imgw2 = this.$refs[`cententimgs_${index}`][0];    
             if(index > 0 )
             {
               let h = imgw2.offsetHeight;
-              console.log(imgw2)
-              if(h< this.imgHeight) {
+              let h2 = imgw2.clientHeight;
+              console.log('mounted：',h,h2,this.imgHeight)
+              if(  h < this.imgHeight) {
                 imgw2.style.height= this.imgHeight + 'px'
               }
             }   
@@ -212,7 +212,14 @@ export default {
     find(fn) {
       let imgs = document.getElementsByClassName("cententimgs");
       let imgw = imgs[0];
-      if (!imgw || !imgw.width) {
+      let loadAll = true;
+      for(let i=0;i<imgs.length;i++){
+        if(!imgs[i].width) {
+          loadAll = false
+          break
+        }
+      }
+      if (!imgw || !loadAll) {
         setTimeout(() => {
           this.find(fn);
         }, 200);
@@ -245,24 +252,20 @@ export default {
           });
         }
         this.$nextTick(() => {
-          
-          
-             
-
-              this.imgData.forEach((val,index,arr)=>{
-                    const imgw2 = this.$refs[`cententimgs_${index}`][0];
-                    
+                  this.find((imgw) => {     
+                    this.imgData.forEach((val,index,arr)=>{
+                    const imgw2 = this.$refs[`cententimgs_${index}`][0]; 
                     if(index > 0 )
                     {
                       let h = imgw2.offsetHeight;
-                      console.log(imgw2)
-                      if(h< this.imgHeight) {
+                      let h2 = imgw2.clientHeight;
+                      console.log('nextTick:',h,h2,this.imgHeight)
+                      if( h < this.imgHeight) {
                         imgw2.style.height= this.imgHeight + 'px'
                       }
                     }   
                   })
-           
-          
+            });   
         })
       });
     },
