@@ -182,45 +182,29 @@ export default {
     //       })
     // });
     this.find((imgs) => {
-      
       let avralH = 0;
-      for(let i=0;i<imgs.length;i++){
+      for (let i = 0; i < imgs.length; i++) {
         console.log(imgs[i].width, 44444444444);
         avralH += imgs[i].width / 1.5;
       }
 
-      if(imgs.length>0){
+      if (imgs.length > 0) {
         this.imgHeight = avralH / imgs.length;
       }
       if (!this.imgHeight) this.imgHeight = 144;
-      
+
       console.log(this.imgHeight, 5555555555);
 
-<<<<<<< HEAD
       this.imgData.forEach((val, index, arr) => {
         const imgw2 = this.$refs[`cententimgs_${index}`][0];
-        if (index > 0) {
-          let h = imgw2.offsetHeight;
-          let h2 = imgw2.clientHeight;
-          console.log("mounted：", h, h2, this.imgHeight);
-          if (h < this.imgHeight) {
-            imgw2.style.height = this.imgHeight + "px";
-          }
+
+        let h = imgw2.offsetHeight;
+        let h2 = imgw2.clientHeight;
+        console.log("mounted：", h, h2, this.imgHeight);
+        if (h < this.imgHeight) {
+          imgw2.style.height = this.imgHeight + "px";
         }
       });
-=======
-      this.imgData.forEach((val,index,arr)=>{
-            const imgw2 = this.$refs[`cententimgs_${index}`][0];    
-            
-            let h = imgw2.offsetHeight;
-            let h2 = imgw2.clientHeight;
-            console.log('mounted：',h,h2,this.imgHeight)
-            if(  h < this.imgHeight) {
-              imgw2.style.height= this.imgHeight + 'px'
-            }
-              
-          })
->>>>>>> 7760290aaf6710040fc18b91bedbd98b1bec5646
     });
     this.getList(true);
     this.$store
@@ -274,37 +258,19 @@ export default {
           });
         }
         this.$nextTick(() => {
-<<<<<<< HEAD
           this.find((imgw) => {
             this.imgData.forEach((val, index, arr) => {
               const imgw2 = this.$refs[`cententimgs_${index}`][0];
-              if (index > 0) {
-                let h = imgw2.offsetHeight;
-                let h2 = imgw2.clientHeight;
-                console.log("nextTick:", h, h2, this.imgHeight);
-                if (h < this.imgHeight) {
-                  imgw2.style.height = this.imgHeight + "px";
-                }
+
+              let h = imgw2.offsetHeight;
+              let h2 = imgw2.clientHeight;
+              console.log("nextTick:", h, h2, this.imgHeight);
+              if (h < this.imgHeight) {
+                imgw2.style.height = this.imgHeight + "px";
               }
             });
           });
         });
-=======
-                  this.find((imgw) => {     
-                    this.imgData.forEach((val,index,arr)=>{
-                    const imgw2 = this.$refs[`cententimgs_${index}`][0]; 
-                    
-                      let h = imgw2.offsetHeight;
-                      let h2 = imgw2.clientHeight;
-                      console.log('nextTick:',h,h2,this.imgHeight)
-                      if( h < this.imgHeight) {
-                        imgw2.style.height= this.imgHeight + 'px'
-                      }
-                       
-                  })
-            });   
-        })
->>>>>>> 7760290aaf6710040fc18b91bedbd98b1bec5646
       });
     },
     // getUrl(url) {
