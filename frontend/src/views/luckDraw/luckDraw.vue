@@ -93,7 +93,7 @@ export default {
         },
         {
           icon: require("@/assets/luckDraw/e1.png"),
-          name: "AVATR E值",
+          name: "E值",
         },
       ],
       imgDataRseult: [
@@ -131,7 +131,7 @@ export default {
         },
         {
           icon: require("@/assets/luckDraw/result/1/9.png"),
-          name: "AVATR E值",
+          name: "E值",
         },
       ],
       imgHeight: "auto",
