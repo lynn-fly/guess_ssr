@@ -284,7 +284,7 @@ export default {
         var nextItem = this.subObj[nextIndex];
         var noNewItem = false;
         // 如果已经作答，就找下一个索引
-        if (nextItem.notDo) {
+        if (nextItem && nextItem.notDo) {
           var oldNextIndex = nextIndex;
           for (var i = nextIndex + 1; i < 30; i++) {
             if (!this.subObj[i].notDo) {
@@ -296,7 +296,10 @@ export default {
             //证明没有新题了
             noNewItem = true;
           }
+        } else if (!nextItem) {
+            noNewItem = true;
         }
+
         // 正确的分支
         if (isOK == 1) {
           this.$store.commit("user/SET_HEARTVALUE", res.data.heartValue);
