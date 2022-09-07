@@ -10,7 +10,7 @@
       </div>
       <div class="once flex-c-c">
         <div class="title">
-          <img class="titleImg" src="@/assets/login/number1.png" alt="" srcset="" />
+          <img class="titleImg" src="@/assets/login/number1.png" style="width: 1.4rem; margin-left: -8px;" alt="" srcset="" />
         </div>
         <input type="text" v-model="form.password" placeholder="请输入工号" />
       </div>
