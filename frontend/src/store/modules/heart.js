@@ -23,6 +23,25 @@ const mutations = {
     dom.className = 'heardsss';
     dom.style.transition = "all 3s"
     document.body.appendChild(dom)
+    //当前位置
+    //缓动
+    let ofTop = dom.offsetTop, ofLeft = dom.offsetLeft, lend = 100, time = 3000;
+    let selec = time / lend;
+    let lendX = (wrap.offsetLeft - ofLeft) / selec, lendY = (ofTop - wrap.offsetTop) / selec;
+    console.log(ofTop, ofLeft)
+    for (let k = 0; k <= selec; k++) {
+      setTimeout(() => {
+        dom.style.top = ofTop - k * lendY + 'px'
+        dom.style.left = ofLeft + k * lendX + 'px'
+      }, selec * k);
+    }
+    setTimeout(() => {
+      document.body.removeChild(dom)
+    }, time + 100);
+    return
+    let doit = () => {
+
+    }
     setTimeout(() => {
       let wrap = document.getElementById('wrap')
       console.log(wrap.offsetLeft)
