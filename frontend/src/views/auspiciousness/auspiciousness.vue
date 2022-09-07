@@ -194,7 +194,7 @@ export default {
       if (imgs.length > 0) {
         this.imgHeight = avralH / imgs.length;
       }
-      if (!this.imgHeight) this.imgHeight = 144;
+      if (this.imgHeight < 100) this.imgHeight = 101;
 
       console.log(this.imgHeight, 5555555555);
 
@@ -380,7 +380,7 @@ export default {
             this.openPopup("luck");
           }
           else {
-            alert("你的祝福已经送达！"); //上传完成 
+            alert("你的祝福已经送达！(Your blessing has been delivered!)"); //上传完成 
           }
         })
         .catch((error) => {
@@ -402,7 +402,7 @@ export default {
       var thumbedList = item.thumbed.split(",");
       for (let k in thumbedList) {
         if (thumbedList[k] == this.userInfor.userId) {
-          alert("不可重复点赞");
+          alert("不可重复点赞！(Do not repeat the like!)");
           return;
         }
       }
@@ -412,7 +412,7 @@ export default {
           this.getList();
         })
         .catch((error) => {
-          alert("点赞失败,请联系管理员");
+          alert("点赞失败,请联系管理员!(Click praise failure, please contact administrator!)");
           this.getList();
         });
     },
