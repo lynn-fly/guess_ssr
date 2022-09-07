@@ -390,8 +390,8 @@ def fl_query(db: Session = Depends(deps.get_db), *,searchKey: str = Form(''), gi
      fls = crud.user.get_results(db,order_by=order_by,filters=filters,page=page,limit=limit)
      # 插入数据
      row = 1
-     gifts = ['未中奖','户外座椅-灰','阿维塔定制保温杯','城市画展系列T恤衫-XL',
-     '户外超声波防潮野餐地垫-灰','户外折叠整理箱-灰','AVATR环保束口包','AVATR精品帆布包（含定制徽章）','杜邦电脑包','E值-10']
+     gifts = ['未中奖','AVATR户外座椅-灰','AVATR定制保温杯','AVATR城市画展系列T恤衫',
+      'AVATR户外折叠整理箱-灰','AVATR户外超声波防潮野餐地垫-灰','AVATR环保束口包','AVATR精品帆布包','AVATR杜邦电脑包','E值']
      for f_log in fls:
          table_sheet.write(row, 0, str(f_log['username']), style=c_style)
          table_sheet.write(row, 1, str(f_log['nick_name']), style=c_style)
