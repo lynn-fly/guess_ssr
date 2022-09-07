@@ -20,8 +20,8 @@
           :class="[chouseIndex == index ? 'avtive' : '']"
           v-for="(item, index) in imgData"
           :key="index"
+          @click="getResult(index + 1)"
         >
-          <!-- @click="getResult(index + 1)" -->
           <img
             class="imgs"
             :style="{ height: imgHeight + 'px' }"
@@ -57,7 +57,7 @@ export default {
       name: "返回首页",
       chouseIndex: 0,
       state: false,
-      drawing:false,
+      drawing: false,
       imgData: [
         {
           icon: require("@/assets/luckDraw/111.png"),
@@ -176,9 +176,9 @@ export default {
     // this.beginChouse();
     // }, 2000);
     this.$store
-        .dispatch("user/getInfo")
-        .then((data) => {})
-        .catch((err) => {});
+      .dispatch("user/getInfo")
+      .then((data) => {})
+      .catch((err) => {});
   },
   computed: {
     ...mapGetters(["userInfor"]),
@@ -211,7 +211,6 @@ export default {
       });
     },
 
- 
     async beginChouse2() {
       if (this.userInfor.lotteryCount < 1) {
         alert("每人最多有两次抽奖机会哦！祈福或猜灯谜可以获取心动值哦~");
@@ -234,23 +233,23 @@ export default {
           this.addIndex();
           if (nowNum > 30 && this.chouseIndex == num) {
             this.state = lotteryCount < 1;
-            this.drawing =false;
+            this.drawing = false;
             this.chouseIndex = num;
-            console.log("中奖：",num);
+            console.log("中奖：", num);
             draw = false;
             this.$store.commit("audio/play", "lucky");
             this.getResult(num);
           } else if (nowNum > 30 && num == 9) {
             this.state = lotteryCount < 1;
-            this.drawing =false;
-            console.log("未中奖：",num);
+            this.drawing = false;
+            console.log("未中奖：", num);
             this.chouseIndex = num;
             draw = false;
             this.getResult(num);
           }
         }
       } catch (err) {
-        this.drawing =false;
+        this.drawing = false;
         console.log(err);
         let msg = "抽奖失败!";
         if (err && err.response && err.response.data && err.response.data.detail) {

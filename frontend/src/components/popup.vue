@@ -79,6 +79,12 @@
           src="@/assets/guess/result/ddc.png"
           alt=""
         />
+        <img
+          class="closeIconTD"
+          style="display: none"
+          src="@/assets/luckDraw/result/1/dizhi.png"
+          alt=""
+        />
       </div>
     </div>
   </div>
@@ -338,7 +344,17 @@ export default {
 .luckDrawPopupNot .buttons img {
   width: 70% !important;
 }
-
+.luckDrawPopup .closeIcon {
+  position: absolute;
+  right: -0.5rem;
+  top: -1.3rem;
+}
+.luckDrawPopup .closeIconTD {
+  position: absolute;
+  display: inline-block !important;
+  width: 75%;
+  left: 1rem;
+}
 .subject {
   position: absolute;
   color: #fff;
