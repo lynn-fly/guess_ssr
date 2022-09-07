@@ -352,8 +352,8 @@ export default {
 .luckDrawPopup .closeIconTD {
   position: absolute;
   display: inline-block !important;
-  width: 75%;
-  left: 1rem;
+  width: 80%;
+  left: 0.6rem;
 }
 .subject {
   position: absolute;
