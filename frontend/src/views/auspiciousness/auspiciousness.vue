@@ -195,16 +195,18 @@ export default {
 
       console.log(this.imgHeight, 5555555555);
 
-      this.imgData.forEach((val, index, arr) => {
-        const imgw2 = this.$refs[`cententimgs_${index}`][0];
-
-        let h = imgw2.offsetHeight;
-        let h2 = imgw2.clientHeight;
-        console.log("mounted：", h, h2, this.imgHeight);
-        if (h < this.imgHeight) {
-          imgw2.style.height = this.imgHeight + "px";
-        }
-      });
+      this.imgData.forEach((val,index,arr)=>{
+            const imgw2 = this.$refs[`cententimgs_${index}`][0];    
+            
+            let h = imgw2.offsetHeight;
+            let h2 = imgw2.clientHeight;
+            console.log('mounted：',h,h2,this.imgHeight)
+            if(  h < this.imgHeight) {
+              imgw2.style.height= this.imgHeight + 'px';
+              imgw2.style.width= '150%';
+            }
+              
+          })
     });
     this.getList(true);
     this.$store
@@ -258,19 +260,21 @@ export default {
           });
         }
         this.$nextTick(() => {
-          this.find((imgw) => {
-            this.imgData.forEach((val, index, arr) => {
-              const imgw2 = this.$refs[`cententimgs_${index}`][0];
-
-              let h = imgw2.offsetHeight;
-              let h2 = imgw2.clientHeight;
-              console.log("nextTick:", h, h2, this.imgHeight);
-              if (h < this.imgHeight) {
-                imgw2.style.height = this.imgHeight + "px";
-              }
-            });
-          });
-        });
+                  this.find((imgw) => {     
+                    this.imgData.forEach((val,index,arr)=>{
+                    const imgw2 = this.$refs[`cententimgs_${index}`][0]; 
+                    
+                      let h = imgw2.offsetHeight;
+                      let h2 = imgw2.clientHeight;
+                      console.log('nextTick:',h,h2,this.imgHeight)
+                      if( h < this.imgHeight) {
+                        imgw2.style.height= this.imgHeight + 'px'
+                        imgw2.style.width= '150%'
+                      }
+                       
+                  })
+            });   
+        })
       });
     },
     // getUrl(url) {
