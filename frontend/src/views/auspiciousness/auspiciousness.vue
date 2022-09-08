@@ -656,5 +656,7 @@ export default {
   max-width: 80%;
   margin: 0 auto;
   word-break: break-all;
+  letter-spacing: 2px;
+  line-height: 20px;
 }
 </style>
