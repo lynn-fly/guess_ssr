@@ -213,7 +213,7 @@ export default {
     async beginChouse2() {
 
       if (this.userInfor.lotteryCount < 1) {
-        alert("每人最多有两次抽奖机会哦！祈福或猜灯谜可以获取心动值哦~");
+        alert("抽奖次数已用完~(The number of lucky draws has been used up^_^)");
         return;
       }
 
