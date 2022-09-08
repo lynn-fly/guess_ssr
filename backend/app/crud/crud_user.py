@@ -175,7 +175,14 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         )
         query2 = query2.filter(and_(User.answer_heart_value > 0))
         cnt2 = query2.count()
-        return cnt1 + cnt2
+
+        query3 = db.query(
+            self.model.username, self.model.id, 
+        )
+        query3 = query3.filter(and_(User.is_prize == True))
+        cnt3 = query3.count()
+
+        return cnt1 + cnt2 + cnt3
 
     # 获取中奖人员列表
     def get_results(self, db: Session, *, filters=None,
