@@ -37,4 +37,11 @@ export function goodLucky() {
   })
 }
 
-// 管理员登陆
+//获取人数
+export function getUserCount() { 
+  return request({
+    url: '/user/get_cy',
+    method: 'get',
+  })
+}
+ 
