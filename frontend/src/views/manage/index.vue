@@ -11,7 +11,8 @@
       </select>
       <button  @click="search">查询</button>
       <button @click="exportExcel">导出</button>
-      <button class="logout" v-show="showLogout" @click="logout">[退出]</button>
+      <label>总参与人数：{{count}}</label>
+      <!-- <button class="logout" v-show="showLogout" @click="logout">[退出]</button> -->
     </div>
     <hr/>
     <div>
@@ -47,6 +48,7 @@ export default {
       showLogout:false,
       selected_gift: 0,
       searchKey:"",
+      count: 0,
       gifts: ['--请选择奖品--','AVATR户外座椅-灰','AVATR定制保温杯','AVATR城市画展系列T恤衫',
       'AVATR户外折叠整理箱-灰','AVATR户外超声波防潮野餐地垫-灰','AVATR环保束口包','AVATR精品帆布包','AVATR杜邦电脑包','E值'],
       // gifts:[
@@ -74,6 +76,7 @@ export default {
       .then(data=>{
         //console.log('lucky boys:',data)
         this.members=data.data;
+        this.count = this.members.length;
       })
       .catch(err=>{
         console.log(err)

@@ -15,6 +15,7 @@
           <Buttons :msg="name" :key="name" @back="back" />
           <LampNumber :num="userInfor.heartValue" />
         </div>
+        
         <img
           src="../../assets/home//music.png"
           style="width: 50px; height: 50px"
@@ -67,6 +68,9 @@
             src="@/assets/home/luckDraw.png"
             alt=""
           />
+          <div class="countNum"> 
+            <label class="countWord">已有<span style="font-size:0.42rem; color: white">{{userCount}}</span>人参与活动</label>
+          </div>
         </div>
         <div class="bottomImg">
           <img class="bottomImgs" src="@/assets/home/introduce.png" alt="" />
@@ -81,6 +85,9 @@ import Buttons from "@/components/home/buttons.vue";
 import LampNumber from "@/components/home/lampNumber.vue";
 import { mapGetters } from "vuex";
 import { gotopPage } from "@/utils/index";
+import { getUserCount } from "@/api/user";
+
+
 export default {
   name: "Home",
   components: {
@@ -94,7 +101,8 @@ export default {
       muteBgMusic: false,
       onloadRabbit: false,
       onloadRabbitTime: false,
-      timeStart: false
+      timeStart: false,
+      userCount: 0
     };
   },
   watch: {
@@ -189,6 +197,9 @@ export default {
     if (dateInt > 8 || dateInt < 8) {
       this.timeStart = true;
     } 
+    getUserCount().then((res) => {
+      this.userCount = res.data.count
+    })
   },
 };
 </script>
@@ -368,6 +379,25 @@ export default {
 .bottomImg .bottomImgs {
   width: 6.5rem;
 }
+
+.countNum {
+  font-size: 0.42rem;
+    position: relative;
+    margin-left: 0.1rem;
+    font-weight: 600;
+    /* -webkit-filter: drop-shadow(0 0 0.08rem #e300d3) drop-shadow(0 0 0.08rem #e300d3);
+    filter: drop-shadow(0 0 0.08rem #e300d3) drop-shadow(0 0 0.08rem #e300d3); */
+    margin-top: -10px;
+    margin-bottom: 10px;
+}
+
+.countWord {
+  color: #9e9bb4;
+  font-size: 0.3rem;
+  -webkit-filter: drop-shadow(0 0 0.08rem #640c90) drop-shadow(0 0 0.08rem #640c90);
+  filter: drop-shadow(0 0 0.08rem #640c90) drop-shadow(0 0 0.08rem #640c90);
+}
+
 </style>
 
 <style scoped>
