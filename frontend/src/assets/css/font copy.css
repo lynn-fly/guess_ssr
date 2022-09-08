@@ -1,0 +1,12 @@
+@font-face {
+  font-family: "ph";
+  font-weight: 400;
+  src: url("./SPo7F3A02on8Qc5PhGUKY.woff2") format("woff2"),
+    url("./SPo7F3A02on8Qc5PhGUKY.woff") format("woff");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Dinpro";
+  src: url('./DINPro-Light.otf');
+}

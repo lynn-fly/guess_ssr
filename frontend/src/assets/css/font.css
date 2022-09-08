@@ -1,12 +1,13 @@
 @font-face {
-  font-family: "ph";
+  font-family: "ALBBphuhui";
   font-weight: 400;
-  src: url("./SPo7F3A02on8Qc5PhGUKY.woff2") format("woff2"),
-    url("./SPo7F3A02on8Qc5PhGUKY.woff") format("woff");
+  /* src: url("./ALIBABA-PUHUITI-MEDIUM.TTF"); */
+  src: url-loader("./ALIBABA-PUHUITI-MEDIUM.TTF") format("ttf"),
+    url-loader("./ALIBABA-PUHUITI-REGULAR.TTF") format("ttf");
   font-display: swap;
 }
 
 @font-face {
-  font-family: Dinpro;
-  src: url('./DINPro-Light.otf');
+  font-family: "Dinpro";
+  src: url-loader("./DINPRO-MEDIUM.TTF");
 }

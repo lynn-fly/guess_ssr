@@ -66,7 +66,7 @@ export default {
 <style>
 @import "./keyframes.css";
 * {
-  font-family: "ph Dinpro" !important;
+  font-family: "Dinpro ALBBphuhui" !important;
 }
 .flex-c-c {
   display: flex;
