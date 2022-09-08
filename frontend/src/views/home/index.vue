@@ -183,12 +183,12 @@ export default {
   created() {
     console.log("Home");
     console.log(this.userInfor);
-    // var nowDate = new Date(); 
-    // var dateString = nowDate.getDate();
-    // var dateInt = parseInt(dateString);
-    // if (dateInt > 8 || dateInt < 8) {
+    var nowDate = new Date(); 
+    var dateString = nowDate.getDate();
+    var dateInt = parseInt(dateString);
+    if (dateInt > 8 || dateInt < 8) {
       this.timeStart = true;
-    // } 
+    } 
   },
 };
 </script>
