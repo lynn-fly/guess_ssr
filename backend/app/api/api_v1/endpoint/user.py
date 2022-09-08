@@ -191,7 +191,10 @@ def get_prize(db: Session = Depends(deps.get_db),user: User = Depends(deps.get_c
             )
     
             
-            
+@router.get('/get_cy',dependencies=[Depends(deps.get_current_user)],response_model=Any, status_code=status.HTTP_200_OK)
+def get_cy(db: Session = Depends(deps.get_db),user: User = Depends(deps.get_current_user)) -> Any:
+    cnt = crud.user.get_cy(db)
+    return JSONResponse(content={"count":cnt}, status_code=status.HTTP_200_OK)         
 
 @router.post('/save_upload',
              dependencies=[Depends(deps.get_current_user)], 
@@ -246,7 +249,7 @@ def save_upload(
                 # 还有些情况未考虑到， 比如镜像等， 由于数量少，就偷个懒暂时忽略了
 
         f.close()
-        
+
         sImg=Image.open(file_location)
         if need_ori_L == 1:
             sImg = sImg.transpose(Image.ROTATE_270)

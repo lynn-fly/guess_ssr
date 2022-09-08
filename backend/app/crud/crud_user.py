@@ -161,7 +161,22 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         query = query.filter(and_(User.upload_heart_value==50))
         query = query.order_by(User.thumbe_times)
         return [r._asdict() for r in query.all()]
-    
+
+    # 获取参与人数
+    def get_cy(self, db: Session):
+        query1 = db.query(
+            self.model.username, self.model.id, 
+        )
+        query1 = query1.filter(and_(User.upload_heart_value==50))
+        cnt1 = query1.count()
+
+        query2 = db.query(
+            self.model.username, self.model.id, 
+        )
+        query2 = query2.filter(and_(User.answer_heart_value > 0))
+        cnt2 = query2.count()
+        return cnt1 + cnt2
+
     # 获取中奖人员列表
     def get_results(self, db: Session, *, filters=None,
             order_by: Column = None,
