@@ -191,13 +191,13 @@ export default {
   created() {
     console.log("Home");
     console.log(this.userInfor);
-    var nowDate = new Date(); 
-    var dateString = nowDate.getDate();
-    var dateInt = parseInt(dateString);
-    if (dateInt > 8 || dateInt < 8) {
-      this.timeStart = true;
-    } 
-    this.timeStart = false;
+    // var nowDate = new Date(); 
+    // var dateString = nowDate.getDate();
+    // var dateInt = parseInt(dateString);
+    // if (dateInt > 8 || dateInt < 8) {
+    //   this.timeStart = true;
+    // } 
+    // this.timeStart = false;
     getUserCount().then((res) => {
       this.userCount = res.data.count
     })
