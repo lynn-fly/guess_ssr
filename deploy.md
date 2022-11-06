@@ -9,7 +9,7 @@ deactivate
 安装依赖
 
 
-sudo apt-get install libpq-dev
+sudo apt-get install libpq-dev mariadb
 sudo apt-get install gcc
 sudo apt-get install python3.8-dev
 sudo apt install python3-wheel
